@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "288462781480",
+    "project_id": "collegemitra-app",
+    "storage_bucket": "collegemitra-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:288462781480:android:14b1de187019c295bd491d",
+        "android_client_info": {
+          "package_name": "com.example.collegemitra"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFcJxMvVWRA5TQv9YpKKVR_l23JBx7hpo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

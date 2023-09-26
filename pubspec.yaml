@@ -1,0 +1,74 @@
+name: collegemitra
+description: A new Flutter project.
+
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.1.1 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+  google_fonts: ^6.0.0
+  get: ^4.6.5
+  liquid_swipe: ^3.0.0
+  smooth_page_indicator: ^1.0.0+2
+  flutter_otp_text_field: ^1.1.1
+  firebase_core: ^2.15.1
+  firebase_auth: ^4.9.0
+  stream_channel: ^2.1.1
+  firebase_core_platform_interface: ^4.8.0
+  cloud_firestore: ^4.9.1
+  email_validator: '^2.1.16'
+  google_sign_in: ^6.1.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/logo/logo.png
+    - assets/images/splash_images/splash-top-icon.png
+    - assets/images/splash_images/splash-screen-image.png
+    - assets/images/on_boarding_images/on-boarding-image-1.png
+    - assets/images/on_boarding_images/on-boarding-image-2.png
+    - assets/images/on_boarding_images/on-boarding-image-3.png
+    - assets/images/welcome_images/welcome-screen-image.png
+    - assets/logo/google-logo.png
+    - assets/logo/signup-logo.png
+    - assets/logo/forgot-password.png
+    - assets/images/dashboard_images/hero_section.png
+    - assets/images/dashboard_images/hstes.png
+
+
+  
+  
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
