@@ -27,3 +27,7 @@ const String tLogo = "assets/logo/logo.png";
 
 // -- Forget Password Images
 const String tForgetPasswordImage = "assets/logo/forgot-password.png";
+
+//Profile images
+
+const String tProfileImage = "assets/images/profile_images/profile-image.jpeg";

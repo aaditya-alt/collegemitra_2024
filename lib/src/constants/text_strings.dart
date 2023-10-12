@@ -65,3 +65,20 @@ const String tForgetMailSubTitle =
 const String tOtpTitle = "CO\nDE";
 const String tOtpSubTitle = "Verification";
 const String tOtpMessage = "Enter the verification code sent at ";
+
+//Profile Screen
+
+const String tProfile = "Profile";
+const String tEditProfile = "Edit Profile";
+const String tLogoutDialogHeading = "Logout";
+const String tProfileHeading = "Collegemitra";
+const String tProfileSubHeading = "admin@collegemitra.net.in";
+
+const String tMenu1 = "Settings";
+const String tMenu2 = "Information";
+const String tMenu3 = "Billing Details";
+const String tMenu4 = "User Management";
+
+const String tDelete = "Delete";
+const String tJoined = "Joined";
+const String tJoinedAt = "31 October 2023";

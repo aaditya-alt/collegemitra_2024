@@ -96,6 +96,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
                         //     .phoneAuthentication(controller.phoneNo.text.trim());
 
                         final user = UserModel(
+                            id: controller.email.text.trim(),
                             email: controller.email.text.trim(),
                             password: controller.password.text.trim(),
                             fullName: controller.fullName.text.trim(),

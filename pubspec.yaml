@@ -16,6 +16,8 @@ dependencies:
   get: ^4.6.5
   liquid_swipe: ^3.0.0
   smooth_page_indicator: ^1.0.0+2
+  carousel_slider: ^4.2.1
+  youtube_player_flutter: ^8.1.2
   flutter_otp_text_field: ^1.1.1
   firebase_core: ^2.15.1
   firebase_auth: ^4.9.0
@@ -24,6 +26,8 @@ dependencies:
   cloud_firestore: ^4.9.1
   email_validator: '^2.1.16'
   google_sign_in: ^6.1.5
+  line_awesome_flutter: ^2.0.0
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_test:
@@ -44,7 +48,21 @@ flutter:
     - assets/logo/signup-logo.png
     - assets/logo/forgot-password.png
     - assets/images/dashboard_images/hero_section.png
-    - assets/images/dashboard_images/hstes.png
+    - assets/images/dashboard_images/nta.png
+    - assets/images/dashboard_images/counselling_images/hstes.png
+    - assets/images/dashboard_images/counselling_images/uptu.png
+    - assets/images/dashboard_images/counselling_images/ojee.png
+    - assets/images/dashboard_images/counselling_images/reap.png
+    - assets/images/dashboard_images/counselling_images/josaa.png
+    - assets/images/dashboard_images/counselling_images/jacd.png
+    - assets/images/dashboard_images/counselling_images/ggsipu.png
+    - assets/images/dashboard_images/counselling_images/more.png
+    - assets/images/profile_images/profile-image.jpeg
+    - assets/images/dashboard_images/t10delhi.jpg
+    - assets/images/dashboard_images/support.png
+    - assets/images/dashboard_images/background.png
+    - assets/images/dashboard_images/background.jpeg
+    - assets/images/dashboard_images/graduation.png
 
 
   

@@ -1,5 +1,7 @@
 //Creating modal to map user's data
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserModel {
   final String? id;
   final String? fullName;
@@ -22,5 +24,17 @@ class UserModel {
       "Phone": phoneNo,
       "Password": password,
     };
+  }
+
+  //Step - 1 : Map User fetched from firebase to UserModal
+  factory UserModel.fromSnapshot(
+      DocumentSnapshot<Map<String, dynamic>> document) {
+    final data = document.data()!;
+    return UserModel(
+        id: document.id,
+        email: data["Email"],
+        password: data["Password"],
+        fullName: data["FullName"],
+        phoneNo: data["Phone"]);
   }
 }

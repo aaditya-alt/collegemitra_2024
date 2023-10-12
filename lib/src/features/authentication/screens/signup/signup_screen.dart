@@ -23,7 +23,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final controller = Get.put(SignUpController());
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(tDefaultSize),

@@ -7,6 +7,10 @@ class TTextTheme {
       fontWeight: FontWeight.w700,
       color: Colors.black87,
     ),
+    headlineMedium: GoogleFonts.montserrat(
+      fontWeight: FontWeight.w700,
+      color: Colors.black87,
+    ),
     displaySmall: GoogleFonts.montserrat(
       fontWeight: FontWeight.w700,
       color: Colors.black87,
@@ -58,6 +62,10 @@ class TTextTheme {
       color: const Color.fromARGB(221, 255, 255, 255),
       fontSize: 12,
       fontWeight: FontWeight.w500,
+    ),
+    headlineMedium: GoogleFonts.montserrat(
+      fontWeight: FontWeight.w700,
+      color: Colors.white,
     ),
   );
 }

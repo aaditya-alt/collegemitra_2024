@@ -34,4 +34,31 @@ class UserRepository extends GetxController {
       return stackTrace;
     });
   }
+
+  //Step-2: Fetch All users or user details
+  Future<UserModel> getUserDetails(String email) async {
+    final snapshot =
+        await _db.collection("Users").where("Email", isEqualTo: email).get();
+    final userData = snapshot.docs.map((e) => UserModel.fromSnapshot(e)).single;
+    return userData;
+  }
+
+  Future<List<UserModel>> getAllUserDetails() async {
+    final snapshot = await _db.collection("Users").get();
+    final userData =
+        snapshot.docs.map((e) => UserModel.fromSnapshot(e)).toList();
+    return userData;
+  }
+
+  Future<void> updateUserRecord(UserModel user) async {
+    try {
+      await _db
+          .collection("Users")
+          .doc(user.id)
+          .update(user.toJson())
+          .onError((e, _) => print("Error updating document: $e"));
+    } on FirebaseException catch (e) {
+      print(e.toString());
+    }
+  }
 }
