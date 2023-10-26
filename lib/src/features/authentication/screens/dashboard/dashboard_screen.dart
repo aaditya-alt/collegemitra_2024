@@ -1,18 +1,30 @@
 import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/best_services.dart';
 import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/blogs_section.dart';
+import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/bottom_carousel.dart';
 import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/counselling_buttons.dart';
+import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/counselling_list_items.dart';
 import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/premium_promo.dart';
+import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/testimonials.dart';
 import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/upcoming_card.dart';
+import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/why_collegemitra.dart';
 import 'package:collegemitra/src/features/authentication/screens/general_utils/carousel_slider.dart';
+import 'package:collegemitra/src/features/authentication/screens/general_utils/drawer_header.dart';
+import 'package:collegemitra/src/features/authentication/screens/general_utils/drawer_list.dart';
 import 'package:collegemitra/src/features/authentication/screens/premium/chat/chat_users.dart';
 import 'package:collegemitra/src/features/authentication/screens/profile/profile_screen.dart';
 import 'package:collegemitra/src/repository/authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class Dashboard extends StatelessWidget {
+class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
 
+  @override
+  State<Dashboard> createState() => _DashboardState();
+}
+
+class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +64,9 @@ class Dashboard extends StatelessWidget {
               style: Theme.of(context).textTheme.bodySmall),
           const SizedBox(height: 20),
           //counsellings
-          const CounsellingButton(),
+          CounsellingButton(listItems: customIcons),
+          const SizedBox(height: 15),
+          CounsellingButton(listItems: allCounselling),
           const SizedBox(height: 30),
 
           Text(
@@ -79,32 +93,114 @@ class Dashboard extends StatelessWidget {
           //Popular Blogs
           const PopularBlogs(),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 13),
 
           //Collegemitra premium promotion
           const PromoCard(),
+
+          const SizedBox(
+            height: 25,
+          ),
+
+          Text(
+            "Our Mentorship",
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          Text("Explore Fantastic reviews by our students...",
+              style: Theme.of(context).textTheme.bodySmall),
+          const SizedBox(height: 15),
+
+          //Testimonial Section
+          const TestimonialSection(),
+
+          const SizedBox(height: 15),
+
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: ElevatedButton.icon(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.star,
+                // Replace this with the desired icon
+                color: Colors.white,
+                // Icon color
+              ),
+              label: const Text(
+                'Get Premium Support',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor:
+                    const Color.fromARGB(255, 255, 129, 39), // Button color
+
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding:
+                    const EdgeInsets.all(16), // Adjust the padding as needed
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 20),
+
+          Image.asset(
+            'assets/images/dashboard_images/reminder.png',
+            width: MediaQuery.sizeOf(context).width,
+          ),
+
+          const SizedBox(height: 10),
+          Text(
+            "Why Collegemitra?",
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          // Text("Explore Fantastic reviews by our students...",
+          //     style: Theme.of(context).textTheme.bodySmall),
+          const SizedBox(height: 18),
+
+          const WhyCollegemitra(),
+
+          const SizedBox(height: 30),
+
+          //Bottom Corousel Slider
+          const BottomCarousel(),
         ],
+      ),
+      drawer: Drawer(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              MyHeaderDrawer(),
+              const DrawerList(),
+            ],
+          ),
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           showSelectedLabels: false,
           showUnselectedLabels: false,
-          items: [
+          currentIndex: 0,
+          onTap: (index) {
+            if (index == 3) {
+              Get.to(() => const ProfileScreen());
+            }
+          },
+          items: const [
             BottomNavigationBarItem(
                 icon: Icon(Icons.home_outlined), label: "Home"),
             BottomNavigationBarItem(
                 icon: Icon(Icons.newspaper_outlined), label: "Blogs"),
             BottomNavigationBarItem(
-                icon: GestureDetector(
-                    onTap: () {},
-                    child: const Icon(Icons.workspace_premium_outlined)),
-                label: "Premium"),
+                icon: Icon(Icons.workspace_premium_outlined), label: "Premium"),
             BottomNavigationBarItem(
-                icon: GestureDetector(
-                    onTap: () => Get.to(() => const ProfileScreen()),
-                    child: const Icon(Icons.person_2_outlined)),
-                label: "Profile"),
+                icon: Icon(Icons.person_2_outlined), label: "Profile"),
           ]),
     );
   }
+
+  // ignore: non_constant_identifier_names
 }

@@ -28,6 +28,7 @@ dependencies:
   google_sign_in: ^6.1.5
   line_awesome_flutter: ^2.0.0
   flutter_rating_bar: ^4.0.1
+  excel: ^2.1.0
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +64,21 @@ flutter:
     - assets/images/dashboard_images/background.png
     - assets/images/dashboard_images/background.jpeg
     - assets/images/dashboard_images/graduation.png
+    - assets/images/dashboard_images/reminder.png
+    - assets/images/dashboard_images/3d-fire.png
+    - assets/images/dashboard_images/3d-target.png
+    - assets/images/dashboard_images/love.png
+    - assets/images/dashboard_images/shield.png
+    - assets/images/dashboard_images/chart.png
+    - assets/images/dashboard_images/bachelors-degree.png
+    - assets/images/dashboard_images/benchmarking.png
+    - assets/images/dashboard_images/justice-scale.png
+    - assets/images/dashboard_images/justice.png
+    - assets/images/dashboard_images/office.png
+    - assets/images/dashboard_images/ranking.png
+    - assets/images/dashboard_images/search.png
+    - assets/images/dashboard_images/seats.png
+    - assets/cutoff_files/test.xlsx
 
 
   

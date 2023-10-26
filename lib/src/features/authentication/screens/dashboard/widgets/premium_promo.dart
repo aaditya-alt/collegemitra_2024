@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class PromoCard extends StatelessWidget {
   const PromoCard({
     super.key,
+    this.counselling_name,
   });
 
   static const kDefaultShadow = BoxShadow(
@@ -10,9 +11,10 @@ class PromoCard extends StatelessWidget {
     blurRadius: 27,
     color: Colors.black12, // Black color with 12% opacity
   );
-
+  final counselling_name;
   @override
   Widget build(BuildContext context) {
+    var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     // It  will provide us total height and width of our screen
     Size size = MediaQuery.of(context).size;
     return SizedBox(
@@ -34,7 +36,7 @@ class PromoCard extends StatelessWidget {
               child: Container(
                 margin: const EdgeInsets.only(right: 10),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: isDark ? Colors.black : Colors.white,
                   borderRadius: BorderRadius.circular(22),
                 ),
               ),
@@ -72,8 +74,13 @@ class PromoCard extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
-                        'Looking for Mentorship ?',
+                        (counselling_name != null &&
+                                counselling_name != 'JAC Delhi' &&
+                                counselling_name != 'GGSIPU Delhi')
+                            ? '$counselling_name Mentorship ?'
+                            : 'Looking for Mentorship ?',
                         style: Theme.of(context).textTheme.titleLarge,
+                        overflow: TextOverflow.clip,
                       ),
                     ),
                     // it use the available space

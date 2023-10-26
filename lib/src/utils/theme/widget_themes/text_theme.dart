@@ -10,6 +10,7 @@ class TTextTheme {
     headlineMedium: GoogleFonts.montserrat(
       fontWeight: FontWeight.w700,
       color: Colors.black87,
+      fontSize: 20,
     ),
     displaySmall: GoogleFonts.montserrat(
       fontWeight: FontWeight.w700,

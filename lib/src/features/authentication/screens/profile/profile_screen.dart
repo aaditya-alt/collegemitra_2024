@@ -3,6 +3,9 @@ import 'package:collegemitra/src/constants/image_strings.dart';
 import 'package:collegemitra/src/constants/sizes.dart';
 import 'package:collegemitra/src/constants/text_strings.dart';
 import 'package:collegemitra/src/features/authentication/controllers/profile_controller.dart';
+import 'package:collegemitra/src/features/authentication/screens/dashboard/dashboard_screen.dart';
+import 'package:collegemitra/src/features/authentication/screens/general_utils/drawer_header.dart';
+import 'package:collegemitra/src/features/authentication/screens/general_utils/drawer_list.dart';
 import 'package:collegemitra/src/features/authentication/screens/profile/update_profile_screen.dart';
 import 'package:collegemitra/src/features/authentication/screens/profile/widgets/profile_menu_widget.dart';
 import 'package:collegemitra/src/repository/authentication_repository/authentication_repository.dart';
@@ -19,9 +22,6 @@ class ProfileScreen extends StatelessWidget {
     var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-            onPressed: () => Get.back(),
-            icon: const Icon(LineAwesomeIcons.angle_left)),
         title: Text(
           tProfile,
           style: Theme.of(context).textTheme.headlineMedium,
@@ -132,6 +132,28 @@ class ProfileScreen extends StatelessWidget {
           ),
         ),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          currentIndex: 3,
+          onTap: (index) {
+            if (index == 3) {
+              Get.to(() => const ProfileScreen());
+            } else if (index == 0) {
+              Get.to(() => const Dashboard());
+            }
+          },
+          items: const [
+            BottomNavigationBarItem(
+                icon: Icon(Icons.home_outlined), label: "Home"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.newspaper_outlined), label: "Blogs"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.workspace_premium_outlined), label: "Premium"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.person_2_outlined), label: "Profile"),
+          ]),
     );
   }
 }

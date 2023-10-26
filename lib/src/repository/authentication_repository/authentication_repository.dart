@@ -2,6 +2,7 @@ import 'package:collegemitra/src/features/authentication/models/user_model.dart'
 import 'package:collegemitra/src/features/authentication/screens/dashboard/dashboard_screen.dart';
 import 'package:collegemitra/src/features/authentication/screens/login/login_screen.dart';
 import 'package:collegemitra/src/features/authentication/screens/mail_verification/mail_verification.dart';
+import 'package:collegemitra/src/features/authentication/screens/splash_screen/splash_screen.dart';
 import 'package:collegemitra/src/features/authentication/screens/welcome/welcome_screen.dart';
 import 'package:collegemitra/src/repository/authentication_repository/exceptions/signup_mail_password_failure.dart';
 import 'package:firebase_auth/firebase_auth.dart';

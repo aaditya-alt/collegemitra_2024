@@ -3,6 +3,7 @@ import 'package:collegemitra/src/constants/image_strings.dart';
 import 'package:collegemitra/src/constants/text_strings.dart';
 import 'package:collegemitra/src/features/authentication/models/model_on_boarding.dart';
 import 'package:collegemitra/src/features/authentication/screens/on_boarding/on_boarding_page_widget.dart';
+import 'package:collegemitra/src/features/authentication/screens/welcome/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:liquid_swipe/PageHelpers/LiquidController.dart';
@@ -41,10 +42,22 @@ class OnBoardingController extends GetxController {
     ),
   ];
 
-  skip() => controller.jumpToPage(page: 2);
+  skip() {
+    if (controller.currentPage == 2) {
+      Get.offAll(() => const WelcomeScreen());
+    } else {
+      controller.jumpToPage(page: 2);
+    }
+  }
+
   animareToNextSlide() {
     int nextPage = controller.currentPage + 1;
-    controller.animateToPage(page: nextPage);
+
+    if (controller.currentPage == 2) {
+      Get.offAll(() => const WelcomeScreen());
+    } else {
+      controller.animateToPage(page: nextPage);
+    }
   }
 
   onPageChangedCallback(int activePageIndex) =>

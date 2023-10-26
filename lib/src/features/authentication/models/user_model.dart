@@ -38,3 +38,37 @@ class UserModel {
         phoneNo: data["Phone"]);
   }
 }
+
+class RoundData {
+  final String roundName;
+  final int openingRank;
+  final int closingRank;
+  final int rankDifference;
+
+  RoundData({
+    required this.roundName,
+    required this.openingRank,
+    required this.closingRank,
+    required this.rankDifference,
+  });
+}
+
+class BranchData {
+  final String branchName;
+  final List<RoundData> rounds;
+
+  BranchData({
+    required this.branchName,
+    required this.rounds,
+  });
+}
+
+class CollegeData {
+  final String collegeName;
+  final List<BranchData> branches;
+
+  CollegeData({
+    required this.collegeName,
+    required this.branches,
+  });
+}

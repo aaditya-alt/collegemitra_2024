@@ -13,6 +13,7 @@ class BestServices extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     final List<Color> gradientColors = [
       const Color.fromARGB(255, 127, 216, 238),
       const Color.fromARGB(255, 251, 244, 244)
@@ -74,6 +75,7 @@ class BestServices extends StatelessWidget {
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
+                              color: Colors.black,
                             ),
                           ),
                           const SizedBox(height: 4),
@@ -81,6 +83,7 @@ class BestServices extends StatelessWidget {
                             freeServices[i].subTitle,
                             style: const TextStyle(
                               fontSize: 13,
+                              color: Colors.black,
                             ),
                           ),
                         ],

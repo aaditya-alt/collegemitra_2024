@@ -1,15 +1,15 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 
-class MyCarouselSlider extends StatefulWidget {
-  const MyCarouselSlider({Key? key}) : super(key: key);
+class BottomCarousel extends StatefulWidget {
+  const BottomCarousel({super.key});
 
   @override
-  State<MyCarouselSlider> createState() => _MyCarouselSliderState();
+  State<BottomCarousel> createState() => _BottomCarouselState();
 }
 
-class _MyCarouselSliderState extends State<MyCarouselSlider> {
+class _BottomCarouselState extends State<BottomCarousel> {
   late YoutubePlayerController _controller;
   bool _isPlayerReady = false;
   List<String> youtubeVideoIds = [
@@ -17,21 +17,19 @@ class _MyCarouselSliderState extends State<MyCarouselSlider> {
     'pYYBGnanhzM',
     'SEzIoNqJL3U',
   ];
-
   int currentIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     return CarouselSlider.builder(
-      itemCount: youtubeVideoIds.length,
+      itemCount: 3,
       options: CarouselOptions(
-        height: 160,
+        height: 140,
         aspectRatio: 16 / 9,
         autoPlay: true,
         autoPlayInterval: const Duration(seconds: 5),
         autoPlayAnimationDuration: const Duration(milliseconds: 800),
         autoPlayCurve: Curves.fastOutSlowIn,
-        enlargeCenterPage: true,
+        enlargeCenterPage: false,
         onPageChanged: (index, reason) {
           setState(() {
             currentIndex = index;
@@ -43,26 +41,29 @@ class _MyCarouselSliderState extends State<MyCarouselSlider> {
           onTap: () {
             _playVideo(youtubeVideoIds[index]);
           },
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Image.network(
-                  'https://img.youtube.com/vi/${youtubeVideoIds[index]}/0.jpg',
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: double.infinity,
-                ),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(40),
-                  child: const Icon(
-                    Icons.play_circle_outline,
-                    size: 50,
-                    color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Image.network(
+                    'https://img.youtube.com/vi/${youtubeVideoIds[index]}/0.jpg',
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity,
                   ),
-                ),
-              ],
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(40),
+                    child: const Icon(
+                      Icons.play_circle_outline,
+                      size: 50,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );

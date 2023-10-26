@@ -1,11 +1,12 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:collegemitra/src/utils/theme/widget_themes/text_theme.dart';
 
 class PopularBlogs extends StatelessWidget {
   const PopularBlogs({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     final List<blogSection> blogsSection = [
       blogSection(
           image: 'assets/images/dashboard_images/t10delhi.jpg',
@@ -27,13 +28,17 @@ class PopularBlogs extends StatelessWidget {
           itemCount: blogsSection.length,
           itemBuilder: (BuildContext context, int i) => GestureDetector(
                 child: Card(
+                  color: isDark
+                      ? Colors.black
+                      : const Color.fromARGB(255, 255, 229, 238),
+                  elevation: 5,
                   child: Container(
                     height: 200,
                     width: 180,
-                    decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 255, 255, 255),
-                        borderRadius:
-                            BorderRadius.vertical(bottom: Radius.circular(10))),
+                    decoration: BoxDecoration(
+                        color: isDark ? Colors.black : Colors.pink.shade200,
+                        borderRadius: const BorderRadius.vertical(
+                            bottom: Radius.circular(10))),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -45,22 +50,25 @@ class PopularBlogs extends StatelessWidget {
                           child: Image.asset(
                             blogsSection[i].image,
                             fit: BoxFit.cover,
+                            width: 180,
                           ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           blogsSection[i].title,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
+                            color: isDark ? Colors.white : Colors.black,
                           ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           textAlign: TextAlign.center,
                           blogsSection[i].subTitle,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 13,
+                            color: isDark ? Colors.white : Colors.black,
                           ),
                         ),
                       ],
