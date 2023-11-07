@@ -10,6 +10,7 @@ import 'package:collegemitra/src/features/authentication/screens/dashboard/widge
 import 'package:collegemitra/src/features/authentication/screens/general_utils/carousel_slider.dart';
 import 'package:collegemitra/src/features/authentication/screens/general_utils/drawer_header.dart';
 import 'package:collegemitra/src/features/authentication/screens/general_utils/drawer_list.dart';
+import 'package:collegemitra/src/features/authentication/screens/meeting/meeting_home_screen.dart';
 import 'package:collegemitra/src/features/authentication/screens/premium/chat/chat_users.dart';
 import 'package:collegemitra/src/features/authentication/screens/profile/profile_screen.dart';
 import 'package:collegemitra/src/repository/authentication_repository/authentication_repository.dart';
@@ -187,6 +188,8 @@ class _DashboardState extends State<Dashboard> {
           onTap: (index) {
             if (index == 3) {
               Get.to(() => const ProfileScreen());
+            } else if (index == 2) {
+              Get.offAll(() => const MeetingHomeScreen());
             }
           },
           items: const [

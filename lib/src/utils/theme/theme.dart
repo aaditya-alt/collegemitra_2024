@@ -7,7 +7,7 @@ class TAppTheme {
   TAppTheme._();
 
   static ThemeData lightTheme = ThemeData(
-    colorSchemeSeed: Colors.pink.shade600,
+    colorSchemeSeed: Colors.lightBlue,
     useMaterial3: true,
     brightness: Brightness.light,
     textTheme: TTextTheme.lightTextTheme,
@@ -16,7 +16,7 @@ class TAppTheme {
   );
 
   static ThemeData darkTheme = ThemeData(
-      colorSchemeSeed: Colors.pink.shade600,
+      colorSchemeSeed: Colors.lightBlue,
       useMaterial3: true,
       brightness: Brightness.dark,
       textTheme: TTextTheme.darkTextTheme,

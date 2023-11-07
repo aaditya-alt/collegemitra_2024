@@ -19,9 +19,14 @@ class CollegePredictorController extends GetxController {
         value: 'Select State', label: 'Select State', enabled: false),
   ];
 
+  List<DropdownMenuEntry<dynamic>> finalCategoryList = [
+    const DropdownMenuEntry(
+        value: 'Select State', label: 'Select State', enabled: false),
+  ];
+
   RxBool isLoading = false.obs;
 
-  void setLoading(bool value) {
+  setLoading(bool value) {
     isLoading.value = value;
   }
 
@@ -79,5 +84,40 @@ class CollegePredictorController extends GetxController {
             rank.toString()
           ],
         ));
+  }
+
+  @override
+  void dispose() {
+    domicile.dispose();
+    category.dispose();
+    subCategory.dispose();
+    userRank.dispose();
+    super.dispose();
+  }
+
+// Updated getDmocileList with error handling
+  getDmocileList(String counselling) async {
+    try {
+      final data =
+          await excelCollegePredictorRepo.getStateDataToPopulate(counselling);
+
+      finalDomicileList.clear();
+      for (var domicile in data) {
+        finalDomicileList.add(domicile);
+      }
+    } catch (e) {
+      // Handle the error, e.g., show an error message to the user
+      print('Error while fetching domicile list: $e');
+    }
+  }
+
+  getCategoryDataToPopulate(String counselling, String state) async {
+    final data = await excelCollegePredictorRepo.getCategoryDataToPopulate(
+        counselling, state);
+
+    finalCategoryList.clear();
+    for (var category in data) {
+      finalCategoryList.add(category);
+    }
   }
 }

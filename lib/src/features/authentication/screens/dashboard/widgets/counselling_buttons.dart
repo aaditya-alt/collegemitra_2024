@@ -39,6 +39,7 @@ class CustomIcon {
 }
 
 Widget counsellingRow(List icons, BuildContext context) {
+  bool isLoading = false;
   final controller = Get.put(CollegePredictorController());
   var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
   List<CustomIcon> customIcons = [
@@ -57,12 +58,13 @@ Widget counsellingRow(List icons, BuildContext context) {
   ];
 
   return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    mainAxisAlignment: MainAxisAlignment.spaceAround,
     children: List.generate(icons.length, (index) {
       return Column(
         children: [
           InkWell(
             onTap: () async {
+              isLoading = true;
               if (icons[index].name == 'More') {
                 bottomSheet(context);
               } else if (icons[index].name == 'College Predictor') {
@@ -75,19 +77,28 @@ Widget counsellingRow(List icons, BuildContext context) {
             },
             borderRadius: BorderRadius.circular(90),
             child: Container(
-                padding: const EdgeInsets.all(3),
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: isDark ? tSecondaryColor : Colors.white,
-                ),
-                child: Center(
-                  child: Image.asset(
-                    icons[index].icon,
-                    fit: BoxFit.cover,
-                  ),
-                )),
+              padding: const EdgeInsets.all(3),
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: isDark ? tSecondaryColor : Colors.white,
+              ),
+              child: isLoading
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            isDark ? Colors.white : tSecondaryColor),
+                        strokeWidth: 4.0,
+                      ),
+                    )
+                  : Center(
+                      child: Image.asset(
+                        icons[index].icon,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+            ),
           ),
           const SizedBox(height: 6),
           Text(
