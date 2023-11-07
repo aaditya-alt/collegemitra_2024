@@ -31,17 +31,19 @@ class _MeetingHomeScreenState extends State<MeetingHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: tPrimaryColor.shade100,
-        elevation: 4,
+        foregroundColor: isDark ? Colors.black : Colors.white,
+        elevation: 0,
         title: const Text("Meet & Chat"),
         centerTitle: true,
       ),
       body: pages[_page],
       bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.white,
-          elevation: 5,
+          backgroundColor: isDark ? Colors.black : Colors.white,
+          elevation: 3,
           selectedItemColor: tPrimaryColor,
           onTap: onPageChanged,
           currentIndex: _page,

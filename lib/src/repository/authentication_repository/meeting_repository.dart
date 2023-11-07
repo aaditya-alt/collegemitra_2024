@@ -9,7 +9,7 @@ class JitsiMeetMethods {
   final _userRepo = Get.put(UserRepository());
   final _jitsiMeetPlugin = JitsiMeet();
 
-  void join(
+  void joinMeeting(
       {required String roomName,
       required bool isAudioMuted,
       required bool isVideoMuted}) async {
@@ -17,11 +17,11 @@ class JitsiMeetMethods {
     final userDetails = await _userRepo.getUserDetails(email!);
     try {
       var options = JitsiMeetConferenceOptions(
-        room: "testgabigabi",
+        room: roomName,
         configOverrides: {
-          "startWithAudioMuted": false,
-          "startWithVideoMuted": false,
-          "subject": "Lipitori"
+          "startWithAudioMuted": isAudioMuted,
+          "startWithVideoMuted": isVideoMuted,
+          "subject": "Collegemitra Meeting"
         },
         featureFlags: {
           "unsaferoomwarning.enabled": false,
@@ -31,61 +31,10 @@ class JitsiMeetMethods {
             displayName: userDetails.fullName,
             email: userDetails.email,
             avatar:
-                "https://avatars.githubusercontent.com/u/57035818?s=400&u=02572f10fe61bca6fc20426548f3920d53f79693&v=4"),
+                "https://tse3.mm.bing.net/th?id=OIP.ucv1JnCWKWjgS83JX0xBKQHaE6&pid=Api&P=0&h=180"),
       );
 
-      var listener = JitsiMeetEventListener(
-        conferenceJoined: (url) {
-          debugPrint("conferenceJoined: url: $url");
-        },
-        conferenceTerminated: (url, error) {
-          debugPrint("conferenceTerminated: url: $url, error: $error");
-        },
-        conferenceWillJoin: (url) {
-          debugPrint("conferenceWillJoin: url: $url");
-        },
-        // participantJoined: (email, name, role, participantId) {
-        //   debugPrint(
-        //     "participantJoined: email: $email, name: $name, role: $role, "
-        //     "participantId: $participantId",
-        //   );
-        //   participants.add(participantId!);
-        // },
-        participantLeft: (participantId) {
-          debugPrint("participantLeft: participantId: $participantId");
-        },
-        audioMutedChanged: (muted) {
-          debugPrint("audioMutedChanged: isMuted: $muted");
-        },
-        videoMutedChanged: (muted) {
-          debugPrint("videoMutedChanged: isMuted: $muted");
-        },
-        endpointTextMessageReceived: (senderId, message) {
-          debugPrint(
-              "endpointTextMessageReceived: senderId: $senderId, message: $message");
-        },
-        screenShareToggled: (participantId, sharing) {
-          debugPrint(
-            "screenShareToggled: participantId: $participantId, "
-            "isSharing: $sharing",
-          );
-        },
-        chatMessageReceived: (senderId, message, isPrivate, timestamp) {
-          debugPrint(
-            "chatMessageReceived: senderId: $senderId, message: $message, "
-            "isPrivate: $isPrivate, timestamp: $timestamp",
-          );
-        },
-        chatToggled: (isOpen) => debugPrint("chatToggled: isOpen: $isOpen"),
-        participantsInfoRetrieved: (participantsInfo) {
-          debugPrint(
-              "participantsInfoRetrieved: participantsInfo: $participantsInfo, ");
-        },
-        readyToClose: () {
-          debugPrint("readyToClose");
-        },
-      );
-      await _jitsiMeetPlugin.join(options, listener);
+      await _jitsiMeetPlugin.join(options);
     } catch (error) {
       print("error: $error");
     }
