@@ -25,6 +25,7 @@ class FeatureScreen extends StatefulWidget {
 }
 
 class _FeatureScreenState extends State<FeatureScreen> {
+  bool isLoading = false;
   late YoutubePlayerController _controller;
   bool _isPlayerReady = false;
   List<String> youtubeVideoIds = [
@@ -36,32 +37,33 @@ class _FeatureScreenState extends State<FeatureScreen> {
   int currentIndex = 0;
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     List<CustomIcon> featureIcons_1 = [
       CustomIcon(
         icon: "assets/images/dashboard_images/3d-target.png",
-        name: "College Predictor",
+        name: "Predictor",
         counselling: widget.appBarTitle,
       ),
       CustomIcon(
         icon: "assets/images/dashboard_images/search.png",
-        name: "Cut Off",
+        name: "Cutoff",
         counselling: widget.appBarTitle,
       ),
       CustomIcon(
         icon: "assets/images/dashboard_images/chart.png",
-        name: "Rank Predictor",
+        name: "Predict Rank",
         counselling: widget.appBarTitle,
       ),
       CustomIcon(
         icon: "assets/images/dashboard_images/office.png",
-        name: "Branch Predictor",
+        name: "Stream",
         counselling: widget.appBarTitle,
       ),
     ];
     List<CustomIcon> featureIcons_2 = [
       CustomIcon(
           icon: "assets/images/dashboard_images/justice.png",
-          name: "College Compare"),
+          name: "Comparison"),
       CustomIcon(
           icon: "assets/images/dashboard_images/seats.png",
           name: "Seat Matrix"),
@@ -90,59 +92,77 @@ class _FeatureScreenState extends State<FeatureScreen> {
       ),
 
       //Body of the Counselling features screen page
-      body: ListView(
-        padding: const EdgeInsets.all(14.0),
+      body: Stack(
         children: [
-          const MyCarouselSlider(),
-          const SizedBox(height: 20),
-          Text(
-            "Counselling Tools",
-            style: Theme.of(context).textTheme.titleLarge,
+          ListView(
+            padding: const EdgeInsets.all(14.0),
+            children: [
+              const MyCarouselSlider(),
+              const SizedBox(height: 20),
+              Text(
+                "Counselling Tools",
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              Text("Hands on these tools to know the Process...",
+                  style: Theme.of(context).textTheme.bodySmall),
+              const SizedBox(height: 20),
+              //counsellings
+              CounsellingButton(listItems: featureIcons_1),
+              const SizedBox(height: 20),
+              CounsellingButton(listItems: featureIcons_2),
+              const SizedBox(height: 30),
+
+              PromoCard(counselling_name: widget.appBarTitle),
+              const SizedBox(height: 25),
+
+              Text(
+                "Related Videos",
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              Text(
+                  'Watch the latest video on ${widget.appBarTitle} Counselling...',
+                  style: Theme.of(context).textTheme.bodySmall),
+              const SizedBox(height: 18),
+
+              //Related videos
+              const InformativeVideos(),
+
+              const SizedBox(height: 25),
+
+              //Related Blogs
+              Text(
+                "Explore Blogs",
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              Text(
+                  'Check out the latest blogs on ${widget.appBarTitle} Counselling...',
+                  style: Theme.of(context).textTheme.bodySmall),
+
+              const SizedBox(height: 20),
+
+              //Popular Blogs
+              const PopularBlogs(),
+
+              const SizedBox(height: 20),
+
+              const BottomCarousel(),
+
+              //Bottom carousel
+            ],
           ),
-          Text("Hands on these tools to know the Process...",
-              style: Theme.of(context).textTheme.bodySmall),
-          const SizedBox(height: 20),
-          //counsellings
-          CounsellingButton(listItems: featureIcons_1),
-          const SizedBox(height: 20),
-          CounsellingButton(listItems: featureIcons_2),
-          const SizedBox(height: 30),
-
-          PromoCard(counselling_name: widget.appBarTitle),
-          const SizedBox(height: 25),
-
-          Text(
-            "Related Videos",
-            style: Theme.of(context).textTheme.titleLarge,
+          Visibility(
+            visible: isLoading,
+            child: Container(
+              color:
+                  Colors.black.withOpacity(0.5), // Adjust the opacity as needed
+              child: Center(
+                child: Image.asset(
+                  "assets/gif/loader.gif",
+                  width: size.height / 4,
+                ),
+              ),
+            ),
           ),
-          Text('Watch the latest video on ${widget.appBarTitle} Counselling...',
-              style: Theme.of(context).textTheme.bodySmall),
-          const SizedBox(height: 18),
-
-          //Related videos
-          const InformativeVideos(),
-
-          const SizedBox(height: 25),
-
-          //Related Blogs
-          Text(
-            "Explore Blogs",
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-          Text(
-              'Check out the latest blogs on ${widget.appBarTitle} Counselling...',
-              style: Theme.of(context).textTheme.bodySmall),
-
-          const SizedBox(height: 20),
-
-          //Popular Blogs
-          const PopularBlogs(),
-
-          const SizedBox(height: 20),
-
-          const BottomCarousel(),
-
-          //Bottom carousel
         ],
       ),
 

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:collegemitra/src/features/authentication/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show ByteData, rootBundle;
@@ -7,8 +9,8 @@ import 'package:get/get.dart';
 class ExcelCollegePredictor extends GetxController {
   static ExcelCollegePredictor get instance => Get.find();
 
-  Future<List<CollegeData>> processExcelData(
-      String state, String category, String gender, int userRank) async {
+  Future<List<CollegeData>> processExcelData(String state, String category,
+      String gender, int userRank, String counselling, String exam) async {
     ByteData data = await rootBundle.load('assets/cutoff_files/test.xlsx');
     var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
     var excel = Excel.decodeBytes(bytes);
@@ -20,13 +22,28 @@ class ExcelCollegePredictor extends GetxController {
       BranchData? currentBranch;
 
       for (var row in excel.tables[table]!.rows) {
+        bool isIIT = row[7]!.value.toString().contains("IIT");
+
+        if (exam == "JEE Main" && isIIT) {
+          // Skip non-IIT colleges for JEE Main
+          continue;
+        }
+
+        // Check if the exam is JEE Advanced and the college type is IIT
+        if (exam == "JEE Advanced" && !isIIT) {
+          // Skip non-IIT colleges for JEE Advanced
+          continue;
+        }
         if (row[8]!.value.toString() == state) {
           if (row[3]!.value.toString() == category &&
-              row[4]!.value.toString() == gender) {
+              row[4]!.value.toString() == gender &&
+              row[2]!.value.toString() != "OS" &&
+              int.parse(row[6]!.value.toString()) > userRank) {
             if (currentCollege == null ||
                 currentCollege.collegeName != row[0]!.value.toString()) {
               currentCollege = CollegeData(
                 collegeName: row[0]!.value.toString(),
+                collegeType: row[7]!.value.toString(),
                 branches: [],
               );
               filteredData.add(currentCollege);
@@ -45,18 +62,19 @@ class ExcelCollegePredictor extends GetxController {
               roundName: row[9]!.value.toString(),
               openingRank: int.parse(row[5]!.value.toString()),
               closingRank: int.parse(row[6]!.value.toString()),
-              rankDifference: int.parse(row[6]!.value.toString()) -
-                  int.parse(row[5]!.value.toString()),
+              rankDifference: int.parse(row[6]!.value.toString()) - userRank,
             ));
           }
-        } else if (row[2]!.value.toString() == 'OS' ||
-            row[2]!.value.toString() == 'AI') {
+        } else if (row[8]!.value.toString() != state) {
           if (row[3]!.value.toString() == category &&
-              row[4]!.value.toString() == gender) {
+              row[4]!.value.toString() == gender &&
+              row[2]!.value.toString() != "HS" &&
+              int.parse(row[6]!.value.toString()) > userRank) {
             if (currentCollege == null ||
                 currentCollege.collegeName != row[0]!.value.toString()) {
               currentCollege = CollegeData(
                 collegeName: row[0]!.value.toString(),
+                collegeType: row[7]!.value.toString(),
                 branches: [],
               );
               filteredData.add(currentCollege);
@@ -75,8 +93,7 @@ class ExcelCollegePredictor extends GetxController {
               roundName: row[9]!.value.toString(),
               openingRank: int.parse(row[5]!.value.toString()),
               closingRank: int.parse(row[6]!.value.toString()),
-              rankDifference: int.parse(row[6]!.value.toString()) -
-                  int.parse(row[5]!.value.toString()),
+              rankDifference: int.parse(row[6]!.value.toString()) - userRank,
             ));
           }
         }
@@ -86,121 +103,26 @@ class ExcelCollegePredictor extends GetxController {
     return filteredData;
   }
 
-  getStateDataToPopulate(String counselling) async {
-    ByteData data = await rootBundle.load('assets/cutoff_files/test.xlsx');
+  Future<int> getNoOfBranches(String collegeName) async {
+    int branches = 0;
+    ByteData data = await rootBundle.load('assets/cutoff_files/round_6.xlsx');
     var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
     var excel = Excel.decodeBytes(bytes);
 
-    List<DropdownMenuEntry<dynamic>> domicileList = [];
-
-    Set<String> statedata = new Set();
     for (var table in excel.tables.keys) {
       for (var row in excel.tables[table]!.rows) {
-        statedata.add(row[8]!.value.toString());
-      }
-    }
-    statedata.remove("state");
+        var cellValue = row[0]?.value;
 
-    for (var state in statedata) {
-      domicileList.add(DropdownMenuEntry(value: state, label: state));
-    }
-    return domicileList;
-  }
-
-  //Get category data to populate
-
-  getCategoryDataToPopulate(String counselling, String state) async {
-    ByteData data = await rootBundle.load('assets/cutoff_files/test.xlsx');
-    var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-    var excel = Excel.decodeBytes(bytes);
-
-    List<DropdownMenuEntry<dynamic>> domicileList = [];
-
-    Set<String> statedata = new Set();
-
-    for (var table in excel.tables.keys) {
-      for (var row in excel.tables[table]!.rows) {
-        if (row[8]!.value.toString() == state) {
-          statedata.add(row[3]!.value.toString());
-        } else if (row[8]!.value.toString() != state) {
-          statedata.add(row[3]!.value.toString());
+        if (cellValue is String && cellValue == collegeName) {
+          // Check if the first column has the desired collegeName
+          var branchName = row[1]?.value;
+          if (branchName is String) {
+            branches = branchName.length;
+          }
         }
       }
     }
-    statedata.remove("category");
 
-    for (var state in statedata) {
-      domicileList.add(DropdownMenuEntry(value: state, label: state));
-    }
-    return domicileList;
-  }
-
-  List<String> uniqueStates = []; // List to store unique states
-
-  Future<List<String>> getUniqueStates() async {
-    ByteData data = await rootBundle.load('assets/cutoff_files/test.xlsx');
-    var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-    var excel = Excel.decodeBytes(bytes);
-
-    uniqueStates
-        .clear(); // Clear the list in case this method is called multiple times
-
-    for (var table in excel.tables.keys) {
-      for (var row in excel.tables[table]!.rows) {
-        final state = row[8]?.value?.toString() ?? "";
-        if (!uniqueStates.contains(state)) {
-          uniqueStates.add(state);
-        }
-      }
-    }
-    return uniqueStates;
-  }
-
-  List<String> uniqueCategories = [];
-
-  Future<List<String>> getUniqueCategoriesForState(String selectedState) async {
-    ByteData data = await rootBundle.load('assets/cutoff_files/test.xlsx');
-    var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-    var excel = Excel.decodeBytes(bytes);
-
-    uniqueCategories.clear();
-
-    for (var table in excel.tables.keys) {
-      for (var row in excel.tables[table]!.rows) {
-        final state = row[8]?.value?.toString() ?? "";
-        final category = row[3]?.value?.toString() ?? "";
-
-        if (state == selectedState && !uniqueCategories.contains(category)) {
-          uniqueCategories.add(category);
-        }
-      }
-    }
-    return uniqueCategories;
-  }
-
-  List<String> uniqueSubCategories = [];
-
-  Future<List<String>> getUniqueSubCategoriesForState(
-      String selectedState, String selectedCategory) async {
-    ByteData data = await rootBundle.load('assets/cutoff_files/test.xlsx');
-    var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-    var excel = Excel.decodeBytes(bytes);
-
-    uniqueSubCategories.clear();
-
-    for (var table in excel.tables.keys) {
-      for (var row in excel.tables[table]!.rows) {
-        final state = row[8]?.value?.toString() ?? "";
-        final category = row[3]?.value?.toString() ?? "";
-        final subCategory = row[4]?.value?.toString() ?? "";
-
-        if (state == selectedState &&
-            category == selectedCategory &&
-            !uniqueSubCategories.contains(subCategory)) {
-          uniqueSubCategories.add(subCategory);
-        }
-      }
-    }
-    return uniqueSubCategories;
+    return branches;
   }
 }

@@ -11,7 +11,7 @@ class WhyCollegemitra extends StatelessWidget {
           icon: "assets/images/dashboard_images/shield.png", name: "Assured"),
       CustomIcon(
           icon: "assets/images/dashboard_images/3d-fire.png",
-          name: "Fantastic Reviews"),
+          name: "Fantastic"),
       CustomIcon(
           icon: "assets/images/dashboard_images/love.png",
           name: "Love & Support"),
@@ -21,7 +21,7 @@ class WhyCollegemitra extends StatelessWidget {
     ];
 
     return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10),
+      padding: const EdgeInsets.only(left: 8, right: 8),
       child: Column(
         children: [
           whyCollegemitra(customIcons, context),

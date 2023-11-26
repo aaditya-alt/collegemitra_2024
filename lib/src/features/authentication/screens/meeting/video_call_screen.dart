@@ -49,7 +49,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: tPrimaryColor.shade100,
+        backgroundColor: tPrimaryColor,
         foregroundColor: isDark ? Colors.black : Colors.white,
         title: const Text(
           "Join a Meeting",

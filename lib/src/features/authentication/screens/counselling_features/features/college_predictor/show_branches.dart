@@ -36,7 +36,7 @@ class _ShowBranchesState extends State<ShowBranches> {
       "Domicile",
       "Category",
       "Sub Category",
-      "JEE Mains Rank"
+      "JEE Rank"
     ];
 
     return Scaffold(
@@ -88,7 +88,7 @@ class _ShowBranchesState extends State<ShowBranches> {
           ),
           SliverToBoxAdapter(
             child: Container(
-              color: tPrimaryColor.shade100,
+              color: tPrimaryColor.shade300,
               height: 55,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -122,7 +122,7 @@ class _ShowBranchesState extends State<ShowBranches> {
                       ),
                       const Text(
                         "|\n|\n|",
-                        style: TextStyle(color: tPrimaryColor),
+                        style: TextStyle(color: Colors.black),
                       ),
                     ],
                   );
@@ -149,13 +149,9 @@ class _ShowBranchesState extends State<ShowBranches> {
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(25),
                             ),
-                            child: const Center(
-                              child: Text(
-                                "🎓",
-                                style: TextStyle(
-                                  fontSize: 24,
-                                ),
-                              ),
+                            child: Center(
+                              child: _getGifBasedOnChance(
+                                  calculateBranchPercentage(branches)),
                             ),
                           ),
                           const SizedBox(width: 10),
@@ -181,7 +177,7 @@ class _ShowBranchesState extends State<ShowBranches> {
                             ),
                           ),
                           const SizedBox(width: 10),
-                          Container(
+                          SizedBox(
                             width: 40,
                             height: 40,
                             child: IconButton(
@@ -202,7 +198,7 @@ class _ShowBranchesState extends State<ShowBranches> {
                       ),
                     ),
                     if (isExpanded[i])
-                      Container(
+                      SizedBox(
                         height: 150,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
@@ -214,7 +210,8 @@ class _ShowBranchesState extends State<ShowBranches> {
                               padding: const EdgeInsets.all(8),
                               width: 200,
                               decoration: BoxDecoration(
-                                  color: tPrimaryColor.shade100,
+                                  color: _getColorBasedOnChance(
+                                      calculateBranchPercentage(branches)),
                                   borderRadius: BorderRadius.circular(10.0),
                                   border: Border.all(color: Colors.black)),
                               child: Column(
@@ -263,5 +260,79 @@ class _ShowBranchesState extends State<ShowBranches> {
         ],
       ),
     );
+  }
+}
+
+double calculateBranchPercentage(BranchData branch) {
+  double totalRoundPercentages = 0.0;
+  int totalRounds = branch.rounds.length;
+
+  for (var round in branch.rounds) {
+    double roundPercentage = calculateRoundPercentage(round.rankDifference);
+    totalRoundPercentages += roundPercentage;
+  }
+
+  double averagePercentage = totalRoundPercentages / totalRounds;
+
+  double overallModifier = 1.0;
+
+  if (averagePercentage > 0.0) {
+    if (averagePercentage >= 0.8) {
+      overallModifier = 1.2;
+    } else if (averagePercentage >= 0.6) {
+      overallModifier = 1.1;
+    } else if (averagePercentage >= 0.4) {
+      overallModifier = 1.05;
+    }
+  }
+
+  double finalPercentage = averagePercentage * overallModifier;
+
+  return finalPercentage > 1.0 ? 1.0 : finalPercentage;
+}
+
+double calculateRoundPercentage(int rankDifference) {
+  double percentage = 0.0;
+
+  if (rankDifference >= 10000) {
+    percentage = 1.0;
+  } else if (rankDifference >= 4000) {
+    percentage = 0.8;
+  } else if (rankDifference >= 1000) {
+    percentage = 0.6;
+  } else if (rankDifference >= 350) {
+    percentage = 0.4;
+  } else if (rankDifference >= 0) {
+    percentage = 0.2;
+  } else {
+    percentage = 0.5;
+  }
+
+  return percentage;
+}
+
+Color _getColorBasedOnChance(double chance) {
+  if (chance >= 0.6) {
+    return Colors.green.shade300;
+  } else if (chance >= 0.4) {
+    return Colors.orange.shade300;
+  } else {
+    return Colors.red.shade300;
+  }
+}
+
+Widget _getGifBasedOnChance(double chance) {
+  if (chance >= 0.8) {
+    return Image.asset(
+        'assets/gif/love.gif'); // Star emoji for great chance (yellow or gold star)
+  } else if (chance >= 0.6) {
+    return Image.asset(
+        'assets/gif/happy.gif'); // Smiling face for good chance (yellow or orange smiling face)
+  } else if (chance >= 0.4) {
+    return Image.asset(
+        'assets/gif/neutral.gif'); // Neutral face for fair chance (neutral face in yellow or orange tone)
+  } else {
+    return Image.asset(
+        'assets/gif/sad.gif'); // Crying face for slim chance (crying face in yellow or orange tone)
   }
 }

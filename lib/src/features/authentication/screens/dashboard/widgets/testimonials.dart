@@ -44,12 +44,12 @@ class TestimonialSection extends StatelessWidget {
           color: const Color.fromARGB(255, 255, 132, 0)),
     ];
     return SizedBox(
-      height: size.height / 3.5,
+      height: size.height / 3,
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: Testimonials.length,
           itemBuilder: (BuildContext context, int i) => SizedBox(
-                width: size.width - 30,
+                width: size.width - 10,
                 child: Card(
                   surfaceTintColor: Testimonials[i].color,
                   elevation: 4,

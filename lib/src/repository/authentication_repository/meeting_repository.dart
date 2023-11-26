@@ -17,6 +17,8 @@ class JitsiMeetMethods {
     final userDetails = await _userRepo.getUserDetails(email!);
     try {
       var options = JitsiMeetConferenceOptions(
+        serverURL:
+            "https://smaug.lixper.it/CapableProtestersAccompanyCertainly",
         room: roomName,
         configOverrides: {
           "startWithAudioMuted": isAudioMuted,

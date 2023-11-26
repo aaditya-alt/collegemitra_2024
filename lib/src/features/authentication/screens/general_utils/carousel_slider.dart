@@ -13,9 +13,9 @@ class _MyCarouselSliderState extends State<MyCarouselSlider> {
   late YoutubePlayerController _controller;
   bool _isPlayerReady = false;
   List<String> youtubeVideoIds = [
-    '-W45PQ__SAk',
-    'pYYBGnanhzM',
-    '-W45PQ__SAk',
+    'DDvapuQGV84',
+    'DDvapuQGV84',
+    'DDvapuQGV84',
   ];
 
   int currentIndex = 0;

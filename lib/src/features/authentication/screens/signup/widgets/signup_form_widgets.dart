@@ -41,6 +41,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
               TextFormField(
                 controller: controller.fullName,
                 decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.all(10),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.elliptical(10, 10)),
                     ),
@@ -52,6 +53,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
                 controller: controller.email,
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.all(10),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.elliptical(10, 10)),
                     ),
@@ -63,6 +65,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
                 keyboardType: TextInputType.phone,
                 controller: controller.phoneNo,
                 decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.all(10),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.elliptical(10, 10)),
                     ),
@@ -74,6 +77,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
                 keyboardType: TextInputType.visiblePassword,
                 controller: controller.password,
                 decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.all(10),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.elliptical(10, 10)),
                     ),

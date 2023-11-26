@@ -1,3 +1,4 @@
+import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/best_services.dart';
 import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/blogs_section.dart';
 import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/bottom_carousel.dart';
@@ -14,6 +15,7 @@ import 'package:collegemitra/src/features/authentication/screens/meeting/meeting
 import 'package:collegemitra/src/features/authentication/screens/premium/chat/chat_users.dart';
 import 'package:collegemitra/src/features/authentication/screens/profile/profile_screen.dart';
 import 'package:collegemitra/src/repository/authentication_repository/authentication_repository.dart';
+import 'package:collegemitra/src/repository/authentication_repository/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -34,7 +36,10 @@ class _DashboardState extends State<Dashboard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // const Padding(padding: EdgeInsets.only(top: 6)),
-            const Text("Hii Jane"),
+            const Text(
+              "Hey King",
+              style: TextStyle(fontSize: 16),
+            ),
             Text("How are you feeling today?",
                 style: Theme.of(context).textTheme.bodySmall),
           ],

@@ -34,7 +34,7 @@ class _MeetingHomeScreenState extends State<MeetingHomeScreen> {
     bool isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: tPrimaryColor.shade100,
+        backgroundColor: tPrimaryColor,
         foregroundColor: isDark ? Colors.black : Colors.white,
         elevation: 0,
         title: const Text("Meet & Chat"),

@@ -1,4 +1,5 @@
 import 'package:collegemitra/src/constants/colors.dart';
+import 'package:easy_loader/easy_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -30,25 +31,29 @@ class _YoutubeVideoPlayerState extends State<YoutubeVideoPlayer> {
         appBar: AppBar(
           title: const Text('Video Player'),
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        body: Stack(
           children: [
-            YoutubePlayer(
-              controller: _controller,
-              showVideoProgressIndicator: true,
-              onReady: () => print("Ready"),
-              bottomActions: [
-                CurrentPosition(),
-                ProgressBar(
-                  isExpanded: true,
-                  colors: const ProgressBarColors(
-                    playedColor: tSecondaryColor,
-                    handleColor: tPrimaryColor,
-                  ),
-                ),
-                const PlaybackSpeedButton(),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                YoutubePlayer(
+                  controller: _controller,
+                  showVideoProgressIndicator: true,
+                  onReady: () => print("Ready"),
+                  bottomActions: [
+                    CurrentPosition(),
+                    ProgressBar(
+                      isExpanded: true,
+                      colors: const ProgressBarColors(
+                        playedColor: tSecondaryColor,
+                        handleColor: tPrimaryColor,
+                      ),
+                    ),
+                    const PlaybackSpeedButton(),
+                  ],
+                )
               ],
-            )
+            ),
           ],
         ));
   }

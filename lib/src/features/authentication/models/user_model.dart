@@ -65,10 +65,12 @@ class BranchData {
 
 class CollegeData {
   final String collegeName;
+  final String collegeType;
   final List<BranchData> branches;
 
   CollegeData({
     required this.collegeName,
+    required this.collegeType,
     required this.branches,
   });
 }

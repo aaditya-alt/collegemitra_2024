@@ -87,6 +87,7 @@ class CollegePredictorRepository extends GetxController {
         collegesData.add(
           CollegeData(
             collegeName: collegeName,
+            collegeType: collegeName,
             branches: branchesData,
           ),
         );

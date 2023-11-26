@@ -1,3 +1,4 @@
+import 'package:collegemitra/src/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:collegemitra/src/utils/theme/widget_themes/text_theme.dart';
 
@@ -14,7 +15,7 @@ class PopularBlogs extends StatelessWidget {
           subTitle: 'Get to know about Top 10 Colleges in Delhi'),
       blogSection(
           image: 'assets/images/dashboard_images/counselling_images/josaa.png',
-          title: 'JOSAA Counselling',
+          title: 'JOSAA',
           subTitle: 'Read the article for details about JOSAA'),
       blogSection(
           image: 'assets/images/dashboard_images/t10delhi.jpg',
@@ -36,7 +37,7 @@ class PopularBlogs extends StatelessWidget {
                     height: 200,
                     width: 180,
                     decoration: BoxDecoration(
-                        color: isDark ? Colors.black : Colors.pink.shade200,
+                        color: isDark ? Colors.black : tPrimaryColor.shade200,
                         borderRadius: const BorderRadius.vertical(
                             bottom: Radius.circular(10))),
                     child: Column(

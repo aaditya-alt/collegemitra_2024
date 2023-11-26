@@ -13,9 +13,9 @@ class _BottomCarouselState extends State<BottomCarousel> {
   late YoutubePlayerController _controller;
   bool _isPlayerReady = false;
   List<String> youtubeVideoIds = [
-    'SEzIoNqJL3U',
-    'pYYBGnanhzM',
-    'SEzIoNqJL3U',
+    'lFml8NrHoeo',
+    'lFml8NrHoeo',
+    'lFml8NrHoeo',
   ];
   int currentIndex = 0;
   @override

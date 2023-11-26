@@ -64,7 +64,7 @@ class PromoCard extends StatelessWidget {
               bottom: 0,
               left: 0,
               child: SizedBox(
-                height: 136,
+                height: size.height / 3.9,
                 // our image take 200 width, thats why we set out total width - 200
                 width: size.width - 200,
                 child: Column(
@@ -78,9 +78,9 @@ class PromoCard extends StatelessWidget {
                                 counselling_name != 'JAC Delhi' &&
                                 counselling_name != 'GGSIPU Delhi')
                             ? '$counselling_name Mentorship ?'
-                            : 'Looking for Mentorship ?',
+                            : 'Need Guidance ?',
                         style: Theme.of(context).textTheme.titleLarge,
-                        overflow: TextOverflow.clip,
+                        overflow: TextOverflow.fade,
                       ),
                     ),
                     // it use the available space
