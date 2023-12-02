@@ -42,7 +42,7 @@ class SignUpController extends GetxController {
     try {
       final auth = AuthenticationRepository.instance;
       await auth.signInWithGoogle();
-      auth.setInitialScreen(auth.firebaseUser.value);
+      auth.setInitialScreen(auth.firebaseUser.value, "User");
     } catch (e) {
       print(e.toString());
     }

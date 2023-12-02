@@ -22,7 +22,6 @@ class RankPredictor extends StatefulWidget {
 }
 
 class _RankPredictorState extends State<RankPredictor> {
-  late RiveAnimationController _btnAnimationController;
   bool isLoading = false;
 
   String examdate = "20 Feb 2023";
@@ -30,10 +29,6 @@ class _RankPredictorState extends State<RankPredictor> {
 
   @override
   void initState() {
-    _btnAnimationController = OneShotAnimation(
-      "active",
-      autoplay: false,
-    );
     super.initState();
   }
 
@@ -82,7 +77,7 @@ class _RankPredictorState extends State<RankPredictor> {
             left: 100,
             bottom: 100,
             child: Image.asset(
-              "assets/images/spline.png",
+              "assets/images/dashboard_images/background_new.png",
             ),
           ),
           Positioned.fill(
@@ -91,20 +86,9 @@ class _RankPredictorState extends State<RankPredictor> {
               child: const SizedBox(),
             ),
           ),
-          const RiveAnimation.asset(
-            "assets/images/riveAssets/shapes.riv",
-          ),
-          Positioned.fill(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-              child: const SizedBox(),
-            ),
-          ),
-          AnimatedPositioned(
-            top: 0,
+          SizedBox(
             height: MediaQuery.of(context).size.height,
             width: size,
-            duration: const Duration(milliseconds: 260),
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: Column(
@@ -153,12 +137,10 @@ class _RankPredictorState extends State<RankPredictor> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 14, vertical: 10),
                     child: AnimatedBtn(
-                      btnAnimationController: _btnAnimationController,
                       press: () {
                         setState(() {
                           isLoading = true;
                         });
-                        _btnAnimationController.isActive = true;
 
                         // _controller.printDetails(
                         //     examdate, examShift, _controller.marks.text);
@@ -248,7 +230,7 @@ class _RankPredictorState extends State<RankPredictor> {
             child: const Icon(
               Icons.info_rounded,
               size: 30,
-              color: Colors.yellow,
+              color: tAccentColor,
             ),
             onTap: () {
               // showDialog(
@@ -401,110 +383,107 @@ calculateScore(
     c = ((100 - b) / 100) * n + 1;
   }
 
-  showDialog(
+  showModalBottomSheet(
+    enableDrag: true,
+    isDismissible: true,
+    isScrollControlled: true,
     context: context,
     builder: (BuildContext context) {
-      return AlertDialog(
-        contentPadding: EdgeInsets.zero, // No content padding
-        backgroundColor: Colors.transparent, // Transparent background
-        content: Container(
-          width: double.maxFinite, // Full-width dialog
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16.0),
-          ),
-          child: Padding(
-            padding:
-                const EdgeInsets.all(8.0), // Padding for the dialog content
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset(
-                  "assets/gif/graduation-cap.gif",
-                  height: 100,
-                  width: 100,
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Wrap(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16.0),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Expanded(
-                      child: Card(
-                        color: Colors.blue, // Left card color
-                        elevation: 8.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Text(
-                                'Expected Percentile',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                    Image.asset(
+                      "assets/gif/graduation-cap.gif",
+                      height: 100,
+                      width: 100,
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Card(
+                            color: Colors.blue, // Left card color
+                            elevation: 8.0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Text(
+                                    'Expected Percentile',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    '${b.toPrecision(4)}',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              const SizedBox(height: 8),
-                              Text(
-                                '${b.toPrecision(3)}',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(width: 16), // Spacer between cards
-                    Expanded(
-                      child: Card(
-                        color: Colors.blue, // Right card color
-                        elevation: 8.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Text(
-                                'Expected Rank',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                        const SizedBox(width: 16), // Spacer between cards
+                        Expanded(
+                          child: Card(
+                            color: Colors.blue, // Right card color
+                            elevation: 8.0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Text(
+                                    'Expected Rank',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    '${c.toInt()}',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              const SizedBox(height: 8),
-                              Text(
-                                '${c.toInt()}',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
+                    const SizedBox(height: 20),
                   ],
                 ),
-                const SizedBox(height: 15),
-                const Text(
-                  'algorithm designed by Collegemitra',
-                  style: TextStyle(
-                    color: Color.fromARGB(137, 85, 85, 85),
-                    fontSize: 12,
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       );
     },

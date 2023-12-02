@@ -14,16 +14,8 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
-  late RiveAnimationController _btnAnimationController;
-
-  bool isShowSignInDialog = false;
-
   @override
   void initState() {
-    _btnAnimationController = OneShotAnimation(
-      "active",
-      autoplay: false,
-    );
     super.initState();
   }
 
@@ -56,7 +48,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             ),
           ),
           AnimatedPositioned(
-            top: isShowSignInDialog ? -50 : 0,
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             duration: const Duration(milliseconds: 260),
@@ -89,20 +80,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),
                     const Spacer(flex: 2),
                     AnimatedBtn(
-                      btnAnimationController: _btnAnimationController,
                       press: () {
-                        _btnAnimationController.isActive = true;
-
                         Get.to(() => const LoginScreen());
-
-                        Future.delayed(
-                          const Duration(milliseconds: 800),
-                          () {
-                            setState(() {
-                              isShowSignInDialog = true;
-                            });
-                          },
-                        );
                       },
                       buttonText: "Let's find Colleges",
                     ),

@@ -20,7 +20,7 @@ class _LoginFooterWidgetState extends State<LoginFooterWidget> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(LoginController());
-    return Container(
+    return SizedBox(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

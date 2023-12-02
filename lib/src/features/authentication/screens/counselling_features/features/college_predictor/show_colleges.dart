@@ -35,6 +35,12 @@ class _ShowCollegesState extends State<ShowColleges> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     List<String> userDetailsName = [
       "Counselling",
@@ -286,7 +292,7 @@ class _ShowCollegesState extends State<ShowColleges> {
               Stack(
                 children: [
                   Container(
-                    color: tPrimaryColor.shade300,
+                    color: tPrimaryColor,
                     height: 57,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
@@ -295,7 +301,7 @@ class _ShowCollegesState extends State<ShowColleges> {
                         return Row(
                           children: [
                             Container(
-                              width: 120,
+                              width: 140,
                               margin: const EdgeInsets.all(4),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -342,13 +348,7 @@ class _ShowCollegesState extends State<ShowColleges> {
                           size: 30,
                         ),
                         onPressed: () {
-                          setState(() {
-                            isLoading = true;
-                          });
                           Get.back();
-                          setState(() {
-                            isLoading = false;
-                          });
                         },
                       ),
                     ),
@@ -418,25 +418,7 @@ class _ShowCollegesState extends State<ShowColleges> {
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(25),
                             ),
-                            child: FutureBuilder(
-                              future: getCollegeChance(college),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const CircularProgressIndicator();
-                                } else if (snapshot.connectionState ==
-                                    ConnectionState.done) {
-                                  if (snapshot.hasError) {
-                                    print("Error : ${snapshot.error}");
-                                    return Text('Error: ${snapshot.error}');
-                                  } else {
-                                    return Center(child: snapshot.data);
-                                  }
-                                } else {
-                                  return Container();
-                                }
-                              },
-                            ),
+                            child: getCollegeChance(college),
                           ),
                           const SizedBox(width: 10),
                           Expanded(
@@ -513,11 +495,8 @@ class _ShowCollegesState extends State<ShowColleges> {
   }
 }
 
-final _controller = Get.put(CollegePredictorController());
-
-Future<Widget> getCollegeChance(CollegeData college) async {
-  final realCount =
-      await _controller.getBranchesNumber(college.collegeName.toString());
+Widget getCollegeChance(CollegeData college) {
+  int realCount = college.totalBranchLength;
   int havingCount = college.branches.length;
 
   double chance = havingCount / int.parse(realCount.toString());
@@ -538,7 +517,7 @@ class CheckboxOptions extends StatefulWidget {
   final List<String> options;
   final List<String> selectedOptions;
 
-  CheckboxOptions({required this.options, required this.selectedOptions});
+  const CheckboxOptions({required this.options, required this.selectedOptions});
 
   @override
   _CheckboxOptionsState createState() => _CheckboxOptionsState();

@@ -29,17 +29,18 @@ class PopularBlogs extends StatelessWidget {
           itemCount: blogsSection.length,
           itemBuilder: (BuildContext context, int i) => GestureDetector(
                 child: Card(
+                  elevation: 3,
                   color: isDark
                       ? Colors.black
                       : const Color.fromARGB(255, 255, 229, 238),
-                  elevation: 5,
                   child: Container(
                     height: 200,
                     width: 180,
                     decoration: BoxDecoration(
-                        color: isDark ? Colors.black : tPrimaryColor.shade200,
+                        color: isDark ? Colors.black : tCardBgColor,
                         borderRadius: const BorderRadius.vertical(
-                            bottom: Radius.circular(10))),
+                            bottom: Radius.circular(10),
+                            top: Radius.circular(10))),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [

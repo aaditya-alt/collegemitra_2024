@@ -17,16 +17,26 @@ class ShowBranches extends StatefulWidget {
   }) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _ShowBranchesState createState() => _ShowBranchesState();
 }
 
 class _ShowBranchesState extends State<ShowBranches> {
+  bool isLoading = false;
+  List<BranchData> filteredBranches = [];
   List<bool> isExpanded = [];
 
   @override
   void initState() {
     super.initState();
     isExpanded = List.generate(widget.branchesToShow.length, (index) => false);
+    filteredBranches = List.from(widget.branchesToShow);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
@@ -38,6 +48,19 @@ class _ShowBranchesState extends State<ShowBranches> {
       "Sub Category",
       "JEE Rank"
     ];
+
+    void filterBranches(String query) {
+      setState(() {
+        filteredBranches = widget.branchesToShow
+            .where((branch) =>
+                branch.branchName.toLowerCase().contains(query.toLowerCase()) ||
+                widget.userDetails.any((detail) => detail
+                    .toString()
+                    .toLowerCase()
+                    .contains(query.toLowerCase())))
+            .toList();
+      });
+    }
 
     return Scaffold(
       body: CustomScrollView(
@@ -68,6 +91,7 @@ class _ShowBranchesState extends State<ShowBranches> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: TextField(
+                    onChanged: filterBranches,
                     decoration: InputDecoration(
                       hintText: "Search Branches...",
                       suffixIcon: IconButton(
@@ -88,16 +112,16 @@ class _ShowBranchesState extends State<ShowBranches> {
           ),
           SliverToBoxAdapter(
             child: Container(
-              color: tPrimaryColor.shade300,
+              color: tPrimaryColor,
               height: 55,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: 5,
+                itemCount: widget.userDetails.length,
                 itemBuilder: (context, index) {
                   return Row(
                     children: [
                       Container(
-                        width: 120,
+                        width: 130,
                         margin: const EdgeInsets.all(4),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -133,7 +157,7 @@ class _ShowBranchesState extends State<ShowBranches> {
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, i) {
-                var branches = widget.branchesToShow[i];
+                var branches = filteredBranches[i];
 
                 return Column(
                   children: [
@@ -199,7 +223,7 @@ class _ShowBranchesState extends State<ShowBranches> {
                     ),
                     if (isExpanded[i])
                       SizedBox(
-                        height: 150,
+                        height: 155,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: branches.rounds.length,
@@ -218,7 +242,7 @@ class _ShowBranchesState extends State<ShowBranches> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "Round ${j + 1}",
+                                    round.roundName,
                                     style: const TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 16,
@@ -254,7 +278,7 @@ class _ShowBranchesState extends State<ShowBranches> {
                   ],
                 );
               },
-              childCount: widget.branchesToShow.length,
+              childCount: filteredBranches.length,
             ),
           ),
         ],

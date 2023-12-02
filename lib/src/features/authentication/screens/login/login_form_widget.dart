@@ -1,3 +1,4 @@
+import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/constants/sizes.dart';
 import 'package:collegemitra/src/constants/text_strings.dart';
 import 'package:collegemitra/src/features/authentication/controllers/login_controller.dart';
@@ -69,8 +70,11 @@ class _LoginFormState extends State<LoginForm> {
             const SizedBox(height: tDefaultSize),
             SizedBox(
               width: double.infinity,
-              child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.elliptical(10, 10)),
+              child: Container(
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.elliptical(10, 10)),
+                  color: tPrimaryColor,
+                ),
                 child: ElevatedButton(
                   onPressed: () async {
                     if (EmailValidator.validate(controller.email.text.trim())) {

@@ -21,7 +21,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({super.key});
+  final username;
+  const Dashboard({super.key, this.username});
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -32,13 +33,15 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 2,
+        backgroundColor: tAccentColor,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // const Padding(padding: EdgeInsets.only(top: 6)),
-            const Text(
-              "Hey King",
-              style: TextStyle(fontSize: 16),
+            Text(
+              "Hey ${widget.username}",
+              style: const TextStyle(fontSize: 16),
             ),
             Text("How are you feeling today?",
                 style: Theme.of(context).textTheme.bodySmall),
@@ -175,18 +178,21 @@ class _DashboardState extends State<Dashboard> {
           const BottomCarousel(),
         ],
       ),
-      drawer: Drawer(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              MyHeaderDrawer(),
-              const DrawerList(),
-            ],
-          ),
-        ),
-      ),
+      // drawer: Drawer(
+      //   child: SingleChildScrollView(
+      //     child: Column(
+      //       children: [
+      //         MyHeaderDrawer(),
+      //         const DrawerList(),
+      //       ],
+      //     ),
+      //   ),
+      // ),
       bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: tAccentColor.shade100,
+          elevation: 1,
           type: BottomNavigationBarType.fixed,
+          selectedItemColor: tPrimaryColor,
           showSelectedLabels: false,
           showUnselectedLabels: false,
           currentIndex: 0,
@@ -198,14 +204,12 @@ class _DashboardState extends State<Dashboard> {
             }
           },
           items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
             BottomNavigationBarItem(
-                icon: Icon(Icons.home_outlined), label: "Home"),
+                icon: Icon(Icons.newspaper_rounded), label: "Blogs"),
             BottomNavigationBarItem(
-                icon: Icon(Icons.newspaper_outlined), label: "Blogs"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.workspace_premium_outlined), label: "Premium"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.person_2_outlined), label: "Profile"),
+                icon: Icon(Icons.card_membership), label: "Premium"),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
           ]),
     );
   }

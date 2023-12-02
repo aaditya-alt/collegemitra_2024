@@ -1,5 +1,6 @@
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/controllers/college_predictor_controller.dart';
+import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/branch_predictor/branch_predictor.dart';
 import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/college_predictor/college_predictor.dart';
 import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/rank_predictor/rank_predictor.dart';
 import 'package:collegemitra/src/features/authentication/screens/counselling_features/features_screen.dart';
@@ -90,62 +91,89 @@ class _CounsellingButtonState extends State<CounsellingButton> {
     }
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: List.generate(icons.length, (index) {
-        return Column(
+        return Stack(
           children: [
-            InkWell(
-              onTap: () async {
-                setState(() {
-                  isLoading = true;
-                });
-                if (icons[index].name == 'More') {
-                  bottomSheet(context);
-                } else if (icons[index].name == 'Predictor') {
-                  Get.to(() => CollegePredictor(
-                        counselling_name: icons[index].counselling,
-                      ));
-                } else if (icons[index].name == "Predict Rank") {
-                  Get.to(() =>
-                      RankPredictor(counsellingName: icons[index].counselling));
-                } else {
-                  Get.to(() => FeatureScreen(appBarTitle: icons[index].name));
-                }
-                setState(() {
-                  isLoading = false;
-                });
-              },
-              borderRadius: BorderRadius.circular(90),
-              child: Container(
-                padding: const EdgeInsets.all(3),
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: isDark ? tSecondaryColor : Colors.white,
+            Column(
+              children: [
+                InkWell(
+                  onTap: () async {
+                    setState(() {
+                      isLoading = true;
+                    });
+                    if (icons[index].name == 'More') {
+                      bottomSheet(context);
+                    } else if (icons[index].name == 'Predictor') {
+                      Get.to(() => CollegePredictor(
+                            counselling_name: icons[index].counselling,
+                          ));
+                    } else if (icons[index].name == "Predict Rank") {
+                      Get.to(() => RankPredictor(
+                          counsellingName: icons[index].counselling));
+                    } else if (icons[index].name == "Branch") {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      Get.to(() => BranchPredictor(
+                          counselling_name: icons[index].counselling));
+                      setState(() {
+                        isLoading = false;
+                      });
+                    } else {
+                      Get.to(
+                          () => FeatureScreen(appBarTitle: icons[index].name));
+                    }
+                    setState(() {
+                      isLoading = false;
+                    });
+                  },
+                  borderRadius: BorderRadius.circular(90),
+                  child: Container(
+                    padding: const EdgeInsets.all(3),
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: isDark ? tSecondaryColor : Colors.white,
+                    ),
+                    child: isLoading
+                        ? Center(
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  isDark ? Colors.white : tSecondaryColor),
+                              strokeWidth: 4.0,
+                            ),
+                          )
+                        : Center(
+                            child: Image.asset(
+                              icons[index].icon,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                  ),
                 ),
-                child: isLoading
-                    ? Center(
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                              isDark ? Colors.white : tSecondaryColor),
-                          strokeWidth: 4.0,
-                        ),
-                      )
-                    : Center(
-                        child: Image.asset(
-                          icons[index].icon,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-              ),
+                const SizedBox(height: 6),
+                Text(
+                  icons[index].name,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 6),
-            Text(
-              icons[index].name,
-              style: const TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 12,
+            Visibility(
+              visible: isLoading,
+              child: Container(
+                color: Colors.black
+                    .withOpacity(0.5), // Adjust the opacity as needed
+                child: Center(
+                  child: Image.asset(
+                    "assets/gif/loader.gif",
+                    width: MediaQuery.of(context).size.height / 4,
+                  ),
+                ),
               ),
             ),
           ],

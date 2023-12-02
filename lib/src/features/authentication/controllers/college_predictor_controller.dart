@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 class CollegePredictorController extends GetxController {
   static CollegePredictorController get instance => Get.find();
 
-  final collegePredictorRepo = Get.put(CollegePredictorRepository());
+  // final collegePredictorRepo = Get.put(CollegePredictorRepository());
 
   final excelCollegePredictorRepo = Get.put(ExcelCollegePredictor());
 
@@ -44,25 +44,36 @@ class CollegePredictorController extends GetxController {
     final data = await excelCollegePredictorRepo.processExcelData(
         domicile, category, subCategory, rank, counselling, exam);
 
-    print("Got the data");
+    print("Got the data in controller");
 
-    Get.to(() => ShowColleges(
-          collegesToShow: data,
-          counsellingName: counselling.toString(),
-          userDetails: [
-            counselling,
-            domicile,
-            category,
-            subCategory,
-            rank.toString()
-          ],
-        ));
+    return data;
   }
 
   Future<int> getBranchesNumber(String collegeName) async {
     final data =
         await excelCollegePredictorRepo.getNoOfBranches(collegeName.toString());
 
+    return data;
+  }
+
+  Future<List<String>> getBranchesUsingExcel(String counselling) async {
+    final data =
+        await excelCollegePredictorRepo.getBranchesFromCounselling(counselling);
+    return data;
+  }
+
+  getCollegesByBranches(
+      String state,
+      String category,
+      String gender,
+      int userRank,
+      String counselling,
+      String exam,
+      List<String> selectedBranches) async {
+    final data = await excelCollegePredictorRepo.getCollegesForBranches(
+        state, category, gender, userRank, counselling, exam, selectedBranches);
+
+    print("Got data in controller");
     return data;
   }
 }

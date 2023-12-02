@@ -4,7 +4,10 @@ import 'package:collegemitra/src/features/authentication/screens/login/login_scr
 import 'package:collegemitra/src/features/authentication/screens/mail_verification/mail_verification.dart';
 import 'package:collegemitra/src/features/authentication/screens/splash_screen/splash_screen.dart';
 import 'package:collegemitra/src/features/authentication/screens/welcome/welcome_screen.dart';
+import 'package:collegemitra/src/mentor/mentor_dashboard.dart';
 import 'package:collegemitra/src/repository/authentication_repository/exceptions/signup_mail_password_failure.dart';
+import 'package:collegemitra/src/repository/authentication_repository/user_repository.dart';
+import 'package:excel/excel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,22 +21,43 @@ class AuthenticationRepository extends GetxController {
   final _auth = FirebaseAuth.instance;
   late final Rx<User?> firebaseUser;
   var verificationId = ''.obs;
+  final _userRepo = Get.put(UserRepository());
+  var userRole = "";
+  String userName = "";
+
+  getUserData(String? email) async {
+    // ignore: unnecessary_null_comparison
+    if (email != null) {
+      final userDetails = await _userRepo.getUserDetails(email);
+      userRole = userDetails.role.toString();
+      userName = userDetails.fullName.toString();
+      userName.trim();
+    } else {
+      Get.snackbar("Error", "Login to Continue");
+    }
+  }
 
   @override
-  void onReady() {
+  void onReady() async {
     firebaseUser = Rx<User?>(_auth.currentUser);
     firebaseUser.bindStream(_auth.userChanges());
-    setInitialScreen(firebaseUser.value);
+    await getUserData(firebaseUser.value?.email);
+    setInitialScreen(firebaseUser.value, userRole);
     // ever(firebaseUser, _setInitialScreen);
   }
 
-  //User's Initial screen based on current state
-  setInitialScreen(User? user) {
-    user == null
-        ? Get.offAll(() => const WelcomeScreen())
-        : user.emailVerified
-            ? Get.offAll(() => const Dashboard())
-            : Get.offAll(() => const MailVerification());
+  setInitialScreen(User? user, String role) {
+    if (user == null) {
+      Get.offAll(() => const WelcomeScreen());
+    } else if (user.emailVerified) {
+      role == "User"
+          ? Get.offAll(() => Dashboard(
+                username: userName,
+              ))
+          : Get.offAll(() => const MentorInProgressScreen());
+    } else {
+      Get.offAll(() => const MailVerification());
+    }
   }
 
   //Phone Authentication
@@ -72,7 +96,7 @@ class AuthenticationRepository extends GetxController {
     try {
       var credentials = await _auth.signInWithCredential(
         PhoneAuthProvider.credential(
-          verificationId: this.verificationId.value,
+          verificationId: verificationId.value,
           smsCode: otp,
         ),
       );
@@ -151,6 +175,7 @@ class AuthenticationRepository extends GetxController {
   Future<String?> loginWithEmailAndPassword(
       String email, String password) async {
     try {
+      await getUserData(email);
       await _auth.signInWithEmailAndPassword(email: email, password: password);
       Get.snackbar(
         'Success',
@@ -159,7 +184,7 @@ class AuthenticationRepository extends GetxController {
         backgroundColor: Colors.green.withOpacity(0.1),
         colorText: Colors.green,
       );
-      setInitialScreen(firebaseUser.value);
+      setInitialScreen(firebaseUser.value, userRole);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-login-credentials') {
         Get.snackbar(

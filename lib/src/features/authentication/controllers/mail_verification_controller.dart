@@ -26,9 +26,11 @@ class MailVerificationController extends GetxController {
     _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
       FirebaseAuth.instance.currentUser?.reload();
       final user = FirebaseAuth.instance.currentUser;
+      final auth = AuthenticationRepository.instance;
       if (user!.emailVerified) {
         timer.cancel();
-        AuthenticationRepository.instance.setInitialScreen(user);
+        auth.getUserData(user.email);
+        auth.setInitialScreen(user, auth.userRole);
       }
     });
   }
@@ -36,8 +38,10 @@ class MailVerificationController extends GetxController {
   void manuallyCheckEmailVerification() {
     FirebaseAuth.instance.currentUser?.reload();
     final user = FirebaseAuth.instance.currentUser;
+    final auth = AuthenticationRepository.instance;
     if (user!.emailVerified) {
-      AuthenticationRepository.instance.setInitialScreen(user);
+      auth.getUserData(user.email);
+      auth.setInitialScreen(user, auth.userRole);
     }
   }
 }

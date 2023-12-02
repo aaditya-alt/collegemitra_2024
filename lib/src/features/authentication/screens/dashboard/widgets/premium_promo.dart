@@ -19,7 +19,7 @@ class PromoCard extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return SizedBox(
       // color: Colors.blueAccent,
-      height: 160,
+      height: size.height / 3.8,
       child: InkWell(
         onTap: () {},
         child: Stack(
@@ -27,13 +27,14 @@ class PromoCard extends StatelessWidget {
           children: [
             // Those are our background
             Container(
-              height: 136,
+              height: size.height / 3.8,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(22),
                 color: const Color(0xFF40BAD5),
                 boxShadow: const [kDefaultShadow],
               ),
               child: Container(
+                height: size.height / 4,
                 margin: const EdgeInsets.only(right: 10),
                 decoration: BoxDecoration(
                   color: isDark ? Colors.black : Colors.white,
@@ -61,10 +62,11 @@ class PromoCard extends StatelessWidget {
             ),
             // Product title and price
             Positioned(
+              top: 4,
               bottom: 0,
               left: 0,
               child: SizedBox(
-                height: size.height / 3.9,
+                height: size.height / 5,
                 // our image take 200 width, thats why we set out total width - 200
                 width: size.width - 200,
                 child: Column(
@@ -80,7 +82,7 @@ class PromoCard extends StatelessWidget {
                             ? '$counselling_name Mentorship ?'
                             : 'Need Guidance ?',
                         style: Theme.of(context).textTheme.titleLarge,
-                        overflow: TextOverflow.fade,
+                        overflow: TextOverflow.clip,
                       ),
                     ),
                     // it use the available space

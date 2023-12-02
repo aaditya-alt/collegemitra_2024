@@ -85,81 +85,81 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
                     prefixIcon: Icon(Icons.fingerprint)),
               ),
               const SizedBox(height: tFormHeight - 10),
-              SizedBox(
+              Container(
                 width: double.infinity,
-                child: ClipRRect(
-                  borderRadius:
-                      const BorderRadius.all(Radius.elliptical(10, 10)),
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        // SignUpController.instance.registerUser(
-                        //     controller.email.text.trim(),
-                        //     controller.password.text.trim());
-                        // SignUpController.instance
-                        //     .phoneAuthentication(controller.phoneNo.text.trim());
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.elliptical(10, 10)),
+                  color: tPrimaryColor,
+                ),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      // SignUpController.instance.registerUser(
+                      //     controller.email.text.trim(),
+                      //     controller.password.text.trim());
+                      // SignUpController.instance
+                      //     .phoneAuthentication(controller.phoneNo.text.trim());
 
-                        final user = UserModel(
-                            id: controller.email.text.trim(),
-                            email: controller.email.text.trim(),
-                            password: controller.password.text.trim(),
-                            fullName: controller.fullName.text.trim(),
-                            phoneNo: controller.phoneNo.text.trim());
+                      final user = UserModel(
+                          id: controller.email.text.trim(),
+                          email: controller.email.text.trim(),
+                          password: controller.password.text.trim(),
+                          fullName: controller.fullName.text.trim(),
+                          phoneNo: controller.phoneNo.text.trim(),
+                          role: 'User');
 
-                        if (EmailValidator.validate(
-                            controller.email.text.trim())) {
-                          setState(() {
-                            isLoading = true;
-                          });
-                          await SignUpController.instance
-                              .createUser(user, user.email, user.password);
-                          setState(() {
-                            isLoading = false;
-                          });
-                        } else {
-                          Get.snackbar(
-                              'Error', 'Please enter Correct Email Id.');
-                          setState(() {
-                            isLoading = false;
-                          });
-                        }
+                      if (EmailValidator.validate(
+                          controller.email.text.trim())) {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        await SignUpController.instance
+                            .createUser(user, user.email, user.password);
+                        setState(() {
+                          isLoading = false;
+                        });
+                      } else {
+                        Get.snackbar('Error', 'Please enter Correct Email Id.');
+                        setState(() {
+                          isLoading = false;
+                        });
                       }
-                    },
-                    child: isLoading
-                        ? const Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment
-                                  .center, // Center horizontally
-                              crossAxisAlignment: CrossAxisAlignment
-                                  .center, // Center vertically
-                              children: [
-                                SizedBox(
+                    }
+                  },
+                  child: isLoading
+                      ? const Center(
+                          child: Row(
+                            mainAxisAlignment:
+                                MainAxisAlignment.center, // Center horizontally
+                            crossAxisAlignment:
+                                CrossAxisAlignment.center, // Center vertically
+                            children: [
+                              SizedBox(
+                                width:
+                                    21.0, // Adjust the width to make it smaller
+                                height:
+                                    21.0, // Adjust the height to make it smaller
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white),
+                                  strokeWidth:
+                                      3.0, // Adjust the strokeWidth to control the size
+                                ),
+                              ),
+                              SizedBox(
                                   width:
-                                      21.0, // Adjust the width to make it smaller
-                                  height:
-                                      21.0, // Adjust the height to make it smaller
-                                  child: CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                        Colors.white),
-                                    strokeWidth:
-                                        3.0, // Adjust the strokeWidth to control the size
-                                  ),
-                                ),
-                                SizedBox(
-                                    width:
-                                        8.0), // Add spacing between the icon and text
-                                Text(
-                                  'Signing Up...',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                          )
-                        : Text(
-                            tSignup.toUpperCase(),
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                                      8.0), // Add spacing between the icon and text
+                              Text(
+                                'Signing Up...',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ],
                           ),
-                  ),
+                        )
+                      : Text(
+                          tSignup.toUpperCase(),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
                 ),
               ),
             ],

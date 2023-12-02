@@ -129,6 +129,7 @@ class UpdateProfileScreen extends StatelessWidget {
                                   password: password.text.trim(),
                                   fullName: fullName.text.trim(),
                                   phoneNo: phoneNo.text.trim(),
+                                  role: user.role,
                                 );
 
                                 await controller.updateRecord(userData);

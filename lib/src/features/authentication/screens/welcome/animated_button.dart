@@ -5,13 +5,10 @@ import 'package:rive/rive.dart';
 class AnimatedBtn extends StatelessWidget {
   const AnimatedBtn({
     Key? key,
-    required RiveAnimationController btnAnimationController,
     required this.press,
     required this.buttonText,
-  })  : _btnAnimationController = btnAnimationController,
-        super(key: key);
+  }) : super(key: key);
 
-  final RiveAnimationController _btnAnimationController;
   final VoidCallback press;
   final String buttonText;
 
@@ -24,9 +21,8 @@ class AnimatedBtn extends StatelessWidget {
         width: 236,
         child: Stack(
           children: [
-            RiveAnimation.asset(
+            const RiveAnimation.asset(
               "assets/images/riveAssets/button.riv",
-              controllers: [_btnAnimationController],
             ),
             Positioned.fill(
               top: 8,

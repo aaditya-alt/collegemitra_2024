@@ -11,7 +11,7 @@ class ExcelCollegePredictor extends GetxController {
 
   Future<List<CollegeData>> processExcelData(String state, String category,
       String gender, int userRank, String counselling, String exam) async {
-    ByteData data = await rootBundle.load('assets/cutoff_files/test.xlsx');
+    ByteData data = await rootBundle.load('assets/cutoff_files/round_6.xlsx');
     var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
     var excel = Excel.decodeBytes(bytes);
 
@@ -34,7 +34,7 @@ class ExcelCollegePredictor extends GetxController {
           // Skip non-IIT colleges for JEE Advanced
           continue;
         }
-        if (row[8]!.value.toString() == state) {
+        if (row[8]?.value.toString() == state) {
           if (row[3]!.value.toString() == category &&
               row[4]!.value.toString() == gender &&
               row[2]!.value.toString() != "OS" &&
@@ -44,6 +44,7 @@ class ExcelCollegePredictor extends GetxController {
               currentCollege = CollegeData(
                 collegeName: row[0]!.value.toString(),
                 collegeType: row[7]!.value.toString(),
+                totalBranchLength: 0,
                 branches: [],
               );
               filteredData.add(currentCollege);
@@ -51,6 +52,7 @@ class ExcelCollegePredictor extends GetxController {
 
             if (currentBranch == null ||
                 currentBranch.branchName != row[1]!.value.toString()) {
+              currentCollege.totalBranchLength++;
               currentBranch = BranchData(
                 branchName: row[1]!.value.toString(),
                 rounds: [],
@@ -65,7 +67,7 @@ class ExcelCollegePredictor extends GetxController {
               rankDifference: int.parse(row[6]!.value.toString()) - userRank,
             ));
           }
-        } else if (row[8]!.value.toString() != state) {
+        } else if (row[8]?.value.toString() != state) {
           if (row[3]!.value.toString() == category &&
               row[4]!.value.toString() == gender &&
               row[2]!.value.toString() != "HS" &&
@@ -75,6 +77,7 @@ class ExcelCollegePredictor extends GetxController {
               currentCollege = CollegeData(
                 collegeName: row[0]!.value.toString(),
                 collegeType: row[7]!.value.toString(),
+                totalBranchLength: 0,
                 branches: [],
               );
               filteredData.add(currentCollege);
@@ -82,6 +85,7 @@ class ExcelCollegePredictor extends GetxController {
 
             if (currentBranch == null ||
                 currentBranch.branchName != row[1]!.value.toString()) {
+              currentCollege.totalBranchLength++;
               currentBranch = BranchData(
                 branchName: row[1]!.value.toString(),
                 rounds: [],
@@ -124,5 +128,139 @@ class ExcelCollegePredictor extends GetxController {
     }
 
     return branches;
+  }
+
+  Future<List<String>> getBranchesFromCounselling(String counselling) async {
+    Set<String> branches = {};
+    List<String> branchesData = [];
+
+    ByteData data = await rootBundle.load('assets/cutoff_files/round_6.xlsx');
+    var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    var excel = Excel.decodeBytes(bytes);
+
+    for (var table in excel.tables.keys) {
+      for (var row in excel.tables[table]!.rows) {
+        branches.add(row[1]?.value.toString() ??
+            ''); // Assuming row[1] contains branch information
+      }
+    }
+
+    branchesData = branches.toList();
+    branchesData.remove(branchesData.first);
+
+    // Now, 'branches' Set contains all unique branches for the specified counselling
+    return branchesData;
+  }
+
+  Future<List<CollegeData>> getCollegesForBranches(
+      String state,
+      String category,
+      String gender,
+      int userRank,
+      String counselling,
+      String exam,
+      List<String> selectedBranches) async {
+    ByteData data = await rootBundle.load('assets/cutoff_files/round_6.xlsx');
+    var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    var excel = Excel.decodeBytes(bytes);
+
+    List<CollegeData> filteredData = [];
+
+    for (var table in excel.tables.keys) {
+      CollegeData? currentCollege;
+
+      for (var row in excel.tables[table]!.rows) {
+        bool isIIT = row[7]!.value.toString().contains("IIT");
+
+        if (exam == "JEE Main" && isIIT) {
+          // Skip non-IIT colleges for JEE Main
+          continue;
+        }
+
+        // Check if the exam is JEE Advanced and the college type is IIT
+        if (exam == "JEE Advanced" && !isIIT) {
+          // Skip non-IIT colleges for JEE Advanced
+          continue;
+        }
+
+        if (selectedBranches.contains(row[1]!.value.toString())) {
+          if (row[8]?.value.toString() == state) {
+            if (row[3]!.value.toString() == category &&
+                row[4]!.value.toString() == gender &&
+                row[2]!.value.toString() != "OS" &&
+                int.parse(row[6]!.value.toString()) > userRank) {
+              if (currentCollege == null ||
+                  currentCollege.collegeName != row[0]!.value.toString()) {
+                currentCollege = CollegeData(
+                  collegeName: row[0]!.value.toString(),
+                  collegeType: row[7]!.value.toString(),
+                  totalBranchLength: 0, // Initialize totalBranches count
+                  branches: [],
+                );
+                filteredData.add(currentCollege);
+              }
+
+              // Check if the branch is not already added to the college
+              if (!currentCollege.branches.any(
+                  (branch) => branch.branchName == row[1]!.value.toString())) {
+                currentCollege
+                    .totalBranchLength++; // Increment totalBranches count
+                BranchData currentBranch = BranchData(
+                  branchName: row[1]!.value.toString(),
+                  rounds: [],
+                );
+                currentCollege.branches.add(currentBranch);
+
+                currentBranch.rounds.add(RoundData(
+                  roundName: row[9]!.value.toString(),
+                  openingRank: int.parse(row[5]!.value.toString()),
+                  closingRank: int.parse(row[6]!.value.toString()),
+                  rankDifference:
+                      int.parse(row[6]!.value.toString()) - userRank,
+                ));
+              }
+            }
+          } else if (row[8]?.value.toString() != state) {
+            if (row[3]!.value.toString() == category &&
+                row[4]!.value.toString() == gender &&
+                row[2]!.value.toString() != "HS" &&
+                int.parse(row[6]!.value.toString()) > userRank) {
+              if (currentCollege == null ||
+                  currentCollege.collegeName != row[0]!.value.toString()) {
+                currentCollege = CollegeData(
+                  collegeName: row[0]!.value.toString(),
+                  collegeType: row[7]!.value.toString(),
+                  totalBranchLength: 0, // Initialize totalBranches count
+                  branches: [],
+                );
+                filteredData.add(currentCollege);
+              }
+
+              // Check if the branch is not already added to the college
+              if (!currentCollege.branches.any(
+                  (branch) => branch.branchName == row[1]!.value.toString())) {
+                currentCollege
+                    .totalBranchLength++; // Increment totalBranches count
+                BranchData currentBranch = BranchData(
+                  branchName: row[1]!.value.toString(),
+                  rounds: [],
+                );
+                currentCollege.branches.add(currentBranch);
+
+                currentBranch.rounds.add(RoundData(
+                  roundName: row[9]!.value.toString(),
+                  openingRank: int.parse(row[5]!.value.toString()),
+                  closingRank: int.parse(row[6]!.value.toString()),
+                  rankDifference:
+                      int.parse(row[6]!.value.toString()) - userRank,
+                ));
+              }
+            }
+          }
+        }
+      }
+    }
+
+    return filteredData;
   }
 }

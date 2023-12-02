@@ -15,29 +15,44 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rive/rive.dart';
 
-class CollegePredictor extends StatefulWidget {
-  // ignore: non_constant_identifier_names
+class BranchPredictor extends StatefulWidget {
   final String counselling_name;
 
   // ignore: non_constant_identifier_names
-  const CollegePredictor({super.key, required this.counselling_name});
+  const BranchPredictor({super.key, required this.counselling_name});
 
   @override
-  State<CollegePredictor> createState() => _CollegePredictorState();
+  State<BranchPredictor> createState() => _BranchPredictorState();
 }
 
-class _CollegePredictorState extends State<CollegePredictor> {
-  bool isLoading = false;
+class _BranchPredictorState extends State<BranchPredictor> {
   final _controller = Get.put(CollegePredictorController());
+  bool isLoading = false;
+
+  List<String> branches = [];
 
   @override
   void initState() {
+    _loadBranches();
     super.initState();
   }
 
   @override
   void dispose() {
+    _controller.dispose();
     super.dispose();
+  }
+
+  Future<void> _loadBranches() async {
+    try {
+      final data =
+          await _controller.getBranchesUsingExcel(widget.counselling_name);
+      setState(() {
+        branches = data;
+      });
+    } catch (error) {
+      print("Error loading branches: $error");
+    }
   }
 
   String selectedState = "Punjab";
@@ -45,13 +60,13 @@ class _CollegePredictorState extends State<CollegePredictor> {
   String selectedSubCategory = "Gender-Neutral";
   String selectedExam = "JEE Main";
   String selectedCounselling = "JOSAA";
-  String rankToEnter = "CRL Rank";
+  String rankToEnter = "Category Rank";
+  List<String> selectedBranches = [];
 
   @override
   Widget build(BuildContext context) {
     var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     final size = MediaQuery.of(context).size.width;
-
     var counselling = "";
     if (widget.counselling_name == "GGSIPU Delhi") {
       counselling = "GGSIPU";
@@ -109,6 +124,7 @@ class _CollegePredictorState extends State<CollegePredictor> {
     ];
 
     List<String> subCategory = [
+      'Please Select Gender',
       'Gender-Neutral',
       'Female-Only',
     ];
@@ -144,7 +160,7 @@ class _CollegePredictorState extends State<CollegePredictor> {
           "For $counselling Counselling, We Have JOSAA and CSAB, please select the counselling based on your rank, Always Remember in CSAB counselling your CRL Rank will be applicable irrespective of your category but in JOSAA, your Category Rank will be applicable.");
     }
 
-    if (selectedCategory == 'General') {
+    if (selectedCategory == 'OPEN') {
       rankToEnter = "CRL Rank";
     } else {
       rankToEnter = "Category Rank";
@@ -153,7 +169,7 @@ class _CollegePredictorState extends State<CollegePredictor> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "$counselling College Predictor",
+          "$counselling Branch Predictor",
           style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w500,
@@ -213,6 +229,7 @@ class _CollegePredictorState extends State<CollegePredictor> {
                         setState(() {
                           selectedSubCategory = value;
                         });
+                        showBranchSelectionBottomSheet();
                       }, "Enter Sub-Category Details",
                           "Sub Category for the $counselling Counselling is one of the option given for your selected category, These could be your gender benifits, Fee waiver, any disability, Defence benifits."),
                       Padding(
@@ -321,14 +338,14 @@ class _CollegePredictorState extends State<CollegePredictor> {
                         } else {
                           try {
                             final data =
-                                await _controller.predictCollegesUsingExcel(
-                              counselling,
-                              selectedCategory,
-                              selectedSubCategory,
-                              userRank,
-                              selectedState,
-                              selectedExam,
-                            );
+                                await _controller.getCollegesByBranches(
+                                    selectedState,
+                                    selectedCategory,
+                                    selectedSubCategory,
+                                    userRank,
+                                    counselling,
+                                    selectedExam,
+                                    selectedBranches);
 
                             // Delay for better visual feedback
                             await Future.delayed(const Duration(seconds: 2));
@@ -431,6 +448,51 @@ class _CollegePredictorState extends State<CollegePredictor> {
           ),
         ],
       ),
+    );
+  }
+
+  showBranchSelectionBottomSheet() {
+    return showModalBottomSheet(
+      enableDrag: true,
+      showDragHandle: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height / 1.6,
+              child: ListView.builder(
+                itemCount: branches.length,
+                itemBuilder: (BuildContext context, int index) {
+                  String branch = branches[index];
+                  bool isSelected = selectedBranches.contains(branch);
+
+                  return ListTile(
+                    title: Text(branch),
+                    leading: Checkbox(
+                      value: isSelected,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          if (value != null) {
+                            if (value) {
+                              selectedBranches.add(branch);
+                            } else {
+                              selectedBranches.remove(branch);
+                            }
+                            // Update the selected branches in the main screen
+                          }
+                        });
+                        print(selectedBranches);
+                      },
+                    ),
+                  );
+                },
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }

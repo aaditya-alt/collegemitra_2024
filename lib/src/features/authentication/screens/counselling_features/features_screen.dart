@@ -11,6 +11,7 @@ import 'package:collegemitra/src/features/authentication/screens/dashboard/widge
 import 'package:collegemitra/src/features/authentication/screens/general_utils/carousel_slider.dart';
 import 'package:collegemitra/src/features/authentication/screens/general_utils/drawer_header.dart';
 import 'package:collegemitra/src/features/authentication/screens/general_utils/drawer_list.dart';
+import 'package:collegemitra/src/features/authentication/screens/meeting/meeting_home_screen.dart';
 import 'package:collegemitra/src/features/authentication/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -56,7 +57,7 @@ class _FeatureScreenState extends State<FeatureScreen> {
       ),
       CustomIcon(
         icon: "assets/images/dashboard_images/office.png",
-        name: "Stream",
+        name: "Branch",
         counselling: widget.appBarTitle,
       ),
     ];
@@ -76,6 +77,7 @@ class _FeatureScreenState extends State<FeatureScreen> {
     ];
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: tAccentColor,
         title: Text(widget.appBarTitle.length <= 5
             ? '${widget.appBarTitle} Counselling'
             : widget.appBarTitle),
@@ -84,9 +86,9 @@ class _FeatureScreenState extends State<FeatureScreen> {
           IconButton(
               padding: const EdgeInsets.only(right: 8),
               onPressed: () {},
-              icon: Icon(
-                Icons.workspace_premium_sharp,
-                color: Colors.yellow.shade900,
+              icon: const Icon(
+                Icons.paid_rounded,
+                color: Colors.white,
               )),
         ],
       ),
@@ -167,26 +169,29 @@ class _FeatureScreenState extends State<FeatureScreen> {
       ),
 
       bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: tAccentColor.shade100,
+          elevation: 1,
           type: BottomNavigationBarType.fixed,
+          selectedItemColor: tPrimaryColor,
           showSelectedLabels: false,
           showUnselectedLabels: false,
           currentIndex: 0,
           onTap: (index) {
             if (index == 3) {
               Get.to(() => const ProfileScreen());
+            } else if (index == 2) {
+              Get.offAll(() => const MeetingHomeScreen());
             } else if (index == 0) {
-              Get.to(() => const Dashboard());
+              Get.offAll(const Dashboard());
             }
           },
           items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
             BottomNavigationBarItem(
-                icon: Icon(Icons.home_outlined), label: "Home"),
+                icon: Icon(Icons.newspaper_rounded), label: "Blogs"),
             BottomNavigationBarItem(
-                icon: Icon(Icons.newspaper_outlined), label: "Blogs"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.workspace_premium_outlined), label: "Premium"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.person_2_outlined), label: "Profile"),
+                icon: Icon(Icons.card_membership), label: "Premium"),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
           ]),
     );
   }

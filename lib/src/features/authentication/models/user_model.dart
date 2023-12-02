@@ -8,6 +8,7 @@ class UserModel {
   final String? email;
   final String? phoneNo;
   final String? password;
+  final String? role;
 
   const UserModel({
     this.id,
@@ -15,6 +16,7 @@ class UserModel {
     required this.password,
     required this.fullName,
     required this.phoneNo,
+    required this.role,
   });
 
   toJson() {
@@ -23,6 +25,7 @@ class UserModel {
       "Email": email,
       "Phone": phoneNo,
       "Password": password,
+      "Role": role,
     };
   }
 
@@ -35,10 +38,12 @@ class UserModel {
         email: data["Email"],
         password: data["Password"],
         fullName: data["FullName"],
-        phoneNo: data["Phone"]);
+        phoneNo: data["Phone"],
+        role: data["Role"]);
   }
 }
 
+//College predictor data model
 class RoundData {
   final String roundName;
   final int openingRank;
@@ -66,11 +71,13 @@ class BranchData {
 class CollegeData {
   final String collegeName;
   final String collegeType;
+  int totalBranchLength;
   final List<BranchData> branches;
 
   CollegeData({
     required this.collegeName,
     required this.collegeType,
+    required this.totalBranchLength,
     required this.branches,
   });
 }

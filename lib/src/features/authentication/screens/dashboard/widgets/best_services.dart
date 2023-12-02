@@ -25,10 +25,7 @@ class _BestServicesState extends State<BestServices> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
-    final List<Color> gradientColors = [
-      const Color.fromARGB(255, 127, 216, 238),
-      const Color.fromARGB(255, 251, 244, 244)
-    ];
+
     final List<freeService> freeServices = [
       freeService(
           image: 'assets/images/dashboard_images/nta.png',
@@ -133,11 +130,9 @@ class _BestServicesState extends State<BestServices> {
                           height: 145,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
-                            gradient: LinearGradient(
-                              colors: gradientColors,
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              stops: const [0.0, 1.0], // Adjust stops as needed
+                            gradient: const LinearGradient(
+                              colors: [Colors.orange, Colors.yellow],
+                              // Adjust stops as needed
                             ),
                           ),
                           child: Padding(

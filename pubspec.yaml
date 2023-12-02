@@ -36,6 +36,9 @@ dependencies:
   animated_custom_dropdown: ^2.0.0
   flutter_native_splash: ^2.3.6
   easy_loader: ^2.0.0
+  flutter_lints: ^2.0.3
+  tuple: ^2.0.2
+  animate_gradient: ^0.0.2+1
   
   
 
@@ -73,6 +76,7 @@ flutter:
     - assets/images/dashboard_images/background.png
     - assets/images/dashboard_images/background.jpeg
     - assets/images/dashboard_images/graduation.png
+    - assets/images/dashboard_images/background_new.png
     - assets/images/dashboard_images/reminder.png
     - assets/images/dashboard_images/3d-fire.png
     - assets/images/dashboard_images/3d-target.png
