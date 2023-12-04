@@ -68,7 +68,7 @@ class _ShowBranchesState extends State<ShowBranches> {
           SliverAppBar(
             expandedHeight: 80.0,
             pinned: true,
-            backgroundColor: tPrimaryColor,
+            backgroundColor: tAccentColor,
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
                 widget.collegeName,
@@ -112,7 +112,7 @@ class _ShowBranchesState extends State<ShowBranches> {
           ),
           SliverToBoxAdapter(
             child: Container(
-              color: tPrimaryColor,
+              color: tAccentColor,
               height: 55,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -223,53 +223,61 @@ class _ShowBranchesState extends State<ShowBranches> {
                     ),
                     if (isExpanded[i])
                       SizedBox(
-                        height: 155,
+                        height: MediaQuery.of(context).size.height / 3.7,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: branches.rounds.length,
                           itemBuilder: (context, j) {
                             var round = branches.rounds[j];
-                            return Container(
+                            return Card(
+                              color: tPrimaryColor.shade300,
+                              elevation: 8, // Adjust the elevation as needed
                               margin: const EdgeInsets.all(10),
-                              padding: const EdgeInsets.all(8),
-                              width: 200,
-                              decoration: BoxDecoration(
-                                  color: _getColorBasedOnChance(
-                                      calculateBranchPercentage(branches)),
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  border: Border.all(color: Colors.black)),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    round.roundName,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 16,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                              child: Container(
+                                width: 200,
+                                padding: const EdgeInsets.all(16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      round.roundName,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    "Opening Rank: ${round.openingRank}",
-                                    style: const TextStyle(
-                                      color: Colors.black,
+                                    const SizedBox(height: 10),
+                                    const Divider(
+                                        height: 2, color: Colors.grey),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      "Opening Rank: ${round.openingRank}",
+                                      style: const TextStyle(
+                                        color: Colors.black87,
+                                        fontSize: 14,
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 6),
-                                  Text(
-                                    "Closing Rank: ${round.closingRank}",
-                                    style: const TextStyle(
-                                      color: Colors.black,
+                                    const SizedBox(height: 6),
+                                    Text(
+                                      "Closing Rank: ${round.closingRank}",
+                                      style: const TextStyle(
+                                        color: Colors.black87,
+                                        fontSize: 14,
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 6),
-                                  Text(
-                                    "Rank Difference: ${round.rankDifference}",
-                                    style: const TextStyle(
-                                      color: Colors.black,
+                                    const SizedBox(height: 6),
+                                    Text(
+                                      "Rank Difference: ${round.rankDifference}",
+                                      style: const TextStyle(
+                                        color: Colors.black87,
+                                        fontSize: 14,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             );
                           },

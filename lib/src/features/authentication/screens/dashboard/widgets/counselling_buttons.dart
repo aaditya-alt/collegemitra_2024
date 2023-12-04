@@ -2,6 +2,7 @@ import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/controllers/college_predictor_controller.dart';
 import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/branch_predictor/branch_predictor.dart';
 import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/college_predictor/college_predictor.dart';
+import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/details/details_screen.dart';
 import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/rank_predictor/rank_predictor.dart';
 import 'package:collegemitra/src/features/authentication/screens/counselling_features/features_screen.dart';
 import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/counselling_list_items.dart';
@@ -10,9 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CounsellingButton extends StatefulWidget {
-  CounsellingButton({super.key, required this.listItems});
+  const CounsellingButton({super.key, required this.listItems});
 
-  @override
   final List<CustomIcon> listItems;
 
   @override
@@ -23,7 +23,8 @@ class _CounsellingButtonState extends State<CounsellingButton> {
   final controller = Get.put(CollegePredictorController());
 
   bool isLoading = false;
-  // ignore: non_constant_identifier_names
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10),
@@ -38,22 +39,22 @@ class _CounsellingButtonState extends State<CounsellingButton> {
   Widget counsellingRow(List icons, BuildContext context) {
     var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
 
-    List<CustomIcon> customIcons = [
-      CustomIcon(
-          icon: "assets/images/dashboard_images/counselling_images/josaa.png",
-          name: "JOSAA"),
-      CustomIcon(
-          icon: "assets/images/dashboard_images/counselling_images/jacd.png",
-          name: "JAC Delhi"),
-      CustomIcon(
-          icon: "assets/images/dashboard_images/counselling_images/ggsipu.png",
-          name: "GGSIPU Delhi"),
-      CustomIcon(
-          icon: "assets/images/dashboard_images/counselling_images/uptu.png",
-          name: "UPTU"),
-    ];
-
     Future bottomSheet(BuildContext context) {
+      List<CustomIcon> customIcons = [
+        CustomIcon(
+            icon: "assets/images/dashboard_images/counselling_images/josaa.png",
+            name: "JOSAA"),
+        CustomIcon(
+            icon: "assets/images/dashboard_images/counselling_images/jacd.png",
+            name: "JAC Delhi"),
+        CustomIcon(
+            icon:
+                "assets/images/dashboard_images/counselling_images/ggsipu.png",
+            name: "GGSIPU Delhi"),
+        CustomIcon(
+            icon: "assets/images/dashboard_images/counselling_images/uptu.png",
+            name: "UPTU"),
+      ];
       var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
       return showModalBottomSheet(
           showDragHandle: true,
@@ -112,14 +113,11 @@ class _CounsellingButtonState extends State<CounsellingButton> {
                       Get.to(() => RankPredictor(
                           counsellingName: icons[index].counselling));
                     } else if (icons[index].name == "Branch") {
-                      setState(() {
-                        isLoading = true;
-                      });
                       Get.to(() => BranchPredictor(
                           counselling_name: icons[index].counselling));
-                      setState(() {
-                        isLoading = false;
-                      });
+                    } else if (icons[index].name == "Know About") {
+                      Get.to(() => DetailsScreen(
+                          counsellingName: icons[index].counselling));
                     } else {
                       Get.to(
                           () => FeatureScreen(appBarTitle: icons[index].name));

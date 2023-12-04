@@ -1,3 +1,4 @@
+import 'package:collegemitra/src/admin/admin_dashboard.dart';
 import 'package:collegemitra/src/features/authentication/models/user_model.dart';
 import 'package:collegemitra/src/features/authentication/screens/dashboard/dashboard_screen.dart';
 import 'package:collegemitra/src/features/authentication/screens/login/login_screen.dart';
@@ -27,21 +28,18 @@ class AuthenticationRepository extends GetxController {
 
   getUserData(String? email) async {
     // ignore: unnecessary_null_comparison
-    if (email != null) {
-      final userDetails = await _userRepo.getUserDetails(email);
-      userRole = userDetails.role.toString();
-      userName = userDetails.fullName.toString();
-      userName.trim();
-    } else {
-      Get.snackbar("Error", "Login to Continue");
-    }
+
+    final userDetails = await _userRepo.getUserDetails(email!);
+    userRole = userDetails.role.toString();
+    userName = userDetails.fullName.toString();
+    userName.split(" ").first;
   }
 
   @override
   void onReady() async {
     firebaseUser = Rx<User?>(_auth.currentUser);
     firebaseUser.bindStream(_auth.userChanges());
-    await getUserData(firebaseUser.value?.email);
+    await getUserData(firebaseUser.value!.email);
     setInitialScreen(firebaseUser.value, userRole);
     // ever(firebaseUser, _setInitialScreen);
   }
@@ -54,7 +52,9 @@ class AuthenticationRepository extends GetxController {
           ? Get.offAll(() => Dashboard(
                 username: userName,
               ))
-          : Get.offAll(() => const MentorInProgressScreen());
+          : role == "Admin"
+              ? Get.offAll(() => const AdminDashboard())
+              : const MentorInProgressScreen();
     } else {
       Get.offAll(() => const MailVerification());
     }

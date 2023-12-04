@@ -71,12 +71,14 @@ class BranchData {
 class CollegeData {
   final String collegeName;
   final String collegeType;
+  final String collegeState;
   int totalBranchLength;
   final List<BranchData> branches;
 
   CollegeData({
     required this.collegeName,
     required this.collegeType,
+    required this.collegeState,
     required this.totalBranchLength,
     required this.branches,
   });

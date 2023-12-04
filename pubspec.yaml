@@ -38,7 +38,7 @@ dependencies:
   easy_loader: ^2.0.0
   flutter_lints: ^2.0.3
   tuple: ^2.0.2
-  animate_gradient: ^0.0.2+1
+  rounded_expansion_tile: ^0.0.13
   
   
 
@@ -70,6 +70,7 @@ flutter:
     - assets/images/dashboard_images/counselling_images/jacd.png
     - assets/images/dashboard_images/counselling_images/ggsipu.png
     - assets/images/dashboard_images/counselling_images/more.png
+    - assets/images/features_images/about.jpeg
     - assets/images/profile_images/profile-image.jpeg
     - assets/images/dashboard_images/t10delhi.jpg
     - assets/images/dashboard_images/support.png
@@ -91,7 +92,8 @@ flutter:
     - assets/images/dashboard_images/ranking.png
     - assets/images/dashboard_images/search.png
     - assets/images/dashboard_images/seats.png
-    - assets/cutoff_files/round_6.xlsx
+    - assets/cutoff_files/JOSAA_2023.xlsx
+    - assets/cutoff_files/CSAB_2023.xlsx
     - assets/images/facebook.png
     - assets/images/spline.png
     - assets/images/riveAssets/shapes.riv

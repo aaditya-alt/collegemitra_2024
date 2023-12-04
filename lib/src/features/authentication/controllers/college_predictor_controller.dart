@@ -49,13 +49,6 @@ class CollegePredictorController extends GetxController {
     return data;
   }
 
-  Future<int> getBranchesNumber(String collegeName) async {
-    final data =
-        await excelCollegePredictorRepo.getNoOfBranches(collegeName.toString());
-
-    return data;
-  }
-
   Future<List<String>> getBranchesUsingExcel(String counselling) async {
     final data =
         await excelCollegePredictorRepo.getBranchesFromCounselling(counselling);

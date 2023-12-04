@@ -27,6 +27,7 @@ class _ShowCollegesState extends State<ShowColleges> {
   List<String> selectedTypeOptions = [];
   List<String> selectedBranchOptions = [];
   List<String> selectedCollegeOptions = [];
+  List<String> selectedStateOptions = [];
 
   @override
   void initState() {
@@ -51,7 +52,7 @@ class _ShowCollegesState extends State<ShowColleges> {
     ];
 
     List<String> collegeType = [];
-    if (widget.counsellingName == "JOSAA") {
+    if (widget.counsellingName == "JOSAA" || widget.counsellingName == "CSAB") {
       collegeType.add("All");
       collegeType.add("IIT");
       collegeType.add("NIT");
@@ -89,11 +90,13 @@ class _ShowCollegesState extends State<ShowColleges> {
     Set<String> uniqueCollegeNames = {};
     Set<String> uniqueCollegeTypes = {};
     Set<String> uniqueBranchNames = {};
+    Set<String> uniqueStateNames = {};
 
 // Populate sets with unique values
     for (CollegeData college in widget.collegesToShow) {
       uniqueCollegeNames.add(college.collegeName);
       uniqueCollegeTypes.add(college.collegeType);
+      uniqueStateNames.add(college.collegeState);
 
       for (BranchData branch in college.branches) {
         uniqueBranchNames.add(branch.branchName);
@@ -103,6 +106,7 @@ class _ShowCollegesState extends State<ShowColleges> {
     List<String> collegeNames = uniqueCollegeNames.toList();
     List<String> collegeTypes = uniqueCollegeTypes.toList();
     List<String> branchNames = uniqueBranchNames.toList();
+    List<String> stateNames = uniqueStateNames.toList();
 
     final size = MediaQuery.of(context).size;
     return Scaffold(
@@ -111,7 +115,7 @@ class _ShowCollegesState extends State<ShowColleges> {
           "${widget.counsellingName} Colleges",
         ),
         centerTitle: true,
-        backgroundColor: tPrimaryColor,
+        backgroundColor: tAccentColor,
       ),
       body: Stack(
         children: [
@@ -162,7 +166,7 @@ class _ShowCollegesState extends State<ShowColleges> {
                                         ),
                                         const SizedBox(height: 16.0),
                                         DefaultTabController(
-                                          length: 3,
+                                          length: 4,
                                           child: Column(
                                             children: [
                                               const TabBar(
@@ -170,6 +174,9 @@ class _ShowCollegesState extends State<ShowColleges> {
                                                   Tab(text: 'Type'),
                                                   Tab(text: 'Branches'),
                                                   Tab(text: 'Colleges'),
+                                                  Tab(
+                                                    text: "State",
+                                                  ),
                                                 ],
                                               ),
                                               SizedBox(
@@ -194,6 +201,12 @@ class _ShowCollegesState extends State<ShowColleges> {
                                                       options: collegeNames,
                                                       selectedOptions:
                                                           selectedCollegeOptions,
+                                                    ),
+
+                                                    CheckboxOptions(
+                                                      options: stateNames,
+                                                      selectedOptions:
+                                                          selectedStateOptions,
                                                     ),
                                                   ],
                                                 ),
@@ -257,9 +270,18 @@ class _ShowCollegesState extends State<ShowColleges> {
                                                                   .contains(college
                                                                       .collegeName);
 
+                                                      //Check if any state is selected
+                                                      bool isStateSelected =
+                                                          selectedStateOptions
+                                                                  .isEmpty ||
+                                                              selectedStateOptions
+                                                                  .contains(college
+                                                                      .collegeState);
+
                                                       return isTypeSelected &&
                                                           areBranchesSelected &&
-                                                          isCollegeSelected;
+                                                          isCollegeSelected &&
+                                                          isStateSelected;
                                                     }).toList();
                                                   });
                                                   Navigator.of(context).pop();
@@ -292,7 +314,7 @@ class _ShowCollegesState extends State<ShowColleges> {
               Stack(
                 children: [
                   Container(
-                    color: tPrimaryColor,
+                    color: tAccentColor,
                     height: 57,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
@@ -337,7 +359,7 @@ class _ShowCollegesState extends State<ShowColleges> {
                     padding: EdgeInsets.only(left: size.width - 45),
                     child: Container(
                       width: 45,
-                      height: 55,
+                      height: 57,
                       decoration: const BoxDecoration(
                         color: tPrimaryColor,
                       ),
@@ -358,7 +380,7 @@ class _ShowCollegesState extends State<ShowColleges> {
               const SizedBox(height: 5),
               Container(
                 color: const Color.fromARGB(255, 204, 204, 204),
-                height: 42,
+                height: 45,
                 child: ListView.builder(
                   itemCount: collegeType.length,
                   scrollDirection: Axis.horizontal,

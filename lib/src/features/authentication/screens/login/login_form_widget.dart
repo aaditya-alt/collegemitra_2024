@@ -29,6 +29,7 @@ class _LoginFormState extends State<LoginForm> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextFormField(
+              keyboardType: TextInputType.emailAddress,
               controller: controller.email,
               decoration: const InputDecoration(
                 prefixIcon: Icon(Icons.person_outline_outlined),
@@ -70,11 +71,8 @@ class _LoginFormState extends State<LoginForm> {
             const SizedBox(height: tDefaultSize),
             SizedBox(
               width: double.infinity,
-              child: Container(
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.elliptical(10, 10)),
-                  color: tPrimaryColor,
-                ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
                 child: ElevatedButton(
                   onPressed: () async {
                     if (EmailValidator.validate(controller.email.text.trim())) {

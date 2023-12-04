@@ -25,14 +25,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.13.0"
-  animate_gradient:
-    dependency: "direct main"
-    description:
-      name: animate_gradient
-      sha256: ef204fb3b98fcef4339bbf23070c2be71f046f95f217776b2b0a013654ff726d
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.2+1"
   animated_custom_dropdown:
     dependency: "direct main"
     description:
@@ -688,6 +680,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.8"
+  rounded_expansion_tile:
+    dependency: "direct main"
+    description:
+      name: rounded_expansion_tile
+      sha256: "1431357a66112026b1799c8c87ab2ec20f86f9b4db9a4b500795d681719bbe54"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.13"
   sky_engine:
     dependency: transitive
     description: flutter

@@ -61,6 +61,7 @@ class _RankPredictorState extends State<RankPredictor> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: tAccentColor,
         title: const Text(
           "JEE Mains 2024 Rank Predictor",
           style: TextStyle(

@@ -1,7 +1,5 @@
 import 'dart:developer';
 import 'dart:ui';
-
-import 'package:animate_gradient/animate_gradient.dart';
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/controllers/college_predictor_controller.dart';
@@ -11,6 +9,7 @@ import 'package:collegemitra/src/features/authentication/screens/welcome/animate
 import 'package:collegemitra/src/repository/authentication_repository/excel_college_predictor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rive/rive.dart';
@@ -39,7 +38,6 @@ class _BranchPredictorState extends State<BranchPredictor> {
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
   }
 
@@ -168,8 +166,9 @@ class _BranchPredictorState extends State<BranchPredictor> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: tAccentColor,
         title: Text(
-          "$counselling Branch Predictor",
+          "$selectedCounselling Branch Predictor",
           style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w500,
@@ -337,13 +336,14 @@ class _BranchPredictorState extends State<BranchPredictor> {
                           });
                         } else {
                           try {
+                            await SchedulerBinding.instance.endOfFrame;
                             final data =
                                 await _controller.getCollegesByBranches(
                                     selectedState,
                                     selectedCategory,
                                     selectedSubCategory,
                                     userRank,
-                                    counselling,
+                                    selectedCounselling,
                                     selectedExam,
                                     selectedBranches);
 
@@ -354,7 +354,7 @@ class _BranchPredictorState extends State<BranchPredictor> {
                                   collegesToShow: data,
                                   counsellingName: counselling.toString(),
                                   userDetails: [
-                                    counselling,
+                                    selectedCounselling,
                                     selectedState,
                                     selectedCategory,
                                     selectedSubCategory,

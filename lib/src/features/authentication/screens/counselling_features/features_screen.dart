@@ -42,12 +42,12 @@ class _FeatureScreenState extends State<FeatureScreen> {
     List<CustomIcon> featureIcons_1 = [
       CustomIcon(
         icon: "assets/images/dashboard_images/3d-target.png",
-        name: "Predictor",
+        name: "Know About",
         counselling: widget.appBarTitle,
       ),
       CustomIcon(
         icon: "assets/images/dashboard_images/search.png",
-        name: "Cutoff",
+        name: "Predictor",
         counselling: widget.appBarTitle,
       ),
       CustomIcon(
