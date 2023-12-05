@@ -2,39 +2,39 @@ import 'package:flutter/material.dart';
 
 class PromoCard extends StatelessWidget {
   const PromoCard({
-    super.key,
+    Key? key,
     this.counselling_name,
-  });
+  }) : super(key: key);
 
   static const kDefaultShadow = BoxShadow(
     offset: Offset(0, 15),
     blurRadius: 27,
     color: Colors.black12, // Black color with 12% opacity
   );
+
   final counselling_name;
+
   @override
   Widget build(BuildContext context) {
     var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
-    // It  will provide us total height and width of our screen
     Size size = MediaQuery.of(context).size;
+
     return SizedBox(
-      // color: Colors.blueAccent,
-      height: size.height / 3.8,
+      height: size.height / 4.5,
       child: InkWell(
         onTap: () {},
         child: Stack(
           alignment: Alignment.bottomCenter,
           children: [
-            // Those are our background
             Container(
-              height: size.height / 3.8,
+              height: size.height / 4.5,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(22),
                 color: const Color(0xFF40BAD5),
                 boxShadow: const [kDefaultShadow],
               ),
               child: Container(
-                height: size.height / 4,
+                height: size.height / 5.5,
                 margin: const EdgeInsets.only(right: 10),
                 decoration: BoxDecoration(
                   color: isDark ? Colors.black : Colors.white,
@@ -42,7 +42,6 @@ class PromoCard extends StatelessWidget {
                 ),
               ),
             ),
-            // our product image
             Positioned(
               top: 0,
               right: 0,
@@ -50,9 +49,7 @@ class PromoCard extends StatelessWidget {
                 tag: '1',
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  height: 160,
-                  // image is square but we add extra 20 + 20 padding thats why width is 200
-                  width: 200,
+                  height: size.height / 4.5,
                   child: Image.asset(
                     'assets/images/dashboard_images/graduation.png',
                     fit: BoxFit.cover,
@@ -60,15 +57,13 @@ class PromoCard extends StatelessWidget {
                 ),
               ),
             ),
-            // Product title and price
             Positioned(
               top: 4,
               bottom: 0,
               left: 0,
               child: SizedBox(
                 height: size.height / 5,
-                // our image take 200 width, thats why we set out total width - 200
-                width: size.width - 200,
+                width: size.width / 2.5,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -82,15 +77,15 @@ class PromoCard extends StatelessWidget {
                             ? '$counselling_name Mentorship ?'
                             : 'Need Guidance ?',
                         style: Theme.of(context).textTheme.titleLarge,
-                        overflow: TextOverflow.clip,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
                       ),
                     ),
-                    // it use the available space
                     const Spacer(),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 20 * 1.5, // 30 padding
-                        vertical: 20 / 4, // 5 top and bottom
+                        horizontal: 20 * 1.5,
+                        vertical: 20 / 4,
                       ),
                       decoration: const BoxDecoration(
                         color: Color(0xFFFFA41B),

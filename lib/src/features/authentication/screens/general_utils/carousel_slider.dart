@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class MyCarouselSlider extends StatefulWidget {
   const MyCarouselSlider({Key? key}) : super(key: key);
@@ -11,21 +12,49 @@ class MyCarouselSlider extends StatefulWidget {
 
 class _MyCarouselSliderState extends State<MyCarouselSlider> {
   late YoutubePlayerController _controller;
-  bool _isPlayerReady = false;
-  List<String> youtubeVideoIds = [
-    'DDvapuQGV84',
-    'DDvapuQGV84',
-    'DDvapuQGV84',
-  ];
 
+  bool _isPlayerReady = false;
+  List<String> youtubeVideoIds = [];
   int currentIndex = 0;
+
+  List<String> youtubeVideoLinks = [];
+
+  @override
+  void initState() {
+    initializeYoutube();
+    super.initState();
+  }
+
+  void initializeYoutube() async {
+    youtubeVideoLinks = await getYoutubeVideoLinks("HEADER");
+    youtubeVideoIds = convertLinksToIds(youtubeVideoLinks);
+    setState(() {}); // Trigger a rebuild to update the CarouselSlider
+  }
+
+  List<String> convertLinksToIds(List<String> videoLinks) {
+    List<String> videoIds = [];
+    for (String link in videoLinks) {
+      String videoId = YoutubePlayer.convertUrlToId(link) ?? '';
+      if (videoId.isNotEmpty) {
+        videoIds.add(videoId);
+      }
+    }
+    return videoIds;
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (youtubeVideoIds.isEmpty) {
+      // Handle the case where youtubeVideoIds is empty
+      return const Center(
+        child: Text("No YouTube videos available"),
+      );
+    }
+
     return CarouselSlider.builder(
       itemCount: youtubeVideoIds.length,
       options: CarouselOptions(
-        height: 160,
+        height: 140,
         aspectRatio: 16 / 9,
         autoPlay: true,
         autoPlayInterval: const Duration(seconds: 5),
@@ -116,4 +145,24 @@ class _MyCarouselSliderState extends State<MyCarouselSlider> {
       },
     );
   }
+}
+
+Future<List<String>> getYoutubeVideoLinks(String position) async {
+  final supabase = Supabase.instance.client;
+  final response = await supabase
+      .from("header_footer_video")
+      .select("video_link")
+      .eq("position", position);
+
+  final List<dynamic>? data = response is List ? response : response['data'];
+
+  if (data == null || data.isEmpty) {
+    // Return an empty list if there is no data
+    return [];
+  }
+
+  final List<String> youtubeVideoLinks =
+      data.map((row) => row['video_link'].toString()).toList();
+
+  return youtubeVideoLinks;
 }

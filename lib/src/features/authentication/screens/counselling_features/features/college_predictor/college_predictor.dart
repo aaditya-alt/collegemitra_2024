@@ -143,10 +143,14 @@ class _CollegePredictorState extends State<CollegePredictor> {
           "For $counselling Counselling, We Have JOSAA and CSAB, please select the counselling based on your rank, Always Remember in CSAB counselling your CRL Rank will be applicable irrespective of your category but in JOSAA, your Category Rank will be applicable.");
     }
 
-    if (selectedCategory == 'General') {
+    if (selectedCounselling == "CSAB") {
       rankToEnter = "CRL Rank";
-    } else {
-      rankToEnter = "Category Rank";
+    } else if (selectedCounselling == "JOSAA") {
+      if (selectedCategory == 'OPEN') {
+        rankToEnter = "CRL Rank";
+      } else {
+        rankToEnter = "Category Rank";
+      }
     }
 
     return Scaffold(

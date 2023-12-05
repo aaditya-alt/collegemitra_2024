@@ -314,7 +314,7 @@ class _ShowCollegesState extends State<ShowColleges> {
               Stack(
                 children: [
                   Container(
-                    color: tAccentColor,
+                    color: tAccentColor.shade200,
                     height: 57,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
@@ -361,7 +361,7 @@ class _ShowCollegesState extends State<ShowColleges> {
                       width: 45,
                       height: 57,
                       decoration: const BoxDecoration(
-                        color: tPrimaryColor,
+                        color: tAccentColor,
                       ),
                       child: IconButton(
                         icon: const Icon(

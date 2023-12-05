@@ -32,7 +32,6 @@ class _BranchPredictorState extends State<BranchPredictor> {
 
   @override
   void initState() {
-    _loadBranches();
     super.initState();
   }
 
@@ -226,7 +225,12 @@ class _BranchPredictorState extends State<BranchPredictor> {
                           "Select your subCategory", subCategory, size,
                           (value) {
                         setState(() {
+                          isLoading = true;
                           selectedSubCategory = value;
+                        });
+                        _loadBranches();
+                        setState(() {
+                          isLoading = false;
                         });
                         showBranchSelectionBottomSheet();
                       }, "Enter Sub-Category Details",

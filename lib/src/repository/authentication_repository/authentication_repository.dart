@@ -26,21 +26,46 @@ class AuthenticationRepository extends GetxController {
   var userRole = "";
   String userName = "";
 
-  getUserData(String? email) async {
-    // ignore: unnecessary_null_comparison
+  // Local cache to store user data
+  final Map<String, dynamic> userDataCache = {};
 
-    final userDetails = await _userRepo.getUserDetails(email!);
-    userRole = userDetails.role.toString();
-    userName = userDetails.fullName.toString();
-    userName.split(" ").first;
+  Future<void> getUserData(String? email) async {
+    if (email != null) {
+      // Check if user data is already in the cache
+      if (userDataCache.containsKey(email)) {
+        final userDetails = userDataCache[email]!;
+        userRole = userDetails['role'] as String;
+        userName = userDetails['fullName'] as String;
+        userName.split(" ").first;
+      } else {
+        // If not in the cache, fetch from Firebase
+        print("Firebase query");
+        final userDetails = await _userRepo.getUserDetails(email);
+        userRole = userDetails.role.toString();
+        userName = userDetails.fullName.toString();
+        userName.split(" ").first;
+
+        // Store in the cache for future use
+        userDataCache[email] = {
+          'role': userRole,
+          'fullName': userName,
+        };
+      }
+    } else {
+      Get.snackbar("Error", "Email is null, please provide email");
+    }
   }
 
   @override
   void onReady() async {
     firebaseUser = Rx<User?>(_auth.currentUser);
     firebaseUser.bindStream(_auth.userChanges());
-    await getUserData(firebaseUser.value!.email);
-    setInitialScreen(firebaseUser.value, userRole);
+    if (firebaseUser.value != null) {
+      await getUserData(firebaseUser.value?.email);
+      setInitialScreen(firebaseUser.value, userRole);
+    } else {
+      Get.to(const WelcomeScreen());
+    }
     // ever(firebaseUser, _setInitialScreen);
   }
 
