@@ -13,6 +13,7 @@ import 'package:collegemitra/src/features/authentication/screens/general_utils/d
 import 'package:collegemitra/src/features/authentication/screens/general_utils/drawer_list.dart';
 import 'package:collegemitra/src/features/authentication/screens/meeting/meeting_home_screen.dart';
 import 'package:collegemitra/src/features/authentication/screens/premium/chat/chat_users.dart';
+import 'package:collegemitra/src/features/authentication/screens/premium/premium_purchase.dart';
 import 'package:collegemitra/src/features/authentication/screens/profile/profile_screen.dart';
 import 'package:collegemitra/src/repository/authentication_repository/authentication_repository.dart';
 import 'package:collegemitra/src/repository/authentication_repository/user_repository.dart';
@@ -61,6 +62,7 @@ class _DashboardState extends State<Dashboard> {
       body: ListView(
         padding: const EdgeInsets.all(14.0),
         children: [
+          const SizedBox(height: 10),
           const MyCarouselSlider(),
           //upcoming card
           // const UpcomingCard(),
@@ -74,7 +76,7 @@ class _DashboardState extends State<Dashboard> {
           const SizedBox(height: 20),
           //counsellings
           CounsellingButton(listItems: customIcons),
-          const SizedBox(height: 15),
+          const SizedBox(height: 20),
           CounsellingButton(listItems: allCounselling),
           const SizedBox(height: 30),
 
@@ -100,15 +102,17 @@ class _DashboardState extends State<Dashboard> {
           const SizedBox(height: 15),
 
           //Popular Blogs
-          const PopularBlogs(),
+          PopularBlogs(
+            counsellingName: "POPULAR",
+          ),
 
-          const SizedBox(height: 13),
+          const SizedBox(height: 25),
 
           //Collegemitra premium promotion
           const PromoCard(),
 
           const SizedBox(
-            height: 25,
+            height: 30,
           ),
 
           Text(
@@ -120,7 +124,9 @@ class _DashboardState extends State<Dashboard> {
           const SizedBox(height: 15),
 
           //Testimonial Section
-          const TestimonialSection(),
+          TestimonialSection(
+            counsellingName: "POPULAR",
+          ),
 
           const SizedBox(height: 15),
 
@@ -199,8 +205,10 @@ class _DashboardState extends State<Dashboard> {
           onTap: (index) {
             if (index == 3) {
               Get.to(() => const ProfileScreen());
+            } else if (index == 1) {
+              Get.to(() => const MeetingHomeScreen());
             } else if (index == 2) {
-              Get.offAll(() => const MeetingHomeScreen());
+              Get.to(() => const PremiumPurchase());
             }
           },
           items: const [

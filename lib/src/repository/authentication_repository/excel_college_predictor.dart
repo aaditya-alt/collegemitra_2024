@@ -242,4 +242,54 @@ class ExcelCollegePredictor extends GetxController {
 
     return filteredColleges.values.toList();
   }
+
+  //Get all colleges dynamically
+  Future<List<String>> getCollegesFromCounselling(String counselling) async {
+    Set<String> colleges = {};
+    List<String> collegessData = [];
+
+    ByteData data =
+        await rootBundle.load('assets/cutoff_files/${counselling}_2023.xlsx');
+    var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    var excel = Excel.decodeBytes(bytes);
+
+    for (var table in excel.tables.keys) {
+      for (var row in excel.tables[table]!.rows) {
+        colleges.add(row[0]?.value.toString() ??
+            ''); // Assuming row[1] contains branch information
+      }
+    }
+
+    collegessData = colleges.toList();
+    collegessData.remove(collegessData.first);
+
+    // Now, 'branches' Set contains all unique branches for the specified counselling
+    return collegessData;
+  }
+
+  //Get all branches dynamically
+  Future<List<String>> getBranchesFromColleges(
+      String college, String counselling) async {
+    Set<String> branches = {};
+    List<String> branchesData = [];
+
+    ByteData data =
+        await rootBundle.load('assets/cutoff_files/${counselling}_2023.xlsx');
+    var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    var excel = Excel.decodeBytes(bytes);
+
+    for (var table in excel.tables.keys) {
+      for (var row in excel.tables[table]!.rows) {
+        if (row[0]?.value.toString() == college) {
+          branches.add(row[1]?.value.toString() ?? '');
+        }
+      }
+    }
+
+    branchesData = branches.toList();
+    branchesData.remove(branchesData.first);
+
+    // Now, 'branches' Set contains all unique branches for the specified counselling
+    return branchesData;
+  }
 }

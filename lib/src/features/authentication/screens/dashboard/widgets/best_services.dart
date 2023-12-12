@@ -54,7 +54,7 @@ class _BestServicesState extends State<BestServices> {
     return Stack(
       children: [
         SizedBox(
-          height: size.height / 4.2,
+          height: size.height / 9,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: freeServices.length,
@@ -122,43 +122,35 @@ class _BestServicesState extends State<BestServices> {
               child: Card(
                 child: Container(
                   width: size.width / 1.9,
-                  height: 145,
+                  height: size.height / 8,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(10),
                     gradient: const LinearGradient(
                       colors: [Colors.orange, Colors.yellow],
                       // Adjust stops as needed
                     ),
                   ),
                   child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Container(
-                          alignment: Alignment.center,
-                          child: Image.asset(
-                            freeServices[i].image,
-                            height: size.width / 3.5,
-                            width: size.width / 1.5,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
                         Text(
                           freeServices[i].title,
                           style: const TextStyle(
-                            fontSize: 14,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        const SizedBox(height: 2),
+                        const SizedBox(height: 4),
                         Text(
                           freeServices[i].subTitle,
                           style: const TextStyle(
-                            fontSize: 11,
+                            fontSize: 13,
                             color: Colors.black,
                           ),
                           textAlign: TextAlign.center,

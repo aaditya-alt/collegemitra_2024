@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:collegemitra/src/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -24,8 +25,13 @@ class _BottomCarouselState extends State<BottomCarousel> {
     super.initState();
   }
 
-  void initializeYoutube() async {
-    youtubeVideoLinks = await getYoutubeVideoLinks("HEADER");
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  Future<void> initializeYoutube() async {
+    youtubeVideoLinks = await getYoutubeVideoLinks("FOOTER");
     youtubeVideoIds = convertLinksToIds(youtubeVideoLinks);
     setState(() {}); // Trigger a rebuild to update the CarouselSlider
   }
@@ -44,9 +50,14 @@ class _BottomCarouselState extends State<BottomCarousel> {
   @override
   Widget build(BuildContext context) {
     if (youtubeVideoIds.isEmpty) {
-      // Handle the case where youtubeVideoIds is empty
-      return const Center(
-        child: Text("No YouTube videos available"),
+      return const SizedBox(
+        height: 160,
+        width: double.infinity,
+        child: Center(
+          child: CircularProgressIndicator(
+            color: tPrimaryColor,
+          ), // Show loading indicator while fetching data
+        ),
       );
     }
 

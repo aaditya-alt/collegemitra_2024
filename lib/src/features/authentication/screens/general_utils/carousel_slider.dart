@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:collegemitra/src/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -13,7 +14,6 @@ class MyCarouselSlider extends StatefulWidget {
 class _MyCarouselSliderState extends State<MyCarouselSlider> {
   late YoutubePlayerController _controller;
 
-  bool _isPlayerReady = false;
   List<String> youtubeVideoIds = [];
   int currentIndex = 0;
 
@@ -25,8 +25,13 @@ class _MyCarouselSliderState extends State<MyCarouselSlider> {
     super.initState();
   }
 
-  void initializeYoutube() async {
-    youtubeVideoLinks = await getYoutubeVideoLinks("HEADER");
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  Future<void> initializeYoutube() async {
+    final youtubeVideoLinks = await getYoutubeVideoLinks("HEADER");
     youtubeVideoIds = convertLinksToIds(youtubeVideoLinks);
     setState(() {}); // Trigger a rebuild to update the CarouselSlider
   }
@@ -45,16 +50,21 @@ class _MyCarouselSliderState extends State<MyCarouselSlider> {
   @override
   Widget build(BuildContext context) {
     if (youtubeVideoIds.isEmpty) {
-      // Handle the case where youtubeVideoIds is empty
-      return const Center(
-        child: Text("No YouTube videos available"),
+      return const SizedBox(
+        height: 160,
+        width: double.infinity,
+        child: Center(
+          child: CircularProgressIndicator(
+            color: tPrimaryColor,
+          ), // Show loading indicator while fetching data
+        ),
       );
     }
 
     return CarouselSlider.builder(
       itemCount: youtubeVideoIds.length,
       options: CarouselOptions(
-        height: 140,
+        height: 160,
         aspectRatio: 16 / 9,
         autoPlay: true,
         autoPlayInterval: const Duration(seconds: 5),
@@ -126,9 +136,7 @@ class _MyCarouselSliderState extends State<MyCarouselSlider> {
               controller: _controller,
               showVideoProgressIndicator: true,
               progressIndicatorColor: Colors.blue,
-              onReady: () {
-                _isPlayerReady = true;
-              },
+              onReady: () {},
             ),
             contentPadding: const EdgeInsets.all(0),
             actions: [

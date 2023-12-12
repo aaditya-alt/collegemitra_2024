@@ -26,14 +26,7 @@ class _CounsellingButtonState extends State<CounsellingButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10),
-      child: Column(
-        children: [
-          counsellingRow(widget.listItems, context),
-        ],
-      ),
-    );
+    return counsellingRow(widget.listItems, context);
   }
 
   Widget counsellingRow(List icons, BuildContext context) {
@@ -75,8 +68,7 @@ class _CounsellingButtonState extends State<CounsellingButton> {
                       Text("Engineering Counselling and Mentorship Details...",
                           style: Theme.of(context).textTheme.bodySmall),
                       Padding(
-                        padding:
-                            const EdgeInsets.only(top: 20, left: 20, right: 20),
+                        padding: const EdgeInsets.only(top: 20),
                         child: Column(
                           children: [
                             counsellingRow(customIcons, context),
@@ -93,6 +85,7 @@ class _CounsellingButtonState extends State<CounsellingButton> {
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: List.generate(icons.length, (index) {
         return Stack(
           children: [
@@ -128,7 +121,6 @@ class _CounsellingButtonState extends State<CounsellingButton> {
                   },
                   borderRadius: BorderRadius.circular(90),
                   child: Container(
-                    padding: const EdgeInsets.all(3),
                     width: 60,
                     height: 60,
                     decoration: BoxDecoration(
@@ -155,7 +147,7 @@ class _CounsellingButtonState extends State<CounsellingButton> {
                 Text(
                   icons[index].name,
                   style: const TextStyle(
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                     fontSize: 12,
                   ),
                 ),

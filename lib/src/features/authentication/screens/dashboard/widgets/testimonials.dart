@@ -1,55 +1,56 @@
+import 'package:collegemitra/src/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-class TestimonialSection extends StatelessWidget {
-  const TestimonialSection({super.key});
+class TestimonialSection extends StatefulWidget {
+  String counsellingName = "POPULAR";
+  TestimonialSection({super.key, required this.counsellingName});
+
+  @override
+  State<TestimonialSection> createState() => _TestimonialSectionState();
+}
+
+class _TestimonialSectionState extends State<TestimonialSection> {
+  List<Testimonial> testimonialsDetails = [];
+  @override
+  void initState() {
+    _getData();
+    super.initState();
+  }
+
+  void _getData() async {
+    testimonialsDetails = await getDataFromDatabase(widget.counsellingName);
+    // Set isLoading to false after fetching data
+    setState(() {}); // Trigger a rebuild
+  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final List<Testimonial> Testimonials = [
-      Testimonial(
-        image: 'assets/images/profile_images/profile-image.jpeg',
-        name: 'Aaditya Ranjan',
-        college: 'GJUS&T Hisar',
-        branch: 'CSE(AI&ML)',
-        review:
-            'I am a tech enthusiast now, but that was not always the case. I come from a non-tech background and used to.',
-        color: const Color.fromARGB(255, 0, 208, 255),
-      ),
-
-      Testimonial(
-        image: 'assets/images/profile_images/profile-image.jpeg',
-        name: 'Aaditya Ranjan',
-        college: 'GJUS&T Hisar',
-        branch: 'CSE(AI&ML)',
-        review:
-            'I am a tech enthusiast now, but that was not always the case. I come from a non-tech background and used to.',
-        color: const Color.fromARGB(255, 0, 208, 255),
-      ),
-
-      Testimonial(
-        image: 'assets/images/profile_images/profile-image.jpeg',
-        name: 'Aaditya Ranjan',
-        college: 'GJUS&T Hisar',
-        branch: 'CSE(AI&ML)',
-        review:
-            'I am a tech enthusiast now, but that was not always the case. I come from a non-tech background and used to.',
-        color: const Color.fromARGB(255, 0, 208, 255),
-      ),
-      // ... Repeat the same structure for other testimonials
-    ];
+    if (testimonialsDetails.isEmpty) {
+      return SizedBox(
+        height: size.height / 3.2,
+        width: size.width - 20,
+        child: const Center(
+          child: CircularProgressIndicator(
+            color: tPrimaryColor,
+          ), // Show loading indicator while fetching data
+        ),
+      );
+    }
 
     return SizedBox(
       height: size.height / 3.2,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: Testimonials.length,
+        itemCount: testimonialsDetails.length,
         itemBuilder: (BuildContext context, int i) => SizedBox(
-          width: size.width - 20,
+          width: size.width - 40,
           child: Card(
-            elevation: 4,
+            color: const Color.fromARGB(255, 255, 195, 178),
+            elevation: 3,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -58,19 +59,20 @@ class TestimonialSection extends StatelessWidget {
                   child: Row(
                     children: [
                       CircleAvatar(
-                        radius: 24,
-                        foregroundImage: AssetImage(Testimonials[i].image),
+                        radius: 30,
+                        foregroundImage:
+                            NetworkImage(testimonialsDetails[i].image),
                       ),
                       const SizedBox(width: 15),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            Testimonials[i].name,
+                            testimonialsDetails[i].name,
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           Text(
-                            '${Testimonials[i].college}, ${Testimonials[i].branch}',
+                            testimonialsDetails[i].designation,
                             style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
@@ -97,7 +99,7 @@ class TestimonialSection extends StatelessWidget {
                     bottom: 20,
                   ),
                   child: Text(
-                    Testimonials[i].review,
+                    testimonialsDetails[i].review,
                     textAlign: TextAlign.start,
                   ),
                 ),
@@ -113,16 +115,37 @@ class TestimonialSection extends StatelessWidget {
 class Testimonial {
   final String image;
   final String name;
-  final String college;
-  final String branch;
+  final String designation;
   final String review;
-  final Color color;
   Testimonial({
     required this.image,
     required this.name,
-    required this.college,
-    required this.branch,
+    required this.designation,
     required this.review,
-    required this.color,
   });
+}
+
+Future<List<Testimonial>> getDataFromDatabase(String counselling) async {
+  final supabase = Supabase.instance.client;
+  final response = await supabase
+      .from("testimonials")
+      .select()
+      .eq("counselling", counselling);
+
+  final List<dynamic>? data = response is List ? response : response['data'];
+
+  if (data == null || data.isEmpty) {
+    return [];
+  }
+
+  final List<Testimonial> testimonialsDetails = data
+      .map<Testimonial>((row) => Testimonial(
+            image: row['image_link'].toString(),
+            name: row['name'].toString(),
+            designation: row['designation'].toString(),
+            review: row['comment'].toString(),
+          ))
+      .toList();
+
+  return testimonialsDetails;
 }

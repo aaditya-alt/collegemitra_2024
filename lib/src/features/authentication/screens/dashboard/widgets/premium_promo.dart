@@ -78,7 +78,7 @@ class PromoCard extends StatelessWidget {
                             : 'Need Guidance ?',
                         style: Theme.of(context).textTheme.titleLarge,
                         overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
+                        maxLines: 3,
                       ),
                     ),
                     const Spacer(),

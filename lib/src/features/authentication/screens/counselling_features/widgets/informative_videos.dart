@@ -3,10 +3,12 @@ import 'package:collegemitra/src/features/authentication/screens/video_player/in
 import 'package:flutter/material.dart';
 import 'package:collegemitra/src/utils/theme/widget_themes/text_theme.dart';
 import 'package:get/get.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class InformativeVideos extends StatefulWidget {
-  const InformativeVideos({super.key});
+  final counsellingName;
+  const InformativeVideos({super.key, required this.counsellingName});
 
   @override
   State<InformativeVideos> createState() => _InformativeVideosState();
@@ -14,11 +16,34 @@ class InformativeVideos extends StatefulWidget {
 
 class _InformativeVideosState extends State<InformativeVideos> {
   late PageController pageController;
+  List<VideoCard> videoCards = [];
+  List<String> youtubeVideoIds = [];
 
   @override
   void initState() {
     super.initState();
+    initializeYoutube();
     pageController = PageController(viewportFraction: 0.8);
+  }
+
+  Future<void> initializeYoutube() async {
+    videoCards = await getDataFromDatabase(widget.counsellingName);
+    youtubeVideoIds = convertLinksToIds(videoCards);
+    setState(() {}); // Trigger a rebuild to update the CarouselSlider
+  }
+
+  List<String> convertLinksToIds(List<VideoCard> videoCards) {
+    List<String> videoIds = [];
+
+    for (int i = 0; i < videoCards.length; i++) {
+      String videoId =
+          YoutubePlayer.convertUrlToId(videoCards[i].videoURL) ?? '';
+      if (videoId.isNotEmpty) {
+        videoIds.add(videoId);
+      }
+    }
+
+    return videoIds;
   }
 
   @override
@@ -29,27 +54,19 @@ class _InformativeVideosState extends State<InformativeVideos> {
 
   @override
   Widget build(BuildContext context) {
-    var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
-    List<videoCard> videoCards = [
-      videoCard(
-          video_url: 'https://youtu.be/TF0To2vWNa8?si=wOypWFNgaT00UMcE',
-          title_text:
-              'HSTES Physical Counselling का पूरा निचोड़\n बस एक वीडियो में । Premium Google Meet',
-          time_in_ago: '2 months ago',
-          video_id: 'TF0To2vWNa8'),
-      videoCard(
-          video_url: 'https://youtu.be/I79DcXLCGfE?si=JeFLUOM14kGRLQIL',
-          title_text:
-              'Get the Best Govt. Engineering College On\n Your JEE Mains Rank 2023 | Collegemitra',
-          time_in_ago: '2 months ago',
-          video_id: 'I79DcXLCGfE'),
-      videoCard(
-          video_url: 'https://youtu.be/pC-zjH3-yL4?si=ok4ZO0x7v7pkdfmS',
-          title_text:
-              'OJEE Counselling 2023 Started | Odisha\n BTech Counselling 2023 | Collegemitra',
-          time_in_ago: '2 months ago',
-          video_id: 'pC-zjH3-yL4'),
-    ];
+    final isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
+    final size = MediaQuery.of(context).size;
+    if (videoCards.isEmpty) {
+      return SizedBox(
+        height: size.height / 3.2,
+        width: size.width - 20,
+        child: const Center(
+          child: CircularProgressIndicator(
+            color: tPrimaryColor,
+          ), // Show loading indicator while fetching data
+        ),
+      );
+    }
 
     return SizedBox(
       height: 228,
@@ -75,14 +92,14 @@ class _InformativeVideosState extends State<InformativeVideos> {
                                 topLeft: Radius.circular(15),
                                 topRight: Radius.circular(15)),
                             child: Image.network(
-                              'https://img.youtube.com/vi/${videoCards[i].video_id}/hqdefault.jpg',
+                              'https://img.youtube.com/vi/${youtubeVideoIds[i]}/hqdefault.jpg',
                               fit: BoxFit.cover,
                             ),
                           ),
                         ),
                         GestureDetector(
                           onTap: () => Get.to(YoutubeVideoPlayer(
-                            videoURL: videoCards[i].video_url,
+                            videoURL: videoCards[i].videoURL,
                           )),
                           child: Icon(
                             Icons.play_circle_fill_rounded,
@@ -97,7 +114,7 @@ class _InformativeVideosState extends State<InformativeVideos> {
                           left: 8.0, bottom: 8.0, right: 0),
                       child: Row(children: [
                         Text(
-                          videoCards[i].title_text,
+                          videoCards[i].title,
                           style: Theme.of(context).textTheme.titleMedium,
                           softWrap: true,
                           selectionColor: isDark ? Colors.white : Colors.black,
@@ -116,15 +133,34 @@ class _InformativeVideosState extends State<InformativeVideos> {
   }
 }
 
-class videoCard {
-  final String video_url;
-  final String title_text;
-  final String time_in_ago;
-  final String video_id;
-  videoCard({
-    required this.video_url,
-    required this.title_text,
-    required this.time_in_ago,
-    required this.video_id,
+class VideoCard {
+  final String videoURL;
+  final String title;
+  VideoCard({
+    required this.videoURL,
+    required this.title,
   });
+}
+
+Future<List<VideoCard>> getDataFromDatabase(String counselling) async {
+  final supabase = Supabase.instance.client;
+  final response = await supabase
+      .from("testimonials")
+      .select()
+      .eq("counselling", counselling);
+
+  final List<dynamic>? data = response is List ? response : response['data'];
+
+  if (data == null || data.isEmpty) {
+    return [];
+  }
+
+  final List<VideoCard> videoCardDetails = data
+      .map<VideoCard>((row) => VideoCard(
+            videoURL: row['video_link'].toString(),
+            title: row['title'].toString(),
+          ))
+      .toList();
+
+  return videoCardDetails;
 }

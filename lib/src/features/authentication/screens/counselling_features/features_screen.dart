@@ -115,7 +115,7 @@ class _FeatureScreenState extends State<FeatureScreen> {
               const SizedBox(height: 30),
 
               PromoCard(counselling_name: widget.appBarTitle),
-              const SizedBox(height: 25),
+              const SizedBox(height: 30),
 
               Text(
                 "Related Videos",
@@ -127,7 +127,9 @@ class _FeatureScreenState extends State<FeatureScreen> {
               const SizedBox(height: 18),
 
               //Related videos
-              const InformativeVideos(),
+              InformativeVideos(
+                counsellingName: widget.appBarTitle,
+              ),
 
               const SizedBox(height: 25),
 
@@ -143,7 +145,7 @@ class _FeatureScreenState extends State<FeatureScreen> {
               const SizedBox(height: 20),
 
               //Popular Blogs
-              const PopularBlogs(),
+              PopularBlogs(counsellingName: widget.appBarTitle),
 
               const SizedBox(height: 20),
 
