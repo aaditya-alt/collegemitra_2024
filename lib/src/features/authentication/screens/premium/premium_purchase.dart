@@ -54,20 +54,18 @@ class _PremiumPurchaseState extends State<PremiumPurchase> {
           title: Text(
             "Premium Plan",
             style: GoogleFonts.playfairDisplay(
-              textStyle: const TextStyle(
-                  color: Color.fromARGB(255, 255, 215, 0),
-                  fontWeight: FontWeight.bold),
+              textStyle: const TextStyle(fontWeight: FontWeight.w900),
             ),
           ),
           centerTitle: true,
-          foregroundColor: const Color.fromARGB(255, 255, 215, 0),
-          backgroundColor: Colors.transparent,
+          foregroundColor: const Color.fromARGB(255, 0, 0, 0),
+          backgroundColor: const Color.fromARGB(255, 255, 215, 0),
         ),
         body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              const SizedBox(height: 10),
+              const SizedBox(height: 25),
               RichText(
                 text: TextSpan(
                   text: 'Pick Your ',

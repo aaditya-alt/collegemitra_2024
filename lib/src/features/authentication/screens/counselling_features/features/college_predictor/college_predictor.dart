@@ -157,7 +157,7 @@ class _CollegePredictorState extends State<CollegePredictor> {
       appBar: AppBar(
         backgroundColor: tAccentColor,
         title: Text(
-          "$selectedCounselling College Predictor",
+          "$counselling College Predictor",
           style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w500,

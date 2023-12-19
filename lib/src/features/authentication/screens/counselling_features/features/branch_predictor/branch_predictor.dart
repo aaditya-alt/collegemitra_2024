@@ -167,7 +167,7 @@ class _BranchPredictorState extends State<BranchPredictor> {
       appBar: AppBar(
         backgroundColor: tAccentColor,
         title: Text(
-          "$selectedCounselling Branch Predictor",
+          "$counselling Branch Predictor",
           style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w500,

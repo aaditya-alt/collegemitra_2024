@@ -41,10 +41,10 @@ class _CollegeDetailsCMSState extends State<CollegeDetailsCMS> {
     'medical_support': true,
     // Add more facilities as needed
   };
-  TextEditingController companyNamesController = TextEditingController();
+  TextEditingController companyImagesController = TextEditingController();
 
   // Map to store company names and their corresponding image links
-  Map<String, String> companyDetails = {};
+  Map<String, String> branchPlacementPercentage = {};
 
   @override
   Widget build(BuildContext context) {
@@ -86,8 +86,9 @@ class _CollegeDetailsCMSState extends State<CollegeDetailsCMS> {
                       selectedCounselling = value;
                       isLoading = true;
                     });
-                    colleges = await getCollegesList(value);
+                    List<String> data = await getCollegesList(value);
                     setState(() {
+                      colleges = data;
                       isLoading = false;
                     });
                   },
@@ -253,6 +254,7 @@ class _CollegeDetailsCMSState extends State<CollegeDetailsCMS> {
                       );
                     }).toList(),
                   ),
+
                   const SizedBox(height: 15),
                   Text(
                     "College Placements",
@@ -262,53 +264,74 @@ class _CollegeDetailsCMSState extends State<CollegeDetailsCMS> {
                   const Divider(color: Colors.blue, thickness: 4, height: 15),
                   const SizedBox(height: 20),
                   Text(
-                    "First Enter Branch wise placements (Only For IIT's & NIT's)",
+                    "First Enter Branch wise placement Percentage",
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   const SizedBox(height: 15),
                   SizedBox(
                     width: double.infinity,
                     child: OutlinedButton.icon(
+                      style: const ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(Colors.green),
+                        elevation: MaterialStatePropertyAll(3),
+                      ),
                       onPressed: () async {
                         setState(() {
                           isLoading = true;
                         });
-                        branches = await getBranchesList(
+                        List<String> data = await getBranchesList(
                             selectedCollege, selectedCounselling);
+
+                        await saveBranchDetails(data);
                         setState(() {
+                          branches = data;
                           isLoading = false;
                         });
-
-                        // ignore: use_build_context_synchronously
-                        showModalBottomSheet(
-                          showDragHandle: true,
-                          useSafeArea: true,
-                          isScrollControlled: true,
-                          context: context,
-                          builder: (context) {
-                            return SizedBox(
-                              height: MediaQuery.of(context).size.height,
-                              child: BranchwisePlacementsModal(
-                                branches: branches,
-                                onSave: (Map<String, Map<String, String>>
-                                    branchDetails) {
-                                  branchDetailsJson = jsonEncode(branchDetails);
-                                  // Handle saving branch details
-                                  print(branchDetailsJson);
-                                },
-                              ),
-                            );
-                          },
-                        );
                       },
                       icon: isLoading
                           ? const CircularProgressIndicator()
-                          : const Icon(Icons.money),
+                          : const Icon(Icons.percent),
                       label: isLoading
                           ? const Text("Loading...")
                           : const Text("Enter Branchwise Placements"),
                     ),
                   ),
+
+                  const SizedBox(height: 20),
+
+                  branchPlacementPercentage.isEmpty
+                      ? const SizedBox(height: 0)
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children:
+                              branchPlacementPercentage.keys.map((branch) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(branch),
+                                  ),
+                                  const SizedBox(width: 16.0),
+                                  Expanded(
+                                    flex: 2,
+                                    child: TextFormField(
+                                      onChanged: (value) {
+                                        setState(() {
+                                          branchPlacementPercentage[branch] =
+                                              value;
+                                        });
+                                      },
+                                      decoration: const InputDecoration(
+                                          labelText: "Placement %age"),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                        ),
 
                   const SizedBox(height: 15),
                   Text(
@@ -317,59 +340,21 @@ class _CollegeDetailsCMSState extends State<CollegeDetailsCMS> {
                   ),
                   const SizedBox(height: 15),
                   TextFormField(
-                    controller: companyNamesController,
+                    controller: companyImagesController,
                     decoration: const InputDecoration(
-                        labelText: "Companies that Come(Seperated by Comma)"),
+                        labelText:
+                            "Company Images that Come(Seperated by Comma)"),
                     maxLines: 3,
                   ),
-                  const SizedBox(height: 16.0),
-                  // Button to save company details
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: const ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(Colors.green),
-                      ),
-                      onPressed: () async {
-                        await saveCompanyDetails();
-                        setState(() {});
-                      },
-                      child: const Text('Save Company Details'),
-                    ),
-                  ),
                   const SizedBox(height: 20),
+                  // Button to save company details
 
-                  companyDetails.isEmpty
-                      ? const SizedBox(height: 0)
-                      : Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: companyDetails.keys.map((company) {
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(company),
-                                  ),
-                                  const SizedBox(width: 16.0),
-                                  Expanded(
-                                    flex: 2,
-                                    child: TextFormField(
-                                      onChanged: (value) {
-                                        setState(() {
-                                          companyDetails[company] = value;
-                                        });
-                                      },
-                                      decoration: const InputDecoration(
-                                          labelText: "Image Link"),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }).toList(),
-                        ),
+                  TextFormField(
+                    controller: controller.uploadedBy,
+                    decoration:
+                        const InputDecoration(labelText: "Enter Your Name..."),
+                  ),
+
                   const SizedBox(height: 35),
                   Text(
                     "Click the final submit button only when you have entered all the details correctly...",
@@ -391,10 +376,10 @@ class _CollegeDetailsCMSState extends State<CollegeDetailsCMS> {
                           await controller.storeCollegeDetailsToSupabase(
                               selectedCollege,
                               selectedCounselling,
-                              companiesToJson(companyDetails),
+                              companyImagesController.text.trim(),
                               branchesToJson(branches, commonFee),
                               facilitiesToJson(facilityValues),
-                              branchDetailsJson);
+                              companiesToJson(branchPlacementPercentage));
 
                           showDialog(
                               context: context,
@@ -450,17 +435,13 @@ class _CollegeDetailsCMSState extends State<CollegeDetailsCMS> {
     );
   }
 
-  saveCompanyDetails() {
-    String companyNames = companyNamesController.text.trim();
-    List<String> namesList =
-        companyNames.split(',').map((name) => name.trim()).toList();
-
+  saveBranchDetails(branches) {
     // Example: Set default image link for each company
-    String defaultImageLink = 'https://example.com/default-image.jpg';
+    String placementPercentage = '60%';
 
     // Store company details in the map
-    for (String companyName in namesList) {
-      companyDetails[companyName] = defaultImageLink;
+    for (String branch in branches) {
+      branchPlacementPercentage[branch] = placementPercentage;
     }
   }
 }

@@ -10,41 +10,50 @@ class PremiumDashboard extends StatelessWidget {
     final auth = AuthenticationRepository.instance;
     final userName = auth.userName;
     return DecoratedBox(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color.fromARGB(255, 80, 64, 47),
-              Color.fromARGB(255, 48, 39, 38),
-              Color.fromARGB(255, 28, 22, 25),
-              Color.fromARGB(255, 48, 39, 38),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color.fromARGB(255, 80, 64, 47),
+            Color.fromARGB(255, 48, 39, 38),
+            Color.fromARGB(255, 28, 22, 25),
+            Color.fromARGB(255, 48, 39, 38),
+          ],
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor:
+            Colors.transparent, // Set Scaffold background to transparent
+        appBar: AppBar(
+          backgroundColor: const Color.fromARGB(255, 255, 215, 0),
+          foregroundColor: const Color.fromARGB(255, 0, 0, 0),
+          title: Text(
+            "$userName's Dashboard",
+            style: GoogleFonts.playfairDisplay(
+              textStyle: const TextStyle(
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+          ),
+          centerTitle: true,
+        ),
+        body: const SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: 25),
+              ProfileCard(),
+              SizedBox(height: 10),
+              ServicesCard(),
+              SizedBox(height: 10),
+              MentorSection(),
+              SizedBox(height: 10),
+              MoreInfo(),
             ],
           ),
         ),
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text(
-              "$userName's Dashboard",
-              style: GoogleFonts.playfairDisplay(
-                textStyle: const TextStyle(
-                    color: Color.fromARGB(255, 255, 215, 0),
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            centerTitle: true,
-          ),
-          body: const SingleChildScrollView(
-            child: Column(
-              children: [
-                ProfileCard(),
-                ServicesCard(),
-                MentorSection(),
-                MoreInfo(),
-              ],
-            ),
-          ),
-        ));
+      ),
+    );
   }
 }
 
@@ -75,7 +84,7 @@ class ProfileCard extends StatelessWidget {
                     style: TextStyle(fontStyle: FontStyle.italic, fontSize: 16),
                   ),
                   Text(
-                    "Rohit Tiwari",
+                    "Aaditya Ranjan",
                     style: TextStyle(
                       fontStyle: FontStyle.italic,
                       fontSize: 30,
@@ -91,7 +100,7 @@ class ProfileCard extends StatelessWidget {
                 ],
               ),
               Image(
-                image: AssetImage("assets/1.png"),
+                image: AssetImage("assets/images/premium_panel/1.png"),
               ),
             ],
           ),
@@ -122,7 +131,7 @@ class ServicesCard extends StatelessWidget {
               Column(
                 children: [
                   Card(
-                    color: Color.fromARGB(128, 255, 255, 229),
+                    color: const Color.fromARGB(128, 255, 255, 229),
                     child: IconButton(
                       onPressed: () {},
                       icon: const Icon(Icons.messenger),

@@ -32,6 +32,13 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
+    String firstName;
+    final auth = AuthenticationRepository.instance;
+    if (widget.username == null) {
+      firstName = auth.userName;
+    } else {
+      firstName = widget.username;
+    }
     return Scaffold(
       appBar: AppBar(
         elevation: 2,
@@ -41,7 +48,7 @@ class _DashboardState extends State<Dashboard> {
           children: [
             // const Padding(padding: EdgeInsets.only(top: 6)),
             Text(
-              "Hey ${widget.username}",
+              "Hey $firstName",
               style: const TextStyle(fontSize: 16),
             ),
             Text("How are you feeling today?",

@@ -36,13 +36,15 @@ class CollegeDetailsCMSController extends GetxController {
   final branchAveragePackage = TextEditingController();
   final branchPercentagePlacement = TextEditingController();
   final branchSeats = TextEditingController();
+  final uploadedBy = TextEditingController();
 
   storeCollegeDetailsToSupabase(fullName, counselling, companies, branchesFees,
       facilities, branchWisePlacements) async {
-    print("Hey data reached the controller");
-    print("Companies JSON : $companies");
+    print("Hey, data reached the controller");
+    print("Companies Array : $companies");
     print("Facilities JSON : $facilities");
     print("Branches Fees JSON : $branchesFees");
+    print("Branches Placements : $branchWisePlacements");
     await supabase.from("college_details").insert({
       'full_name': fullName,
       'short_name': shortName.text,
@@ -68,7 +70,8 @@ class CollegeDetailsCMSController extends GetxController {
       'phone': phone.text,
       'email': email.text,
       'website': website.text,
-      'branches_highest_average_percentage_seats': branchWisePlacements,
+      'branches_percentage': branchWisePlacements,
+      'uploaded_by': uploadedBy.text,
     });
   }
 }

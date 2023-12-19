@@ -36,14 +36,14 @@ class AuthenticationRepository extends GetxController {
         final userDetails = userDataCache[email]!;
         userRole = userDetails['role'] as String;
         userName = userDetails['fullName'] as String;
-        userName.split(" ").first;
+        userName = userName.split(" ")[0];
       } else {
         // If not in the cache, fetch from Firebase
         print("Firebase query");
         final userDetails = await _userRepo.getUserDetails(email);
         userRole = userDetails.role.toString();
         userName = userDetails.fullName.toString();
-        userName.split(" ").first;
+        userName = userName.split(" ")[0];
 
         // Store in the cache for future use
         userDataCache[email] = {

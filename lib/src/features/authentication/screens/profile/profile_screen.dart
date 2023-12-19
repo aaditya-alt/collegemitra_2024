@@ -149,7 +149,7 @@ class ProfileScreen extends StatelessWidget {
             if (index == 3) {
               Get.to(() => const ProfileScreen());
             } else if (index == 0) {
-              Get.to(() => const Dashboard());
+              Get.offAll(() => const Dashboard());
             }
           },
           items: const [

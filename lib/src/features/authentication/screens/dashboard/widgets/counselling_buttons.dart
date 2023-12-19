@@ -1,5 +1,6 @@
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/controllers/college_predictor_controller.dart';
+import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/all_colleges/show_all_colleges.dart';
 import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/branch_predictor/branch_predictor.dart';
 import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/college_predictor/college_predictor.dart';
 import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/details/details_screen.dart';
@@ -111,6 +112,8 @@ class _CounsellingButtonState extends State<CounsellingButton> {
                     } else if (icons[index].name == "Know About") {
                       Get.to(() => DetailsScreen(
                           counsellingName: icons[index].counselling));
+                    } else if (icons[index].name == "All Colleges") {
+                      Get.to(() => const ShowAllColleges());
                     } else {
                       Get.to(
                           () => FeatureScreen(appBarTitle: icons[index].name));

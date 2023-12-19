@@ -11,7 +11,7 @@ class ParallaxImages extends StatelessWidget {
       'assets/images/premium_panel/first.png'
     ];
     return SizedBox(
-      height: 220,
+      height: 260,
       child: PageView.builder(
         itemCount: imagePaths.length,
         itemBuilder: (context, index) {
@@ -26,7 +26,7 @@ class ParallaxImages extends StatelessWidget {
       scale: 1.0 - 0.5 * 0.2,
       child: Image.asset(
         imagePath,
-        height: 200,
+        height: 230,
         fit: BoxFit.contain,
       ),
     );
