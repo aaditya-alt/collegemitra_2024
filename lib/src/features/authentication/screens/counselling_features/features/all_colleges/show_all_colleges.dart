@@ -1,7 +1,10 @@
-import 'dart:ui';
+import 'dart:ffi';
+
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/models/all_colleges_model.dart';
+import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/all_colleges/show_college_details.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ShowAllColleges extends StatefulWidget {
@@ -120,6 +123,7 @@ class _ShowAllCollegesState extends State<ShowAllColleges> {
               collegeState: row['state'].toString(),
               collegeType: row['type'].toString(),
               collegeImage: row['main_image'].toString(),
+              collegeId: row['id'],
             ))
         .toList();
 
@@ -136,14 +140,16 @@ class AllCollegesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {},
-      child: Expanded(
-        child: ListView.builder(
-            scrollDirection: Axis.vertical,
-            itemCount: collegeList.length,
-            itemBuilder: (context, index) {
-              return Padding(
+    return Expanded(
+      child: ListView.builder(
+          scrollDirection: Axis.vertical,
+          itemCount: collegeList.length,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () => Get.to(() => ShowCollegeDetails(
+                    collegeId: collegeList[index].collegeId,
+                  )),
+              child: Padding(
                 padding: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
                 child: Card(
                   borderOnForeground: true,
@@ -153,35 +159,48 @@ class AllCollegesList extends StatelessWidget {
                   child: Column(
                     children: [
                       Stack(
-                        alignment: Alignment.bottomLeft,
                         children: [
-                          Container(
-                              width: MediaQuery.of(context).size.width - 20,
-                              height: MediaQuery.of(context).size.height / 4,
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(25),
-                                    topRight: Radius.circular(25)),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              collegeList[index].collegeImage,
+                              height: 200, // Adjust the height as needed
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            child: Container(
+                              height: MediaQuery.of(context).size.height / 5,
+                              alignment: Alignment.bottomCenter,
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.only(
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                ),
+                                gradient: LinearGradient(
+                                  begin: Alignment.bottomCenter,
+                                  end: Alignment.topCenter,
+                                  colors: [
+                                    Colors.black.withOpacity(1),
+                                    Colors.transparent,
+                                    Colors.transparent,
+                                  ],
+                                ),
                               ),
-                              child: Image.network(
-                                collegeList[index].collegeImage,
-                                fit: BoxFit.cover,
-                              )),
-                          Positioned.fill(
-                              child: BackdropFilter(
-                                  filter: ImageFilter.blur(
-                                      sigmaX: 30, sigmaY: 30))),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: MediaQuery.of(context).size.height / 5.4,
-                                left: 10),
-                            child: Text(
-                              collegeList[index].collegeName,
-                              style: const TextStyle(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 15),
+                              child: Text(
+                                collegeList[index].collegeName,
+                                style: const TextStyle(
                                   color: Colors.white,
-                                  fontSize: 24,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.bold,
-                                  overflow: TextOverflow.ellipsis),
+                                ),
+                              ),
                             ),
                           ),
                         ],
@@ -229,9 +248,9 @@ class AllCollegesList extends StatelessWidget {
                     ],
                   ),
                 ),
-              );
-            }),
-      ),
+              ),
+            );
+          }),
     );
   }
 }

@@ -19,6 +19,7 @@ class TTextTheme {
     titleSmall: GoogleFonts.poppins(
       color: Colors.black54,
       fontSize: 16,
+      fontWeight: FontWeight.bold,
     ),
     titleMedium: GoogleFonts.montserrat(
       fontWeight: FontWeight.w700,

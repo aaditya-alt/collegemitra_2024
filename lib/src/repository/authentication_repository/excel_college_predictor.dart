@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:collegemitra/src/features/authentication/models/all_colleges_model.dart';
 import 'package:collegemitra/src/features/authentication/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show ByteData, rootBundle;
@@ -291,5 +292,45 @@ class ExcelCollegePredictor extends GetxController {
 
     // Now, 'branches' Set contains all unique branches for the specified counselling
     return branchesData;
+  }
+
+  Future<List<Cutoff>> getCutoffDataForCollege(
+      String counselling, String collegeName, String category) async {
+    Set<String> uniqueBranches = {}; // Initialize the set
+
+    ByteData data =
+        await rootBundle.load('assets/cutoff_files/${counselling}_2023.xlsx');
+    var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    var excel = Excel.decodeBytes(bytes);
+
+    List<Cutoff> cutoffDetails = [];
+
+    for (var table in excel.tables.keys) {
+      for (var row in excel.tables[table]!.rows) {
+        bool isGo = row[2]!.value.toString().contains("GO");
+        bool isJK = row[2]!.value.toString().contains("JK");
+
+        if (isGo || isJK) {
+          continue;
+        }
+
+        if (row[0]?.value.toString() == collegeName &&
+            row[3]?.value.toString() == category) {
+          String branchName = row[1]!.value.toString();
+
+          // Check if the branch is unique, then add it to the set and create a Cutoff object
+          if (uniqueBranches.add(branchName)) {
+            cutoffDetails.add(
+              Cutoff(
+                branchName: branchName,
+                closingRank: row[6]!.value.toString(),
+              ),
+            );
+          }
+        }
+      }
+    }
+
+    return cutoffDetails;
   }
 }

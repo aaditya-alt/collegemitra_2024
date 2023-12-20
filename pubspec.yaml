@@ -117,6 +117,10 @@ flutter:
     - assets/images/premium_panel/second.png
     - assets/images/premium_panel/1.png
     - assets/images/premium_panel/2.png
+    - assets/NITW.jpg
+    - assets/campus/
+    - assets/facilities/
+    - assets/logos/
 
 flutter_native_splash:
   image: 'assets/images/splash_images/background.png'

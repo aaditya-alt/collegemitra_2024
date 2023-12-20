@@ -1,19 +1,37 @@
+import 'package:collegemitra/src/features/authentication/models/all_colleges_model.dart';
+import 'package:collegemitra/src/repository/authentication_repository/excel_college_predictor.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CutoffPage extends StatefulWidget {
-  const CutoffPage({super.key});
+  final String collegeName;
+
+  const CutoffPage({super.key, required this.collegeName});
 
   @override
   State<CutoffPage> createState() => _CutoffPageState();
 }
 
 class _CutoffPageState extends State<CutoffPage> {
-  int cutoff = 0;
-  String? selectedCategory;
-  String? selectedRound;
+  String selectedCategory = "EWS";
+  String selectedRound = "JOSAA Round 6";
+  bool isLoading = false;
 
-  List<String> categories = ["Category 1", "Category 2", "Category 3"];
-  List<String> rounds = ["Round 1", "Round 2", "Round 3"];
+  List<String> categories = [
+    'EWS',
+    'OPEN',
+    'OBC-NCL',
+    'SC',
+    'ST',
+    'OPEN (PwD)',
+    'EWS (PwD)',
+    'OBC-NCL (PwD)',
+    'SC (PwD)',
+    'ST (PwD)'
+  ];
+
+  List<String> rounds = ["JOSAA Round 6", "CSAB Round 2"];
+  List<Cutoff> cutoffData = [];
 
   @override
   Widget build(BuildContext context) {
@@ -23,37 +41,51 @@ class _CutoffPageState extends State<CutoffPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            buildDropdown("Select Round", rounds, (String? value) {
+            buildDropdown("Select Round", rounds, (value) {
               setState(() {
-                selectedRound = value;
+                selectedRound = value.toString();
               });
             }),
-            SizedBox(height: 20),
-            buildDropdown("Select Category", categories, (String? value) {
+            const SizedBox(height: 20),
+            buildDropdown("Select Category", categories, (value) {
               setState(() {
-                selectedCategory = value;
+                selectedCategory = value.toString();
               });
             }),
-            SizedBox(height: 20),
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(Colors.deepOrange),
-              ),
-              onPressed: () {
-                cutoff = 1;
-                // Handle submit button press
-                print(
-                    "Selected Round: $selectedRound, Selected Category: $selectedCategory");
-              },
-              child: Text(
-                "Submit",
-                style: TextStyle(
-                    color: Colors.deepPurple, fontWeight: FontWeight.bold),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: ElevatedButton(
+                  style: const ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll(
+                        Color.fromARGB(255, 255, 121, 3)),
+                  ),
+                  onPressed: () async {
+                    setState(() {
+                      isLoading = true;
+                    });
+                    await Future.delayed(const Duration(milliseconds: 500));
+                    cutoffData = await getCutoffData(
+                        widget.collegeName, selectedCategory, selectedRound);
+
+                    setState(() {
+                      isLoading = false;
+                    });
+                  },
+                  child: isLoading
+                      ? const CircularProgressIndicator()
+                      : Text("Get Cutoff Data",
+                          style: Theme.of(context).textTheme.titleSmall),
+                ),
               ),
             ),
-            SizedBox(height: 20),
-            CutoffTable(),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
+            cutoffData.isEmpty
+                ? const SizedBox(height: 0)
+                : CutoffTable(cutoffData: cutoffData),
+            const SizedBox(height: 20),
           ],
         ),
       ),
@@ -64,7 +96,7 @@ class _CutoffPageState extends State<CutoffPage> {
       String label, List<String> items, void Function(String?) onChanged) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.deepOrange, width: 2),
@@ -72,11 +104,11 @@ class _CutoffPageState extends State<CutoffPage> {
       child: DropdownButton<String>(
         isExpanded: true,
         value: label == "Select Round" ? selectedRound : selectedCategory,
-        icon: Icon(Icons.arrow_drop_down),
+        icon: const Icon(Icons.arrow_drop_down),
         iconSize: 24,
         elevation: 16,
-        style: TextStyle(color: Colors.deepPurple),
-        underline: SizedBox(),
+        style: const TextStyle(color: Colors.deepPurple),
+        underline: const SizedBox(),
         onChanged: onChanged,
         items: items.map((String value) {
           return DropdownMenuItem<String>(
@@ -90,7 +122,9 @@ class _CutoffPageState extends State<CutoffPage> {
 }
 
 class CutoffTable extends StatelessWidget {
-  const CutoffTable({super.key});
+  final List<Cutoff> cutoffData;
+
+  const CutoffTable({Key? key, required this.cutoffData}) : super(key: key);
 
   TableRow buildTableRow(String branch, String cutoff) {
     return TableRow(
@@ -100,7 +134,7 @@ class CutoffTable extends StatelessWidget {
           child: Center(
             child: Text(
               branch,
-              style: TextStyle(fontSize: 14),
+              style: const TextStyle(fontSize: 14),
               textAlign: TextAlign.center,
             ),
           ),
@@ -110,7 +144,7 @@ class CutoffTable extends StatelessWidget {
           child: Center(
             child: Text(
               cutoff,
-              style: TextStyle(fontSize: 14),
+              style: const TextStyle(fontSize: 14),
               textAlign: TextAlign.center,
             ),
           ),
@@ -124,9 +158,9 @@ class CutoffTable extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: Color.fromARGB(186, 255, 182, 115),
+        color: const Color.fromARGB(186, 255, 182, 115),
       ),
-      padding: EdgeInsets.all(7),
+      padding: const EdgeInsets.all(7),
       child: Table(
         border: TableBorder.all(
           color: Colors.white,
@@ -134,9 +168,9 @@ class CutoffTable extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         children: [
-          TableRow(children: [
+          const TableRow(children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(8.0),
               child: Center(
                 child: Text(
                   'Branches',
@@ -148,10 +182,10 @@ class CutoffTable extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(8.0),
               child: Center(
                 child: Text(
-                  'Cutoff',
+                  'Closing Rank',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.deepPurple,
@@ -160,21 +194,34 @@ class CutoffTable extends StatelessWidget {
               ),
             ),
           ]),
-          buildTableRow('Computer Science Engineering', '1534'),
-          buildTableRow('Bio-Technology', '29829'),
-          buildTableRow('Chemical Engineering', '20029'),
-          buildTableRow('Civil Engineering', '25762'),
-          buildTableRow('Electrical and Electronics Engineering', '9370'),
-          buildTableRow('Electronics and Communication Engineering', '6119'),
-          buildTableRow('Metallurgical and Material Engineering', '26725'),
-          buildTableRow(
-              'Physics (5 Years, Integrated Master of Science)', '26534'),
-          buildTableRow(
-              'Mathematics (5 years, Integrated Master of Science)', '25256'),
-          buildTableRow(
-              "Chemistry (5 Years, Integrated Master of Science)", "36579"),
+          for (var cutoff in cutoffData)
+            buildTableRow(cutoff.branchName, cutoff.closingRank),
         ],
       ),
     );
+  }
+}
+
+Future<List<Cutoff>> getCutoffData(
+  String collegeName,
+  String category,
+  String roundName,
+) async {
+  String counselling = "JOSAA";
+  if (roundName == "JOSAA Round 6") {
+    counselling = "JOSAA";
+  } else {
+    counselling = "CSAB";
+  }
+  List<Cutoff> cutoffData = [];
+  try {
+    final excel = Get.put(ExcelCollegePredictor());
+    cutoffData =
+        await excel.getCutoffDataForCollege(counselling, collegeName, category);
+    return cutoffData;
+  } catch (e) {
+    Get.snackbar("Error", "Some Error Occurred!");
+    return cutoffData;
+    // Return an empty container or another widget to indicate error
   }
 }

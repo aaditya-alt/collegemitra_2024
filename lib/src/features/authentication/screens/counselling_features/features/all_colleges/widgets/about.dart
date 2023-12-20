@@ -1,13 +1,19 @@
+import 'package:collegemitra/src/features/authentication/models/all_colleges_model.dart';
 import 'package:flutter/material.dart';
 
 class AboutPage extends StatelessWidget {
+  final List<CollegeDetails> collegeDetails;
+  const AboutPage({super.key, required this.collegeDetails});
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const ImageSection(),
+          ImageSection(
+              collegeImage: collegeDetails[0].collegeImage,
+              collegeName: collegeDetails[0].collegeFullName),
           _buildCollegeInformation(),
         ],
       ),
@@ -15,18 +21,32 @@ class AboutPage extends StatelessWidget {
   }
 
   Widget _buildCollegeInformation() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Introduction(),
-          Connectivity(),
-          Placements(),
-          Hostel(),
-          Facilities(),
-          SizedBox(
-            height: 100,
+          Introduction(
+              description: collegeDetails[0].description,
+              foundedIn: collegeDetails[0].foundedIn,
+              ranking: collegeDetails[0].ranking),
+          const SizedBox(height: 10),
+          Connectivity(
+              nearbyAirport: collegeDetails[0].nearbyAirport,
+              nearbyBus: collegeDetails[0].nearbyBus,
+              nearbyRailway: collegeDetails[0].nearbyRailway),
+          const SizedBox(height: 10),
+          Placements(
+              highestpackage: collegeDetails[0].highestPackage,
+              averagePackage: collegeDetails[0].averagePackage),
+          const SizedBox(height: 10),
+          Hostel(
+              boysHostelFee: collegeDetails[0].boysHostelFee,
+              girlsHostelFee: collegeDetails[0].girlsHostelFee),
+          const SizedBox(height: 10),
+          const Facilities(),
+          const SizedBox(
+            height: 20,
           ),
         ],
       ),
@@ -35,7 +55,10 @@ class AboutPage extends StatelessWidget {
 }
 
 class Hostel extends StatelessWidget {
-  const Hostel({super.key});
+  final String boysHostelFee;
+  final String girlsHostelFee;
+  const Hostel(
+      {super.key, required this.boysHostelFee, required this.girlsHostelFee});
 
   @override
   Widget build(BuildContext context) {
@@ -50,27 +73,20 @@ class Hostel extends StatelessWidget {
       ),
       elevation: 4,
       color: Colors.white,
-      child: const Padding(
-        padding: EdgeInsets.all(10),
+      child: Padding(
+        padding: const EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'Hostel',
               style: TextStyle(
-                shadows: <Shadow>[
-                  Shadow(
-                    offset: Offset(1.0, 1.0),
-                    blurRadius: 2.0,
-                    color: Colors.black,
-                  ),
-                ],
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.deepOrange,
               ),
             ),
-            Divider(
+            const Divider(
               color: Colors.deepOrange,
             ),
             Row(
@@ -78,7 +94,7 @@ class Hostel extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    Text(
+                    const Text(
                       "Boys Hostel",
                       style: TextStyle(
                           color: Colors.deepPurple,
@@ -86,15 +102,15 @@ class Hostel extends StatelessWidget {
                           fontSize: 15),
                     ),
                     Text(
-                      "₹ 43,600",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                      boysHostelFee,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 14),
                     ),
                   ],
                 ),
                 Column(
                   children: [
-                    Text(
+                    const Text(
                       "Girls Hostel",
                       style: TextStyle(
                           color: Colors.deepPurple,
@@ -102,15 +118,15 @@ class Hostel extends StatelessWidget {
                           fontSize: 15),
                     ),
                     Text(
-                      "₹ 39,200",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                      girlsHostelFee,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 14),
                     ),
                   ],
                 ),
               ],
             ),
-            Text(
+            const Text(
               "*The given fees are on yearly basis",
               textAlign: TextAlign.center,
             ),
@@ -122,18 +138,21 @@ class Hostel extends StatelessWidget {
 }
 
 class ImageSection extends StatelessWidget {
-  const ImageSection({super.key});
+  final String collegeImage;
+  final String collegeName;
+  const ImageSection(
+      {super.key, required this.collegeImage, required this.collegeName});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+      padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 10),
       child: Stack(
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.asset(
-              "assets/NITW.jpg",
+            child: Image.network(
+              collegeImage,
               height: 200, // Adjust the height as needed
               width: double.infinity,
               fit: BoxFit.cover,
@@ -162,9 +181,9 @@ class ImageSection extends StatelessWidget {
                 ),
               ),
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-              child: const Text(
-                "National Institute of Technology Warangal",
-                style: TextStyle(
+              child: Text(
+                collegeName,
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -179,7 +198,14 @@ class ImageSection extends StatelessWidget {
 }
 
 class Connectivity extends StatelessWidget {
-  const Connectivity({super.key});
+  final String nearbyAirport;
+  final String nearbyRailway;
+  final String nearbyBus;
+  const Connectivity(
+      {super.key,
+      required this.nearbyAirport,
+      required this.nearbyBus,
+      required this.nearbyRailway});
 
   @override
   Widget build(BuildContext context) {
@@ -202,13 +228,6 @@ class Connectivity extends StatelessWidget {
             const Text(
               'Connectivity',
               style: TextStyle(
-                shadows: <Shadow>[
-                  Shadow(
-                    offset: Offset(1.0, 1.0),
-                    blurRadius: 2.0,
-                    color: Colors.black,
-                  ),
-                ],
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.deepOrange,
@@ -220,17 +239,17 @@ class Connectivity extends StatelessWidget {
             const SizedBox(width: 5),
             RichText(
               textAlign: TextAlign.justify,
-              text: const TextSpan(
+              text: TextSpan(
                 children: [
-                  WidgetSpan(
+                  const WidgetSpan(
                     child: Icon(
                       Icons.airplanemode_active,
                       color: Colors.deepPurple,
                       size: 15,
                     ),
                   ),
-                  TextSpan(
-                    text: "  Nearby Airport: ",
+                  const TextSpan(
+                    text: " Nearby Airport: ",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.deepPurple,
@@ -238,9 +257,8 @@ class Connectivity extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text:
-                        "Rajiv Gandhi International Airport, Hyderabad. The airport is approximately 150 km away from the college.",
-                    style: TextStyle(
+                    text: nearbyAirport,
+                    style: const TextStyle(
                       fontSize: 14,
                       color: Colors.black,
                     ),
@@ -251,16 +269,16 @@ class Connectivity extends StatelessWidget {
             const SizedBox(height: 10),
             RichText(
               textAlign: TextAlign.justify,
-              text: const TextSpan(
+              text: TextSpan(
                 children: [
-                  WidgetSpan(
+                  const WidgetSpan(
                     child: Icon(
                       Icons.train,
                       color: Colors.deepPurple,
                       size: 15,
                     ),
                   ),
-                  TextSpan(
+                  const TextSpan(
                     text: " Nearby Railway Station: ",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -269,9 +287,38 @@ class Connectivity extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text:
-                        "Kazipet Junction. The railway station is approximately 15 km away from the college.",
+                    text: nearbyRailway,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
+            RichText(
+              textAlign: TextAlign.justify,
+              text: TextSpan(
+                children: [
+                  const WidgetSpan(
+                    child: Icon(
+                      Icons.bus_alert,
+                      color: Colors.deepPurple,
+                      size: 15,
+                    ),
+                  ),
+                  const TextSpan(
+                    text: " Nearby Bus Stand: ",
                     style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.deepPurple,
+                      fontSize: 15,
+                    ),
+                  ),
+                  TextSpan(
+                    text: nearbyBus,
+                    style: const TextStyle(
                       fontSize: 14,
                       color: Colors.black,
                     ),
@@ -287,7 +334,10 @@ class Connectivity extends StatelessWidget {
 }
 
 class Placements extends StatelessWidget {
-  const Placements({super.key});
+  final String highestpackage;
+  final String averagePackage;
+  const Placements(
+      {super.key, required this.highestpackage, required this.averagePackage});
 
   @override
   Widget build(BuildContext context) {
@@ -302,27 +352,20 @@ class Placements extends StatelessWidget {
       ),
       elevation: 4,
       color: Colors.white,
-      child: const Padding(
-        padding: EdgeInsets.all(10),
+      child: Padding(
+        padding: const EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'Placement Overview',
               style: TextStyle(
-                shadows: <Shadow>[
-                  Shadow(
-                    offset: Offset(1.0, 1.0),
-                    blurRadius: 2.0,
-                    color: Colors.black,
-                  ),
-                ],
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.deepOrange,
               ),
             ),
-            Divider(
+            const Divider(
               color: Colors.deepOrange,
             ),
             Row(
@@ -330,7 +373,7 @@ class Placements extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    Text(
+                    const Text(
                       "Highest package",
                       style: TextStyle(
                           color: Colors.deepPurple,
@@ -338,15 +381,15 @@ class Placements extends StatelessWidget {
                           fontSize: 15),
                     ),
                     Text(
-                      "₹ 40 Lacs",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                      highestpackage,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 14),
                     ),
                   ],
                 ),
                 Column(
                   children: [
-                    Text(
+                    const Text(
                       "Average package",
                       style: TextStyle(
                           color: Colors.deepPurple,
@@ -354,9 +397,9 @@ class Placements extends StatelessWidget {
                           fontSize: 15),
                     ),
                     Text(
-                      "₹ 15 Lacs",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                      averagePackage,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 14),
                     ),
                   ],
                 ),
@@ -370,7 +413,15 @@ class Placements extends StatelessWidget {
 }
 
 class Introduction extends StatelessWidget {
-  const Introduction({super.key});
+  final String description;
+  final String foundedIn;
+  final String ranking;
+
+  const Introduction(
+      {super.key,
+      required this.description,
+      required this.foundedIn,
+      required this.ranking});
 
   @override
   Widget build(BuildContext context) {
@@ -393,13 +444,6 @@ class Introduction extends StatelessWidget {
             const Text(
               'Introduction',
               style: TextStyle(
-                shadows: <Shadow>[
-                  Shadow(
-                    offset: Offset(1.0, 1.0),
-                    blurRadius: 2.0,
-                    color: Colors.black,
-                  ),
-                ],
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.deepOrange,
@@ -410,10 +454,9 @@ class Introduction extends StatelessWidget {
             ),
             RichText(
               textAlign: TextAlign.justify,
-              text: const TextSpan(
-                text:
-                    'NIT Warangal is a premier engineering institution located in Warangal, Telangana, India. It was formerly known as Regional Engineering College, Warangal (REC Warangal).',
-                style: TextStyle(
+              text: TextSpan(
+                text: description,
+                style: const TextStyle(
                   color: Colors.black,
                   fontSize: 14,
                 ),
@@ -421,9 +464,9 @@ class Introduction extends StatelessWidget {
             ),
             const SizedBox(height: 8.0),
             RichText(
-              text: const TextSpan(
+              text: TextSpan(
                 children: [
-                  TextSpan(
+                  const TextSpan(
                     text: "Founded: ",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -432,8 +475,8 @@ class Introduction extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text: "1959",
-                    style: TextStyle(color: Colors.black, fontSize: 14),
+                    text: foundedIn,
+                    style: const TextStyle(color: Colors.black, fontSize: 14),
                   ),
                 ],
               ),
@@ -441,9 +484,9 @@ class Introduction extends StatelessWidget {
             const SizedBox(height: 8.0),
             RichText(
               textAlign: TextAlign.justify,
-              text: const TextSpan(
+              text: TextSpan(
                 children: [
-                  TextSpan(
+                  const TextSpan(
                     text: "Ranking: ",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -452,9 +495,8 @@ class Introduction extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text:
-                        "NIT Warangal is consistently ranked among the top engineering colleges in India.",
-                    style: TextStyle(
+                    text: ranking,
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 14,
                     ),
@@ -489,13 +531,16 @@ class Facilities extends StatelessWidget {
   Widget createFacilityRow(List<Map<String, String>> facilities) {
     return SizedBox(
       height: 100,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: facilities.map((facility) {
-          return createFacilityWidget(
-              facility['imagePath']!, facility['label']!);
-        }).toList(),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: facilities.map((facility) {
+            return createFacilityWidget(
+                facility['imagePath']!, facility['label']!);
+          }).toList(),
+        ),
       ),
     );
   }
@@ -521,13 +566,6 @@ class Facilities extends StatelessWidget {
             const Text(
               'Facilities',
               style: TextStyle(
-                shadows: <Shadow>[
-                  Shadow(
-                    offset: Offset(1.0, 1.0),
-                    blurRadius: 2.0,
-                    color: Colors.black,
-                  ),
-                ],
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.deepOrange,

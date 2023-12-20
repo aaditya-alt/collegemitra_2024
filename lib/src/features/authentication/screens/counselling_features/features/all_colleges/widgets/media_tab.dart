@@ -1,18 +1,20 @@
+import 'package:collegemitra/src/features/authentication/models/all_colleges_model.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class MediaMain extends StatelessWidget {
-  const MediaMain({super.key});
+  final List<CollegeDetails> collegedetails;
+  const MediaMain({super.key, required this.collegedetails});
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         children: [
-          MyImageCard(),
-          MyVideoCard(),
+          MyImageCard(collegeImages: collegedetails[0].imageUrlString),
+          MyVideoCard(videoLinks: collegedetails[0].videoLinks),
         ],
       ),
     );
@@ -20,6 +22,7 @@ class MediaMain extends StatelessWidget {
 }
 
 class MyImageCard extends StatelessWidget {
+  final List<String> collegeImages;
   final List<String> assetImagePaths = [
     'assets/campus/2.jpg',
     'assets/campus/1.jpg',
@@ -33,7 +36,7 @@ class MyImageCard extends StatelessWidget {
     // Add more asset image paths as needed
   ];
 
-  MyImageCard({super.key});
+  MyImageCard({super.key, required this.collegeImages});
 
   @override
   Widget build(BuildContext context) {
@@ -55,13 +58,6 @@ class MyImageCard extends StatelessWidget {
             const Text(
               'Images',
               style: TextStyle(
-                shadows: <Shadow>[
-                  Shadow(
-                    offset: Offset(1.0, 1.0),
-                    blurRadius: 2.0,
-                    color: Colors.black,
-                  ),
-                ],
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.deepOrange,
@@ -74,7 +70,7 @@ class MyImageCard extends StatelessWidget {
               height: 200.0,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: assetImagePaths.length,
+                itemCount: collegeImages.length,
                 itemBuilder: (BuildContext context, int index) {
                   return GestureDetector(
                     onTap: () {
@@ -82,11 +78,10 @@ class MyImageCard extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => PhotoViewGallery.builder(
-                            itemCount: assetImagePaths.length,
+                            itemCount: collegeImages.length,
                             builder: (context, index) {
                               return PhotoViewGalleryPageOptions(
-                                imageProvider:
-                                    AssetImage(assetImagePaths[index]),
+                                imageProvider: AssetImage(collegeImages[index]),
                                 minScale:
                                     PhotoViewComputedScale.contained * 0.8,
                                 maxScale: PhotoViewComputedScale.covered * 2,
@@ -102,11 +97,14 @@ class MyImageCard extends StatelessWidget {
                       );
                     },
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image.asset(
-                        assetImagePaths[index],
-                        height: 150, // Adjust the width as needed
-                        fit: BoxFit.cover,
+                      padding: const EdgeInsets.all(6.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: Image.network(
+                          collegeImages[index],
+                          height: 150, // Adjust the width as needed
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   );
@@ -121,6 +119,7 @@ class MyImageCard extends StatelessWidget {
 }
 
 class MyVideoCard extends StatelessWidget {
+  final List<String> videoLinks;
   final List<String> youtubeVideoUrls = [
     'https://youtu.be/bWoVqHpxzho?si=Hrc13kofL23aV_SY',
     'https://youtu.be/AsKFyFhvIcQ?si=3H6aLaCv1hHgjfGj',
@@ -130,7 +129,7 @@ class MyVideoCard extends StatelessWidget {
     // Add more YouTube video URLs as needed
   ];
 
-  MyVideoCard({super.key});
+  MyVideoCard({super.key, required this.videoLinks});
 
   @override
   Widget build(BuildContext context) {
@@ -152,13 +151,6 @@ class MyVideoCard extends StatelessWidget {
             const Text(
               'Videos',
               style: TextStyle(
-                shadows: <Shadow>[
-                  Shadow(
-                    offset: Offset(1.0, 1.0),
-                    blurRadius: 2.0,
-                    color: Colors.black,
-                  ),
-                ],
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.deepOrange,
@@ -171,11 +163,10 @@ class MyVideoCard extends StatelessWidget {
               height: 200.0,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: youtubeVideoUrls.length,
+                itemCount: videoLinks.length,
                 itemBuilder: (BuildContext context, int index) {
                   final videoId =
-                      YoutubePlayer.convertUrlToId(youtubeVideoUrls[index]) ??
-                          '';
+                      YoutubePlayer.convertUrlToId(videoLinks[index]) ?? '';
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -201,16 +192,28 @@ class MyVideoCard extends StatelessWidget {
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width: 300, // Adjust the width as needed
-                        // height: 150.0,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(
-                                'https://img.youtube.com/vi/$videoId/0.jpg'),
-                            fit: BoxFit.cover,
+                      child: Stack(
+                        children: [
+                          Container(
+                            width: 300, // Adjust the width as needed
+                            // height: 150.0,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                    'https://img.youtube.com/vi/$videoId/0.jpg'),
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
                           ),
-                        ),
+                          const Center(
+                              widthFactor: 7,
+                              child: Icon(
+                                Icons.play_circle_fill,
+                                size: 40,
+                                color: Colors.white,
+                              ))
+                        ],
                       ),
                     ),
                   );
