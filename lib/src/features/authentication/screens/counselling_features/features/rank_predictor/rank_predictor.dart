@@ -118,16 +118,12 @@ class _RankPredictorState extends State<RankPredictor> {
                           "Enter the correct shift detail about on the selected date which shift was yours like it could be one from the given option, please choose carefully."),
                       Padding(
                         padding: const EdgeInsets.only(
-                            left: 20, right: 56, top: 12, bottom: 12),
+                            left: 14, right: 56, top: 14, bottom: 12),
                         child: TextFormField(
                           keyboardType: TextInputType.number,
                           controller: _controller.marks,
                           decoration: const InputDecoration(
                               contentPadding: EdgeInsets.all(10),
-                              border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.elliptical(10, 10)),
-                              ),
                               label: Text("Enter Expected marks"),
                               prefixIcon: Icon(Icons.fingerprint)),
                         ),
@@ -207,24 +203,33 @@ class _RankPredictorState extends State<RankPredictor> {
   Widget detailsDropdown(String hint, List<String> list, double mobileWidth,
       Function(String) onChanged, String title, String description) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           SizedBox(
             width: mobileWidth - 80,
-            child: CustomDropdown<String>(
-              closedFillColor: Colors.transparent,
-              closedBorder:
-                  Border.all(color: const Color.fromARGB(255, 138, 136, 136)),
-              hintText: hint,
-              items: list,
-              initialItem: list[0],
-              onChanged: (value) {
-                onChanged(value);
+            child: DropdownButton<String>(
+              borderRadius: BorderRadius.circular(14),
 
-                log('changing value to: $value');
+              value: list[0],
+              hint: Text(hint),
+              items: list.map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (value) {
+                onChanged(value!);
+                print('Changing value to: $value');
               },
+              underline: Container(
+                // Remove default underline
+                height: 1,
+                color: Colors.grey,
+              ),
+              isExpanded: true, // Ensure the dropdown takes the full width
             ),
           ),
           GestureDetector(
@@ -234,14 +239,6 @@ class _RankPredictorState extends State<RankPredictor> {
               color: tAccentColor,
             ),
             onTap: () {
-              // showDialog(
-              //   context: context,
-              //   builder: (BuildContext context) {
-              //     return const AlertDialog(
-              //       title: Text("What"),
-              //     );
-              //   },
-              // );
               showInformation(context, title, description);
             },
           ),

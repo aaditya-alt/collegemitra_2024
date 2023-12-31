@@ -99,10 +99,6 @@ class UpdateProfileScreen extends StatelessWidget {
                             controller: phoneNo,
                             keyboardType: TextInputType.phone,
                             decoration: const InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(
-                                      Radius.elliptical(10, 10)),
-                                ),
                                 label: Text(tPhoneNo),
                                 prefixIcon: Icon(Icons.call_end_rounded)),
                           ),
@@ -111,10 +107,6 @@ class UpdateProfileScreen extends StatelessWidget {
                             controller: password,
                             keyboardType: TextInputType.visiblePassword,
                             decoration: const InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(
-                                      Radius.elliptical(10, 10)),
-                                ),
                                 label: Text(tPassword),
                                 prefixIcon: Icon(Icons.fingerprint)),
                           ),
@@ -134,14 +126,9 @@ class UpdateProfileScreen extends StatelessWidget {
 
                                 await controller.updateRecord(userData);
                               },
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: tPrimaryColor,
-                                  side: BorderSide.none,
-                                  shape: const StadiumBorder()),
-                              child: const Text(
-                                tEditProfile,
-                                style: TextStyle(color: tDarkColor),
-                              ),
+                              child: Text(tEditProfile,
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium),
                             ),
                           ),
                           const SizedBox(height: tFormHeight),

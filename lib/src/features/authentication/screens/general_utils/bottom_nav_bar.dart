@@ -1,121 +1,24 @@
-import 'package:collegemitra/src/features/authentication/screens/dashboard/dashboard_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
-class BottomNavBarFb1 extends StatelessWidget {
-  const BottomNavBarFb1({Key? key}) : super(key: key);
-
-  final primaryColor = const Color(0xff4338CA);
-  final secondaryColor = const Color(0xff6D28D9);
-  final accentColor = const Color(0xffffffff);
-  final backgroundColor = const Color(0xffffffff);
-  final errorColor = const Color(0xffEF4444);
+class BottomNavigation extends StatelessWidget {
+  const BottomNavigation({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BottomAppBar(
-      color: Colors.white,
-      child: SizedBox(
-        height: 56,
-        width: MediaQuery.of(context).size.width,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 25.0, right: 25.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconBottomBar(
-                  text: "Home",
-                  icon: Icons.home,
-                  selected: true,
-                  onPressed: () {}),
-              IconBottomBar(
-                  text: "Assistant",
-                  icon: Icons.chat,
-                  selected: false,
-                  onPressed: () {
-                    Get.to(() => const Dashboard());
-                  }),
-              IconBottomBar2(
-                  text: "Premium",
-                  icon: Icons.paid,
-                  selected: false,
-                  onPressed: () {}),
-              IconBottomBar(
-                  text: "News",
-                  icon: Icons.newspaper,
-                  selected: false,
-                  onPressed: () {}),
-              IconBottomBar(
-                  text: "Profile",
-                  icon: Icons.person,
-                  selected: false,
-                  onPressed: () {})
-            ],
-          ),
-        ),
+    return Scaffold(
+      bottomNavigationBar: NavigationBar(
+        destinations: const [
+          NavigationDestination(icon: Icon(Iconsax.home), label: "Home"),
+          NavigationDestination(icon: Icon(Iconsax.shop), label: "Store"),
+          NavigationDestination(icon: Icon(Iconsax.heart), label: "Wishlist"),
+          NavigationDestination(icon: Icon(Iconsax.user), label: "Profile"),
+        ],
+        elevation: 0,
+        height: 80,
+        selectedIndex: 0,
       ),
-    );
-  }
-}
-
-class IconBottomBar extends StatelessWidget {
-  const IconBottomBar(
-      {Key? key,
-      required this.text,
-      required this.icon,
-      required this.selected,
-      required this.onPressed})
-      : super(key: key);
-  final String text;
-  final IconData icon;
-  final bool selected;
-  final Function() onPressed;
-
-  final primaryColor = const Color(0xff4338CA);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        IconButton(
-          onPressed: onPressed,
-          icon: Icon(
-            icon,
-            size: 25,
-            color: selected ? primaryColor : Colors.black54,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class IconBottomBar2 extends StatelessWidget {
-  const IconBottomBar2(
-      {Key? key,
-      required this.text,
-      required this.icon,
-      required this.selected,
-      required this.onPressed})
-      : super(key: key);
-  final String text;
-  final IconData icon;
-  final bool selected;
-  final Function() onPressed;
-  final primaryColor = const Color(0xff4338CA);
-  @override
-  Widget build(BuildContext context) {
-    return CircleAvatar(
-      backgroundColor: primaryColor,
-      child: IconButton(
-        onPressed: onPressed,
-        icon: Icon(
-          icon,
-          size: 25,
-          color: Colors.white,
-        ),
-      ),
+      body: Container(),
     );
   }
 }

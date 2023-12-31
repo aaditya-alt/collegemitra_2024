@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/models/all_colleges_model.dart';
 import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/all_colleges/show_college_details.dart';
@@ -8,8 +6,10 @@ import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ShowAllColleges extends StatefulWidget {
-  final String counselling = "JOSAA";
-  const ShowAllColleges({super.key});
+  // ignore: prefer_typing_uninitialized_variables
+  final counselling;
+  const ShowAllColleges({Key? key, required this.counselling})
+      : super(key: key);
 
   @override
   State<ShowAllColleges> createState() => _ShowAllCollegesState();
@@ -18,6 +18,7 @@ class ShowAllColleges extends StatefulWidget {
 class _ShowAllCollegesState extends State<ShowAllColleges> {
   bool isLoading = false;
   List<AllColleges> collegeDetails = [];
+  String counselling = "JOSAA";
 
   @override
   void initState() {
@@ -27,12 +28,14 @@ class _ShowAllCollegesState extends State<ShowAllColleges> {
   }
 
   void _getData() async {
-    await Future.delayed(const Duration(microseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 150));
     collegeDetails = await getAllColleges(widget.counselling);
     // Set isLoading to false after fetching data
     setState(() {
       isLoading = false;
-    }); // Trigger a rebuild
+    });
+
+    // Trigger a rebuild
   }
 
   @override
@@ -40,7 +43,6 @@ class _ShowAllCollegesState extends State<ShowAllColleges> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: tAccentColor,
         title: const Text(
           "All Colleges",
         ),
@@ -66,6 +68,8 @@ class _ShowAllCollegesState extends State<ShowAllColleges> {
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: TextField(
                       decoration: InputDecoration(
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
                         hintText: "Search Colleges...",
                         suffixIcon: IconButton(
                           onPressed: () {},
@@ -82,9 +86,7 @@ class _ShowAllCollegesState extends State<ShowAllColleges> {
                   ),
                 ),
               ),
-              AllCollegesList(
-                collegeList: collegeDetails,
-              ),
+              AllCollegesList(collegeList: collegeDetails),
             ],
           ),
           Visibility(
@@ -132,7 +134,7 @@ class _ShowAllCollegesState extends State<ShowAllColleges> {
 }
 
 class AllCollegesList extends StatelessWidget {
-  final List<AllColleges> collegeList;
+  final List<AllColleges>? collegeList;
   const AllCollegesList({
     super.key,
     required this.collegeList,
@@ -143,11 +145,11 @@ class AllCollegesList extends StatelessWidget {
     return Expanded(
       child: ListView.builder(
           scrollDirection: Axis.vertical,
-          itemCount: collegeList.length,
+          itemCount: collegeList!.length,
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () => Get.to(() => ShowCollegeDetails(
-                    collegeId: collegeList[index].collegeId,
+                    collegeId: collegeList![index].collegeId,
                   )),
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
@@ -163,7 +165,7 @@ class AllCollegesList extends StatelessWidget {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: Image.network(
-                              collegeList[index].collegeImage,
+                              collegeList![index].collegeImage,
                               height: 200, // Adjust the height as needed
                               width: double.infinity,
                               fit: BoxFit.cover,
@@ -191,15 +193,16 @@ class AllCollegesList extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 15),
+                              padding: const EdgeInsets.symmetric(vertical: 10)
+                                  .copyWith(left: 8, right: 15),
                               child: Text(
-                                collegeList[index].collegeName,
+                                collegeList![index].collegeName,
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                 ),
+                                textAlign: TextAlign.start,
                               ),
                             ),
                           ),
@@ -218,7 +221,7 @@ class AllCollegesList extends StatelessWidget {
                                     color: Color.fromARGB(255, 121, 121, 121)),
                               ),
                               Text(
-                                collegeList[index].collegeType,
+                                collegeList![index].collegeType,
                                 style: const TextStyle(
                                     color: tPrimaryColor,
                                     fontWeight: FontWeight.bold),
@@ -235,7 +238,7 @@ class AllCollegesList extends StatelessWidget {
                                 style: TextStyle(color: Colors.grey),
                               ),
                               Text(
-                                collegeList[index].collegeState,
+                                collegeList![index].collegeState,
                                 style: const TextStyle(
                                     color: tPrimaryColor,
                                     fontWeight: FontWeight.bold),

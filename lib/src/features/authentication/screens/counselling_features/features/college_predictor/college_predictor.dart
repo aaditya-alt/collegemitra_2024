@@ -404,8 +404,7 @@ class _CollegePredictorState extends State<CollegePredictor> {
             width: mobileWidth - 80,
             child: CustomDropdown<String>(
               closedFillColor: Colors.transparent,
-              closedBorder:
-                  Border.all(color: const Color.fromARGB(255, 138, 136, 136)),
+              closedBorder: Border.all(color: Colors.grey),
               hintText: hint,
               items: list,
               initialItem: list[0],

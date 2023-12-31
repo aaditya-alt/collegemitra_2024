@@ -1,5 +1,7 @@
 import 'package:collegemitra/src/features/authentication/models/all_colleges_model.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AboutPage extends StatelessWidget {
   final List<CollegeDetails> collegeDetails;
@@ -29,16 +31,18 @@ class AboutPage extends StatelessWidget {
           Introduction(
               description: collegeDetails[0].description,
               foundedIn: collegeDetails[0].foundedIn,
-              ranking: collegeDetails[0].ranking),
+              ranking: collegeDetails[0].ranking,
+              address: collegeDetails[0].address),
           const SizedBox(height: 10),
           Connectivity(
               nearbyAirport: collegeDetails[0].nearbyAirport,
               nearbyBus: collegeDetails[0].nearbyBus,
               nearbyRailway: collegeDetails[0].nearbyRailway),
           const SizedBox(height: 10),
-          Placements(
-              highestpackage: collegeDetails[0].highestPackage,
-              averagePackage: collegeDetails[0].averagePackage),
+          ContactDetails(
+              email: collegeDetails[0].email,
+              phone: collegeDetails[0].phone,
+              website: collegeDetails[0].website),
           const SizedBox(height: 10),
           Hostel(
               boysHostelFee: collegeDetails[0].boysHostelFee,
@@ -180,7 +184,8 @@ class ImageSection extends StatelessWidget {
                   ],
                 ),
               ),
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              padding: const EdgeInsets.symmetric(vertical: 10)
+                  .copyWith(left: 8, right: 15),
               child: Text(
                 collegeName,
                 style: const TextStyle(
@@ -188,6 +193,7 @@ class ImageSection extends StatelessWidget {
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
+                textAlign: TextAlign.start,
               ),
             ),
           ),
@@ -333,6 +339,105 @@ class Connectivity extends StatelessWidget {
   }
 }
 
+class ContactDetails extends StatelessWidget {
+  final String website;
+  final String email;
+  final String phone;
+
+  const ContactDetails({
+    Key? key,
+    required this.website,
+    required this.email,
+    required this.phone,
+  }) : super(key: key);
+
+  void _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+        side: const BorderSide(
+          style: BorderStyle.solid,
+          width: 3,
+          color: Colors.deepOrange,
+        ),
+      ),
+      elevation: 4,
+      color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Contact Details',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.deepOrange,
+              ),
+            ),
+            const Divider(
+              color: Colors.deepOrange,
+            ),
+            const SizedBox(width: 5),
+            buildLink("Website", Icons.browser_updated, website),
+            const SizedBox(height: 10),
+            buildLink("E-Mail ID", Icons.email, "mailto:$email"),
+            const SizedBox(height: 10),
+            buildLink("Contact No", Icons.phone, "tel:$phone"),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildLink(String label, IconData icon, String link) {
+    return RichText(
+      textAlign: TextAlign.start,
+      text: TextSpan(
+        children: [
+          WidgetSpan(
+            child: Icon(
+              icon,
+              color: Colors.deepPurple,
+              size: 15,
+            ),
+          ),
+          TextSpan(
+            text: " $label: ",
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.deepPurple,
+              fontSize: 15,
+            ),
+          ),
+          TextSpan(
+            text: link,
+            style: const TextStyle(
+                fontSize: 14,
+                color: Colors.blue, // Set your preferred link color
+                decoration: TextDecoration.underline,
+                overflow: TextOverflow.ellipsis),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                _launchURL(link);
+              },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class Placements extends StatelessWidget {
   final String highestpackage;
   final String averagePackage;
@@ -416,12 +521,14 @@ class Introduction extends StatelessWidget {
   final String description;
   final String foundedIn;
   final String ranking;
+  final String address;
 
   const Introduction(
       {super.key,
       required this.description,
       required this.foundedIn,
-      required this.ranking});
+      required this.ranking,
+      required this.address});
 
   @override
   Widget build(BuildContext context) {
@@ -504,6 +611,25 @@ class Introduction extends StatelessWidget {
                 ],
               ),
             ),
+            const SizedBox(height: 8.0),
+            RichText(
+              text: TextSpan(
+                children: [
+                  const TextSpan(
+                    text: "Address: ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.deepPurple,
+                      fontSize: 15,
+                    ),
+                  ),
+                  TextSpan(
+                    text: address,
+                    style: const TextStyle(color: Colors.black, fontSize: 14),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -514,9 +640,10 @@ class Introduction extends StatelessWidget {
 class Facilities extends StatelessWidget {
   const Facilities({super.key});
 
-  Widget createFacilityWidget(String imagePath, String label) {
+  Widget createFacilityWidget(
+      String imagePath, String label, BuildContext context) {
     return SizedBox(
-      width: 80,
+      width: MediaQuery.of(context).size.width / 4.4,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -528,17 +655,18 @@ class Facilities extends StatelessWidget {
     );
   }
 
-  Widget createFacilityRow(List<Map<String, String>> facilities) {
+  Widget createFacilityRow(
+      List<Map<String, String>> facilities, BuildContext context) {
     return SizedBox(
       height: 100,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: facilities.map((facility) {
             return createFacilityWidget(
-                facility['imagePath']!, facility['label']!);
+                facility['imagePath']!, facility['label']!, context);
           }).toList(),
         ),
       ),
@@ -588,7 +716,7 @@ class Facilities extends StatelessWidget {
                 "imagePath": "assets/facilities/bunk-bed.png",
                 "label": "Hostel"
               },
-            ]),
+            ], context),
             createFacilityRow([
               {
                 "imagePath": "assets/facilities/coffee.png",
@@ -603,7 +731,7 @@ class Facilities extends StatelessWidget {
                 "imagePath": "assets/facilities/first-aid-kit.png",
                 "label": "Medical"
               },
-            ]),
+            ], context),
             createFacilityRow([
               {
                 "imagePath": "assets/facilities/library.png",
@@ -618,7 +746,7 @@ class Facilities extends StatelessWidget {
                 "label": "Security"
               },
               {"imagePath": "assets/facilities/sports.png", "label": "Sports"},
-            ]),
+            ], context),
           ],
         ),
       ),

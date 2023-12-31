@@ -1,11 +1,12 @@
 import 'package:collegemitra/src/constants/colors.dart';
+import 'package:collegemitra/src/features/authentication/screens/dashboard/dashboard_screen.dart';
 import 'package:collegemitra/src/features/authentication/screens/meeting/history_meeting_screen.dart';
 import 'package:collegemitra/src/features/authentication/screens/meeting/meeting_screen.dart';
-import 'package:collegemitra/src/features/authentication/screens/meeting/widgets/home_meeting_button.dart';
-import 'package:flutter/foundation.dart';
+import 'package:collegemitra/src/features/authentication/screens/premium/premium_purchase.dart';
+import 'package:collegemitra/src/features/authentication/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:liquid_swipe/liquid_swipe.dart';
+import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
 class MeetingHomeScreen extends StatefulWidget {
   const MeetingHomeScreen({super.key});
@@ -41,23 +42,27 @@ class _MeetingHomeScreenState extends State<MeetingHomeScreen> {
         centerTitle: true,
       ),
       body: pages[_page],
-      bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: isDark ? Colors.black : Colors.white,
-          elevation: 3,
-          selectedItemColor: tPrimaryColor,
-          onTap: onPageChanged,
-          currentIndex: _page,
-          type: BottomNavigationBarType.fixed,
-          items: const [
-            BottomNavigationBarItem(
-                icon: Icon(Icons.comment_bank), label: 'Meet & Chat'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.lock_clock), label: 'Meetings'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.person_outline), label: 'Contacts'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.settings_outlined), label: 'Settings'),
-          ]),
+      bottomNavigationBar: NavigationBar(
+        height: 65,
+        elevation: 2,
+        onDestinationSelected: (index) {
+          if (index == 3) {
+            Get.to(() => const ProfileScreen());
+          } else if (index == 1) {
+            Get.to(() => const MeetingHomeScreen());
+          } else if (index == 2) {
+            Get.to(() => const PremiumPurchase());
+          } else {
+            Get.to(() => const Dashboard());
+          }
+        },
+        destinations: const [
+          NavigationDestination(icon: Icon(Iconsax.home), label: "Home"),
+          NavigationDestination(icon: Icon(Iconsax.shop), label: "Store"),
+          NavigationDestination(icon: Icon(Iconsax.heart), label: "Wishlist"),
+          NavigationDestination(icon: Icon(Iconsax.user), label: "Profile"),
+        ],
+      ),
     );
   }
 }

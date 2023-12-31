@@ -6,12 +6,15 @@ import 'package:collegemitra/src/features/authentication/controllers/profile_con
 import 'package:collegemitra/src/features/authentication/screens/dashboard/dashboard_screen.dart';
 import 'package:collegemitra/src/features/authentication/screens/general_utils/drawer_header.dart';
 import 'package:collegemitra/src/features/authentication/screens/general_utils/drawer_list.dart';
+import 'package:collegemitra/src/features/authentication/screens/meeting/meeting_home_screen.dart';
+import 'package:collegemitra/src/features/authentication/screens/premium/premium_purchase.dart';
 import 'package:collegemitra/src/features/authentication/screens/profile/update_profile_screen.dart';
 import 'package:collegemitra/src/features/authentication/screens/profile/widgets/profile_menu_widget.dart';
 import 'package:collegemitra/src/repository/authentication_repository/authentication_repository.dart';
 import 'package:easy_loader/easy_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -69,7 +72,7 @@ class ProfileScreen extends StatelessWidget {
                   Text(tProfileHeading,
                       style: Theme.of(context).textTheme.headlineMedium),
                   Text(tProfileSubHeading,
-                      style: Theme.of(context).textTheme.titleMedium),
+                      style: Theme.of(context).textTheme.titleSmall),
                   const SizedBox(height: 20),
                   SizedBox(
                       width: 200,
@@ -77,11 +80,7 @@ class ProfileScreen extends StatelessWidget {
                         onPressed: () =>
                             Get.to(() => const UpdateProfileScreen()),
                         child: Text(tEditProfile,
-                            style: TextStyle(color: tDarkColor)),
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: tPrimaryColor,
-                            side: BorderSide.none,
-                            shape: const StadiumBorder()),
+                            style: Theme.of(context).textTheme.titleMedium),
                       )),
                   const SizedBox(height: 30),
                   const Divider(),
@@ -140,28 +139,28 @@ class ProfileScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          currentIndex: 3,
-          onTap: (index) {
-            if (index == 3) {
-              Get.to(() => const ProfileScreen());
-            } else if (index == 0) {
-              Get.offAll(() => const Dashboard());
-            }
-          },
-          items: const [
-            BottomNavigationBarItem(
-                icon: Icon(Icons.home_outlined), label: "Home"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.newspaper_outlined), label: "Blogs"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.workspace_premium_outlined), label: "Premium"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.person_2_outlined), label: "Profile"),
-          ]),
+      bottomNavigationBar: NavigationBar(
+        backgroundColor: Colors.white,
+        indicatorColor: tAccentColor.shade200,
+        height: 65,
+        elevation: 2,
+        selectedIndex: 3,
+        onDestinationSelected: (index) {
+          if (index == 0) {
+            Get.offAll(() => const Dashboard());
+          } else if (index == 1) {
+            Get.to(() => const MeetingHomeScreen());
+          } else if (index == 2) {
+            Get.to(() => const PremiumPurchase());
+          }
+        },
+        destinations: const [
+          NavigationDestination(icon: Icon(Iconsax.home), label: "Home"),
+          NavigationDestination(icon: Icon(Iconsax.shop), label: "Store"),
+          NavigationDestination(icon: Icon(Iconsax.heart), label: "Wishlist"),
+          NavigationDestination(icon: Icon(Iconsax.user), label: "Profile"),
+        ],
+      ),
     );
   }
 }

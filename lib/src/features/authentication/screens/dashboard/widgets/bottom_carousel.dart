@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -13,6 +14,7 @@ class BottomCarousel extends StatefulWidget {
 
 class _BottomCarouselState extends State<BottomCarousel> {
   late YoutubePlayerController _controller;
+  late Box<List<String>> footerVideoIdBox;
   bool _isPlayerReady = false;
   List<String> youtubeVideoIds = [];
   int currentIndex = 0;
@@ -21,6 +23,8 @@ class _BottomCarouselState extends State<BottomCarousel> {
 
   @override
   void initState() {
+    footerVideoIdBox = Hive.box<List<String>>('footerVideoIds');
+    _getDataFromCache();
     initializeYoutube();
     super.initState();
   }
@@ -30,10 +34,25 @@ class _BottomCarouselState extends State<BottomCarousel> {
     super.dispose();
   }
 
+  void _getDataFromCache() {
+    final cachedData = footerVideoIdBox.get('footerVideoIds');
+    if (cachedData == null || cachedData.isEmpty) {
+      // If cache is empty or data is not available, fetch data from the database
+      initializeYoutube();
+    } else {
+      // If cache is not empty, display data from cache
+      setState(() {
+        youtubeVideoIds = cachedData;
+      });
+    }
+  }
+
   Future<void> initializeYoutube() async {
     youtubeVideoLinks = await getYoutubeVideoLinks("FOOTER");
     youtubeVideoIds = convertLinksToIds(youtubeVideoLinks);
-    setState(() {}); // Trigger a rebuild to update the CarouselSlider
+    setState(() {
+      footerVideoIdBox.put('footerVideoIds', youtubeVideoIds);
+    }); // Trigger a rebuild to update the CarouselSlider
   }
 
   List<String> convertLinksToIds(List<String> videoLinks) {

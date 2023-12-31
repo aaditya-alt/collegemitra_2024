@@ -20,6 +20,7 @@ import 'package:collegemitra/src/repository/authentication_repository/user_repos
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
 
 class Dashboard extends StatefulWidget {
   final username;
@@ -32,6 +33,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
+    var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     String firstName;
     final auth = AuthenticationRepository.instance;
     if (widget.username == null) {
@@ -41,31 +43,32 @@ class _DashboardState extends State<Dashboard> {
     }
     return Scaffold(
       appBar: AppBar(
-        elevation: 2,
-        backgroundColor: tAccentColor,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // const Padding(padding: EdgeInsets.only(top: 6)),
-            Text(
-              "Hey $firstName",
-              style: const TextStyle(fontSize: 16),
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // const Padding(padding: EdgeInsets.only(top: 6)),
+              Text(
+                "Hey $firstName",
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              Text("How are you feeling today?",
+                  style: Theme.of(context).textTheme.bodySmall),
+            ],
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: IconButton(
+                  onPressed: () => Get.to(() => const ProfileScreen()),
+                  icon: Icon(
+                    Icons.notifications_active_rounded,
+                    size: 28,
+                    color: tAccentColor.shade300,
+                  )),
             ),
-            Text("How are you feeling today?",
-                style: Theme.of(context).textTheme.bodySmall),
-          ],
-        ),
-        actions: [
-          IconButton(
-              onPressed: () => Get.to(() => const ProfileScreen()),
-              icon: const Icon(Icons.notifications_none_outlined)),
-          IconButton(
-              onPressed: () {
-                AuthenticationRepository.instance.logout();
-              },
-              icon: const Icon(Icons.logout_outlined)),
-        ],
-      ),
+          ]),
       body: ListView(
         padding: const EdgeInsets.all(14.0),
         children: [
@@ -109,7 +112,7 @@ class _DashboardState extends State<Dashboard> {
           const SizedBox(height: 15),
 
           //Popular Blogs
-          PopularBlogs(
+          const PopularBlogs(
             counsellingName: "POPULAR",
           ),
 
@@ -128,14 +131,14 @@ class _DashboardState extends State<Dashboard> {
           ),
           Text("Explore Fantastic reviews by our students...",
               style: Theme.of(context).textTheme.bodySmall),
-          const SizedBox(height: 15),
+          const SizedBox(height: 25),
 
           //Testimonial Section
           TestimonialSection(
             counsellingName: "POPULAR",
           ),
 
-          const SizedBox(height: 15),
+          const SizedBox(height: 25),
 
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
@@ -201,31 +204,28 @@ class _DashboardState extends State<Dashboard> {
       //     ),
       //   ),
       // ),
-      bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: tAccentColor.shade100,
-          elevation: 1,
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: tPrimaryColor,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          currentIndex: 0,
-          onTap: (index) {
-            if (index == 3) {
-              Get.to(() => const ProfileScreen());
-            } else if (index == 1) {
-              Get.to(() => const MeetingHomeScreen());
-            } else if (index == 2) {
-              Get.to(() => const PremiumPurchase());
-            }
-          },
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.newspaper_rounded), label: "Blogs"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.card_membership), label: "Premium"),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-          ]),
+      bottomNavigationBar: NavigationBar(
+        backgroundColor: isDark ? Colors.black : Colors.white,
+        indicatorColor: tAccentColor.shade200,
+        height: 65,
+        elevation: 2,
+        selectedIndex: 0,
+        onDestinationSelected: (index) {
+          if (index == 3) {
+            Get.to(() => const ProfileScreen());
+          } else if (index == 1) {
+            Get.to(() => const MeetingHomeScreen());
+          } else if (index == 2) {
+            Get.to(() => const PremiumPurchase());
+          }
+        },
+        destinations: const [
+          NavigationDestination(icon: Icon(Iconsax.home), label: "Home"),
+          NavigationDestination(icon: Icon(Iconsax.shop), label: "Store"),
+          NavigationDestination(icon: Icon(Iconsax.heart), label: "Wishlist"),
+          NavigationDestination(icon: Icon(Iconsax.user), label: "Profile"),
+        ],
+      ),
     );
   }
 

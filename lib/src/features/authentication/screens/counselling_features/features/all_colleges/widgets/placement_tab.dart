@@ -46,7 +46,7 @@ class Logos extends StatelessWidget {
             children: [
               Expanded(
                 child: SizedBox(
-                  height: 200.0,
+                  height: 220.0,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: companyImages.length,
@@ -61,7 +61,7 @@ class Logos extends StatelessWidget {
                                 builder: (context, index) {
                                   return PhotoViewGalleryPageOptions(
                                     imageProvider:
-                                        AssetImage(companyImages[index]),
+                                        NetworkImage(companyImages[index]),
                                     minScale:
                                         PhotoViewComputedScale.contained * 0.8,
                                     maxScale:
@@ -84,7 +84,7 @@ class Logos extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                             child: Image.network(
                               companyImages[index],
-                              height: 220, // Adjust the width as needed
+                              height: 220.0, // Adjust the width as needed
                               fit: BoxFit.cover,
                             ),
                           ),

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 /* -- LIST OF ALL COLORS -- */
 
-const tPrimaryColor = Colors.deepOrange;
+const tPrimaryColor = Colors.blue;
 const tBackgroundColor = Color.fromARGB(255, 255, 255, 255);
 const tSecondaryColor = Color(0xFF265DAB);
-const tAccentColor = Colors.orange;
+const tAccentColor = Colors.blue;
 
 const tWhiteColor = Colors.white;
 const tDarkColor = Color(0xff000000);

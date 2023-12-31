@@ -23,7 +23,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(SignUpController());
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     const loading = Positioned.fill(
         child: Center(
             child: CircularProgressIndicator(
@@ -34,17 +34,13 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: tFormHeight - 10),
       child: Form(
-          key: _formKey,
+          key: formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextFormField(
                 controller: controller.fullName,
                 decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.all(10),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.elliptical(10, 10)),
-                    ),
                     label: Text(tFullName),
                     prefixIcon: Icon(Icons.person_outline_rounded)),
               ),
@@ -53,10 +49,6 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
                 controller: controller.email,
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.all(10),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.elliptical(10, 10)),
-                    ),
                     label: Text(tEmail),
                     prefixIcon: Icon(Icons.email_outlined)),
               ),
@@ -65,10 +57,6 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
                 keyboardType: TextInputType.phone,
                 controller: controller.phoneNo,
                 decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.all(10),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.elliptical(10, 10)),
-                    ),
                     label: Text(tPhoneNo),
                     prefixIcon: Icon(Icons.call_end_rounded)),
               ),
@@ -77,23 +65,15 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
                 keyboardType: TextInputType.visiblePassword,
                 controller: controller.password,
                 decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.all(10),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.elliptical(10, 10)),
-                    ),
                     label: Text(tPassword),
                     prefixIcon: Icon(Icons.fingerprint)),
               ),
               const SizedBox(height: tFormHeight - 10),
-              Container(
+              SizedBox(
                 width: double.infinity,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.elliptical(10, 10)),
-                  color: tPrimaryColor,
-                ),
                 child: ElevatedButton(
                   onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
+                    if (formKey.currentState!.validate()) {
                       // SignUpController.instance.registerUser(
                       //     controller.email.text.trim(),
                       //     controller.password.text.trim());

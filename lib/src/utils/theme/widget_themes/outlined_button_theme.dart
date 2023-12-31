@@ -1,5 +1,3 @@
-import 'package:collegemitra/src/constants/colors.dart';
-import 'package:collegemitra/src/constants/sizes.dart';
 import 'package:flutter/material.dart';
 
 class TOutlinedButtonTheme {
@@ -7,19 +5,23 @@ class TOutlinedButtonTheme {
 
   static final lightOutlinedButtonTheme = OutlinedButtonThemeData(
     style: OutlinedButton.styleFrom(
-      shape: const RoundedRectangleBorder(),
-      foregroundColor: tSecondaryColor,
-      side: const BorderSide(color: tSecondaryColor),
-      padding: const EdgeInsets.symmetric(vertical: tButtonHeight),
+      elevation: 0,
+      foregroundColor: Colors.black,
+      backgroundColor: Colors.blue,
+      side: const BorderSide(color: Colors.blue),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
     ),
   );
 
   static final darkOutlinedButtonTheme = OutlinedButtonThemeData(
     style: OutlinedButton.styleFrom(
-      shape: const RoundedRectangleBorder(),
-      foregroundColor: tWhiteColor,
-      side: const BorderSide(color: tWhiteColor),
-      padding: const EdgeInsets.symmetric(vertical: tButtonHeight),
+      elevation: 0,
+      foregroundColor: Colors.white,
+      backgroundColor: Colors.blue,
+      side: const BorderSide(color: Colors.blue),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
     ),
   );
 }

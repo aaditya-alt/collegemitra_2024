@@ -1,9 +1,13 @@
 import 'dart:developer';
 
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
+import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/college_predictor/college_predictor.dart';
 import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/rank_predictor/rank_predictor.dart';
+import 'package:collegemitra/src/features/authentication/screens/general_utils/rounded_container.dart';
+import 'package:collegemitra/src/features/authentication/screens/general_utils/shadow.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 
 class BestServices extends StatefulWidget {
@@ -54,113 +58,77 @@ class _BestServicesState extends State<BestServices> {
     return Stack(
       children: [
         SizedBox(
-          height: size.height / 9,
+          height: 110,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: freeServices.length,
             itemBuilder: (BuildContext context, int i) => GestureDetector(
-              onTap: () async {
-                setState(() {
-                  isLoading = true;
-                });
+                onTap: () async {
+                  setState(() {
+                    isLoading = true;
+                  });
 
-                if (freeServices[i].title == "Rank Predictor") {
-                  Get.to(() => RankPredictor(counsellingName: null));
-                } else if (freeServices[i].title == "College Predictor") {
-                  showDialog(
-                    barrierDismissible: true,
-                    context: context,
-                    builder: (context) {
-                      return SizedBox(
-                        height: size.height - 2,
-                        width: size.width - 20,
-                        child: AlertDialog(
-                          elevation: 4,
-                          actions: [
-                            const SizedBox(height: 20),
-                            Text(
-                              "Select the Counselling",
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 12),
-                              child: SizedBox(
-                                width: size.width - 80,
-                                child: CustomDropdown<String>(
-                                  closedFillColor: Colors.transparent,
-                                  closedBorder: Border.all(
-                                    color: const Color.fromARGB(
-                                        255, 138, 136, 136),
+                  if (freeServices[i].title == "Rank Predictor") {
+                    Get.to(() => RankPredictor(counsellingName: null));
+                  } else if (freeServices[i].title == "College Predictor") {
+                    showDialog(
+                      barrierDismissible: true,
+                      context: context,
+                      builder: (context) {
+                        return SizedBox(
+                          height: size.height - 2,
+                          width: size.width - 20,
+                          child: AlertDialog(
+                            elevation: 4,
+                            actions: [
+                              const SizedBox(height: 20),
+                              Text(
+                                "Select the Counselling",
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 12),
+                                child: SizedBox(
+                                  width: size.width - 80,
+                                  child: CustomDropdown<String>(
+                                    closedFillColor: Colors.transparent,
+                                    closedBorder: Border.all(
+                                      color: const Color.fromARGB(
+                                          255, 138, 136, 136),
+                                    ),
+                                    hintText: "Select the Counselling",
+                                    items: counsellingList,
+                                    initialItem: counsellingList[0],
+                                    onChanged: (value) {
+                                      selectedCounselling = value;
+                                      log('changing value to: $value');
+                                    },
                                   ),
-                                  hintText: "Select the Counselling",
-                                  items: counsellingList,
-                                  initialItem: counsellingList[0],
-                                  onChanged: (value) {
-                                    selectedCounselling = value;
-                                    log('changing value to: $value');
-                                  },
                                 ),
                               ),
-                            ),
-                            ElevatedButton(
-                              onPressed: () => Get.to(() => CollegePredictor(
-                                  counselling_name: selectedCounselling)),
-                              child: const Text("   Go ahead   "),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                }
+                              ElevatedButton(
+                                onPressed: () => Get.to(() => CollegePredictor(
+                                    counselling_name: selectedCounselling)),
+                                child: const Text("   Go ahead   "),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  }
 
-                setState(() {
-                  isLoading = false;
-                });
-              },
-              child: Card(
-                child: Container(
-                  width: size.width / 1.9,
-                  height: size.height / 8,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    gradient: const LinearGradient(
-                      colors: [Colors.orange, Colors.yellow],
-                      // Adjust stops as needed
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(
-                          freeServices[i].title,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          freeServices[i].subTitle,
-                          style: const TextStyle(
-                            fontSize: 13,
-                            color: Colors.black,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
+                  setState(() {
+                    isLoading = false;
+                  });
+                },
+                child: Row(
+                  children: [
+                    newCard(context, freeServices[i].title),
+                    const SizedBox(width: 15),
+                  ],
+                )),
           ),
         ),
         Visibility(
@@ -180,6 +148,7 @@ class _BestServicesState extends State<BestServices> {
   }
 }
 
+// ignore: camel_case_types
 class freeService {
   final String image;
   final String title;
@@ -189,4 +158,63 @@ class freeService {
     required this.title,
     required this.subTitle,
   });
+}
+
+Widget newCard(BuildContext context, String title) {
+  var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
+  return // Generated code for this Container Widget...
+      Container(
+    width: MediaQuery.sizeOf(context).width * 0.44,
+    height: 106,
+    decoration: BoxDecoration(
+      color: isDark
+          ? const Color.fromARGB(255, 10, 10, 10)
+          : const Color.fromARGB(255, 245, 245, 245),
+      boxShadow: const [
+        BoxShadow(
+          blurRadius: 4,
+          color: Color(0x3F14181B),
+          offset: Offset(0, 3),
+        )
+      ],
+      borderRadius: BorderRadius.circular(8),
+    ),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            textAlign: TextAlign.start,
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
+          Container(
+            width: 60,
+            height: 24,
+            decoration: BoxDecoration(
+              color: tAccentColor.shade100,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: const Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Free",
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                      fontFamily: 'Lexend',
+                      color: tAccentColor,
+                      fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }

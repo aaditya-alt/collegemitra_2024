@@ -35,9 +35,6 @@ class _LoginFormState extends State<LoginForm> {
                 prefixIcon: Icon(Icons.person_outline_outlined),
                 labelText: tEmail,
                 hintText: tEmail,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.elliptical(10, 10)),
-                ),
               ),
             ),
             const SizedBox(
@@ -49,9 +46,6 @@ class _LoginFormState extends State<LoginForm> {
                 prefixIcon: Icon(Icons.fingerprint),
                 labelText: tPassword,
                 hintText: tPassword,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.elliptical(10, 10)),
-                ),
                 suffixIcon: IconButton(
                     onPressed: null, icon: Icon(Icons.remove_red_eye_sharp)),
               ),
@@ -65,66 +59,64 @@ class _LoginFormState extends State<LoginForm> {
                   },
                   child: const Text(
                     tForgetPassword,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: tPrimaryColor),
                   )),
             ),
             const SizedBox(height: tDefaultSize),
             SizedBox(
               width: double.infinity,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    if (EmailValidator.validate(controller.email.text.trim())) {
-                      setState(() {
-                        isLoading = true;
-                      });
-                      await LoginController.instance.login();
-                      setState(() {
-                        isLoading = false;
-                      });
-                    } else {
-                      Get.snackbar('Error', 'Please enter Correct Email Id.');
-                      setState(() {
-                        isLoading = false;
-                      });
-                    }
-                  },
-                  child: isLoading
-                      ? const Center(
-                          child: Row(
-                            mainAxisAlignment:
-                                MainAxisAlignment.center, // Center horizontally
-                            crossAxisAlignment:
-                                CrossAxisAlignment.center, // Center vertically
-                            children: [
-                              SizedBox(
+              child: ElevatedButton(
+                onPressed: () async {
+                  if (EmailValidator.validate(controller.email.text.trim())) {
+                    setState(() {
+                      isLoading = true;
+                    });
+                    await LoginController.instance.login();
+                    setState(() {
+                      isLoading = false;
+                    });
+                  } else {
+                    Get.snackbar('Error', 'Please enter Correct Email Id.');
+                    setState(() {
+                      isLoading = false;
+                    });
+                  }
+                },
+                child: isLoading
+                    ? const Center(
+                        child: Row(
+                          mainAxisAlignment:
+                              MainAxisAlignment.center, // Center horizontally
+                          crossAxisAlignment:
+                              CrossAxisAlignment.center, // Center vertically
+                          children: [
+                            SizedBox(
+                              width:
+                                  21.0, // Adjust the width to make it smaller
+                              height:
+                                  21.0, // Adjust the height to make it smaller
+                              child: CircularProgressIndicator(
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
+                                strokeWidth:
+                                    3.0, // Adjust the strokeWidth to control the size
+                              ),
+                            ),
+                            SizedBox(
                                 width:
-                                    21.0, // Adjust the width to make it smaller
-                                height:
-                                    21.0, // Adjust the height to make it smaller
-                                child: CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                      Colors.white),
-                                  strokeWidth:
-                                      3.0, // Adjust the strokeWidth to control the size
-                                ),
-                              ),
-                              SizedBox(
-                                  width:
-                                      8.0), // Add spacing between the icon and text
-                              Text(
-                                'Logging In...',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                        )
-                      : Text(
-                          tLogin.toUpperCase(),
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                                    8.0), // Add spacing between the icon and text
+                            Text(
+                              'Logging In...',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
                         ),
-                ),
+                      )
+                    : Text(
+                        tLogin.toUpperCase(),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
               ),
             ),
           ],

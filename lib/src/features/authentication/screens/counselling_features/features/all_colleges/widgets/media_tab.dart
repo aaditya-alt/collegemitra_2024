@@ -81,7 +81,8 @@ class MyImageCard extends StatelessWidget {
                             itemCount: collegeImages.length,
                             builder: (context, index) {
                               return PhotoViewGalleryPageOptions(
-                                imageProvider: AssetImage(collegeImages[index]),
+                                imageProvider:
+                                    NetworkImage(collegeImages[index]),
                                 minScale:
                                     PhotoViewComputedScale.contained * 0.8,
                                 maxScale: PhotoViewComputedScale.covered * 2,

@@ -1,8 +1,12 @@
+import 'package:collegemitra/src/features/authentication/screens/dashboard/dashboard_screen.dart';
+import 'package:collegemitra/src/features/authentication/screens/meeting/meeting_home_screen.dart';
 import 'package:collegemitra/src/features/authentication/screens/premium/dashboard/premium_dashboard.dart';
 import 'package:collegemitra/src/features/authentication/screens/premium/widgets/parallex_images.dart';
+import 'package:collegemitra/src/features/authentication/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
 
 class PremiumPurchase extends StatefulWidget {
   const PremiumPurchase({super.key});
@@ -368,6 +372,27 @@ class _PremiumPurchaseState extends State<PremiumPurchase> {
               // ))
             ],
           ),
+        ),
+        bottomNavigationBar: NavigationBar(
+          height: 65,
+          elevation: 2,
+          onDestinationSelected: (index) {
+            if (index == 3) {
+              Get.to(() => const ProfileScreen());
+            } else if (index == 1) {
+              Get.to(() => const MeetingHomeScreen());
+            } else if (index == 2) {
+              Get.to(() => const PremiumPurchase());
+            } else {
+              Get.to(() => const Dashboard());
+            }
+          },
+          destinations: const [
+            NavigationDestination(icon: Icon(Iconsax.home), label: "Home"),
+            NavigationDestination(icon: Icon(Iconsax.shop), label: "Store"),
+            NavigationDestination(icon: Icon(Iconsax.heart), label: "Wishlist"),
+            NavigationDestination(icon: Icon(Iconsax.user), label: "Profile"),
+          ],
         ),
       ),
     );

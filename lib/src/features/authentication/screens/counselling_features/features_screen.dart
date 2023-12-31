@@ -63,21 +63,28 @@ class _FeatureScreenState extends State<FeatureScreen> {
     ];
     List<CustomIcon> featureIcons_2 = [
       CustomIcon(
-          icon: "assets/images/dashboard_images/justice.png",
-          name: "Comparison"),
+        icon: "assets/images/dashboard_images/justice.png",
+        name: "Comparison",
+        counselling: widget.appBarTitle,
+      ),
       CustomIcon(
-          icon: "assets/images/dashboard_images/seats.png",
-          name: "Seat Matrix"),
+        icon: "assets/images/dashboard_images/seats.png",
+        name: "Seat Matrix",
+        counselling: widget.appBarTitle,
+      ),
       CustomIcon(
-          icon: "assets/images/dashboard_images/benchmarking.png",
-          name: "College List"),
+        icon: "assets/images/dashboard_images/benchmarking.png",
+        name: "College List",
+        counselling: widget.appBarTitle,
+      ),
       CustomIcon(
-          icon: "assets/images/dashboard_images/ranking.png",
-          name: "All Colleges"),
+        icon: "assets/images/dashboard_images/ranking.png",
+        name: "All Colleges",
+        counselling: widget.appBarTitle,
+      ),
     ];
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: tAccentColor,
         title: Text(widget.appBarTitle.length <= 5
             ? '${widget.appBarTitle} Counselling'
             : widget.appBarTitle),
@@ -88,7 +95,6 @@ class _FeatureScreenState extends State<FeatureScreen> {
               onPressed: () {},
               icon: const Icon(
                 Icons.paid_rounded,
-                color: Colors.white,
               )),
         ],
       ),

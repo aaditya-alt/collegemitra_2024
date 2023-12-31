@@ -1,33 +1,52 @@
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:collegemitra/src/utils/theme/widget_themes/text_theme.dart';
+import 'package:hive/hive.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class PopularBlogs extends StatefulWidget {
-  String counsellingName = "POPULAR";
-  PopularBlogs({super.key, required this.counsellingName});
+  // ignore: prefer_typing_uninitialized_variables
+  final counsellingName;
+  const PopularBlogs({super.key, required this.counsellingName});
 
   @override
   State<PopularBlogs> createState() => _PopularBlogsState();
 }
 
 class _PopularBlogsState extends State<PopularBlogs> {
+  late Box<List<blogSection>> blogBox;
   List<blogSection> blogDetails = [];
+
   @override
   void initState() {
-    _getData();
+    blogBox = Hive.box<List<blogSection>>('blogDetails');
+    _getDataFromCache();
     super.initState();
+  }
+
+  void _getDataFromCache() {
+    final cachedData = blogBox.get('blogDetails');
+    if (cachedData == null || cachedData.isEmpty) {
+      // If cache is empty or data is not available, fetch data from the database
+      _getData();
+    } else {
+      // If cache is not empty, display data from cache
+      setState(() {
+        blogDetails = cachedData;
+      });
+    }
   }
 
   void _getData() async {
     blogDetails = await getDataFromDatabase(widget.counsellingName);
     // Set isLoading to false after fetching data
-    setState(() {}); // Trigger a rebuild
+    setState(() {
+      // Save the fetched data to the cache
+      blogBox.put('blogDetails', blogDetails);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     if (blogDetails.isEmpty) {
       return const SizedBox(
         height: 200,
@@ -35,79 +54,37 @@ class _PopularBlogsState extends State<PopularBlogs> {
         child: Center(
           child: CircularProgressIndicator(
             color: tPrimaryColor,
-          ), // Show loading indicator while fetching data
+          ),
         ),
       );
     }
     return SizedBox(
-      height: 200,
-      child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: blogDetails.length,
-          itemBuilder: (BuildContext context, int i) => GestureDetector(
-                child: Card(
-                  elevation: 3,
-                  color: isDark
-                      ? Colors.black
-                      : const Color.fromARGB(255, 255, 229, 238),
-                  child: Container(
-                    height: 200,
-                    width: 180,
-                    decoration: BoxDecoration(
-                        color: isDark
-                            ? Colors.black
-                            : const Color.fromARGB(255, 255, 255, 255),
-                        borderRadius: const BorderRadius.vertical(
-                            bottom: Radius.circular(10),
-                            top: Radius.circular(10))),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.only(top: 0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          alignment: Alignment.center,
-                          width: 180,
-                          height: 100,
-                          child: Image.network(
-                            blogDetails[i].image,
-                            fit: BoxFit.cover,
-                            width: 180,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          blogDetails[i].title,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: isDark ? Colors.white : Colors.black,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          textAlign: TextAlign.center,
-                          blogDetails[i].subTitle,
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: isDark ? Colors.white : Colors.black,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              )),
+      height: 240,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: blogDetails.length,
+        separatorBuilder: (BuildContext context, int index) =>
+            const SizedBox(width: 8), // Add separator width
+        itemBuilder: (BuildContext context, int i) => GestureDetector(
+          child: newBlogsCard(
+            context,
+            blogDetails[i].title,
+            blogDetails[i].subTitle,
+            widget.counsellingName,
+            blogDetails[i].image,
+          ),
+        ),
+      ),
     );
   }
 }
 
+// ignore: camel_case_types
 class blogSection {
   final String image;
   final String title;
   final String subTitle;
+
   blogSection({
     required this.image,
     required this.title,
@@ -135,4 +112,90 @@ Future<List<blogSection>> getDataFromDatabase(String counselling) async {
       .toList();
 
   return blogsDetails;
+}
+
+Widget newBlogsCard(BuildContext context, String title, String subTitle,
+    String counselling, String image) {
+  var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
+  return // Generated code for this Container Widget...
+      Padding(
+    padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 12),
+    child: Container(
+      width: MediaQuery.sizeOf(context).width * 0.5,
+      decoration: BoxDecoration(
+        color: isDark ? Colors.black12 : Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: const [
+          BoxShadow(
+            blurRadius: 4,
+            color: Color(0x3F14181B),
+            offset: Offset(0, 3),
+          )
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsetsDirectional.fromSTEB(4, 4, 4, 12),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(
+                  image,
+                  width: double.infinity,
+                  height: 120,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(8, 0, 8, 4),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Text(
+                    counselling,
+                    style: const TextStyle(
+                      fontFamily: 'Plus Jakarta Sans',
+                      color: Color(0xFF57636C),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(8, 0, 0, 0),
+              child: Text(
+                title,
+                style: const TextStyle(
+                    fontFamily: 'Plus Jakarta Sans',
+                    color: Color(0xFF14181B),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    overflow: TextOverflow.ellipsis),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(8, 4, 0, 0),
+              child: Text(
+                subTitle,
+                style: const TextStyle(
+                    fontFamily: 'Plus Jakarta Sans',
+                    color: Color(0xFF57636C),
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    overflow: TextOverflow.ellipsis),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }
