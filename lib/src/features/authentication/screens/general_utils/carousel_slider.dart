@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,6 @@ class MyCarouselSlider extends StatefulWidget {
 }
 
 class _MyCarouselSliderState extends State<MyCarouselSlider> {
-  late Box<List<String>> headerVideoIdBox;
   late YoutubePlayerController _controller;
 
   List<String> youtubeVideoIds = [];
@@ -23,13 +23,13 @@ class _MyCarouselSliderState extends State<MyCarouselSlider> {
 
   @override
   void initState() {
-    headerVideoIdBox = Hive.box<List<String>>('headerVideoIds');
     _getDataFromCache();
     super.initState();
   }
 
   void _getDataFromCache() {
-    final cachedData = headerVideoIdBox.get('headerVideoIds');
+    Box box = Hive.box('headerVideoIds');
+    final cachedData = box.get('Ids');
     if (cachedData == null || cachedData.isEmpty) {
       // If cache is empty or data is not available, fetch data from the database
       initializeYoutube();
@@ -47,11 +47,21 @@ class _MyCarouselSliderState extends State<MyCarouselSlider> {
   }
 
   Future<void> initializeYoutube() async {
-    final youtubeVideoLinks = await getYoutubeVideoLinks("HEADER");
-    youtubeVideoIds = convertLinksToIds(youtubeVideoLinks);
-    setState(() {
-      headerVideoIdBox.put('headerVideoIds', youtubeVideoIds);
-    }); // Trigger a rebuild to update the CarouselSlider
+    Box box = Hive.box('headerVideoIds');
+    try {
+      final youtubeVideoLinks = await getYoutubeVideoLinks("HEADER");
+
+      setState(() {
+        youtubeVideoIds = convertLinksToIds(youtubeVideoLinks);
+        // Only set the state once you have the updated data
+        box.put('Ids', youtubeVideoIds);
+      });
+
+      // Trigger a rebuild to update the CarouselSlider
+    } catch (error) {
+      // Handle the error (e.g., log it or show a user-friendly message)
+      print("Error initializing YouTube: $error");
+    }
   }
 
   List<String> convertLinksToIds(List<String> videoLinks) {
@@ -105,8 +115,9 @@ class _MyCarouselSliderState extends State<MyCarouselSlider> {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                Image.network(
-                  'https://img.youtube.com/vi/${youtubeVideoIds[index]}/0.jpg',
+                CachedNetworkImage(
+                  imageUrl:
+                      'https://img.youtube.com/vi/${youtubeVideoIds[index]}/0.jpg',
                   fit: BoxFit.cover,
                   width: double.infinity,
                   height: double.infinity,

@@ -12,9 +12,11 @@ import 'package:collegemitra/src/features/authentication/screens/general_utils/c
 import 'package:collegemitra/src/features/authentication/screens/general_utils/drawer_header.dart';
 import 'package:collegemitra/src/features/authentication/screens/general_utils/drawer_list.dart';
 import 'package:collegemitra/src/features/authentication/screens/meeting/meeting_home_screen.dart';
+import 'package:collegemitra/src/features/authentication/screens/premium/premium_purchase.dart';
 import 'package:collegemitra/src/features/authentication/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class FeatureScreen extends StatefulWidget {
@@ -38,6 +40,7 @@ class _FeatureScreenState extends State<FeatureScreen> {
   int currentIndex = 0;
   @override
   Widget build(BuildContext context) {
+    bool isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     final size = MediaQuery.of(context).size;
     List<CustomIcon> featureIcons_1 = [
       CustomIcon(
@@ -175,32 +178,30 @@ class _FeatureScreenState extends State<FeatureScreen> {
           ),
         ],
       ),
-
-      bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: tAccentColor.shade100,
-          elevation: 1,
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: tPrimaryColor,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          currentIndex: 0,
-          onTap: (index) {
-            if (index == 3) {
-              Get.to(() => const ProfileScreen());
-            } else if (index == 2) {
-              Get.offAll(() => const MeetingHomeScreen());
-            } else if (index == 0) {
-              Get.offAll(const Dashboard());
-            }
-          },
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.newspaper_rounded), label: "Blogs"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.card_membership), label: "Premium"),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-          ]),
+      bottomNavigationBar: NavigationBar(
+        backgroundColor: isDark ? Colors.black : Colors.white,
+        indicatorColor: tAccentColor.shade200,
+        height: 65,
+        elevation: 2,
+        selectedIndex: 0,
+        onDestinationSelected: (index) {
+          if (index == 3) {
+            Get.to(() => const ProfileScreen());
+          } else if (index == 1) {
+            Get.to(() => const MeetingHomeScreen());
+          } else if (index == 2) {
+            Get.to(() => const PremiumPurchase());
+          } else {
+            Get.back();
+          }
+        },
+        destinations: const [
+          NavigationDestination(icon: Icon(Iconsax.home), label: "Home"),
+          NavigationDestination(icon: Icon(Iconsax.shop), label: "Store"),
+          NavigationDestination(icon: Icon(Iconsax.heart), label: "Wishlist"),
+          NavigationDestination(icon: Icon(Iconsax.user), label: "Profile"),
+        ],
+      ),
     );
   }
 

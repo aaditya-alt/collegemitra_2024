@@ -1,9 +1,12 @@
 import 'package:collegemitra/firebase_options.dart';
 import 'package:collegemitra/src/features/authentication/controllers/otp_controller.dart';
+import 'package:collegemitra/src/features/authentication/models/blog_section_model.dart';
+import 'package:collegemitra/src/features/authentication/models/testimonial_model.dart';
 import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/blogs_section.dart';
+import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/testimonials.dart';
 import 'package:collegemitra/src/features/authentication/screens/on_boarding/on_boarding_screen.dart';
 import 'package:collegemitra/src/features/authentication/screens/splash_screen/splash_screen.dart';
-import 'package:collegemitra/src/localization/hive_adapters.dart';
+
 import 'package:collegemitra/src/repository/authentication_repository/authentication_repository.dart';
 import 'package:collegemitra/src/utils/theme/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -22,13 +25,10 @@ void main() async {
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtjbHNtc2d6bnh4cm5ib2VvcGp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE2NTk3NjQsImV4cCI6MjAxNzIzNTc2NH0.NrAXP7QCpSDuFbxjf3uhq0vZSedKrGjSZ6D1hJsP7dY',
   );
 
-  Hive.registerAdapter(BlogSectionAdapter());
-  Hive.registerAdapter(TestimonialAdapter());
   await Hive.initFlutter();
-  await Hive.openBox<List<blogSection>>('blogDetails');
-  await Hive.openBox<List<blogSection>>('testimonialDetails');
-  await Hive.openBox<List<String>>('headerVideoIds');
-  await Hive.openBox<List<String>>('footerVideoIds');
+
+  await Hive.openBox('headerVideoIds');
+  await Hive.openBox('footerVideoIds');
 
   runApp(const App());
 }

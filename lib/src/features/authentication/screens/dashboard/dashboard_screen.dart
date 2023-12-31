@@ -70,7 +70,7 @@ class _DashboardState extends State<Dashboard> {
             ),
           ]),
       body: ListView(
-        padding: const EdgeInsets.all(14.0),
+        padding: const EdgeInsets.all(12.0),
         children: [
           const SizedBox(height: 10),
           const MyCarouselSlider(),
@@ -134,7 +134,7 @@ class _DashboardState extends State<Dashboard> {
           const SizedBox(height: 25),
 
           //Testimonial Section
-          TestimonialSection(
+          const TestimonialSection(
             counsellingName: "POPULAR",
           ),
 

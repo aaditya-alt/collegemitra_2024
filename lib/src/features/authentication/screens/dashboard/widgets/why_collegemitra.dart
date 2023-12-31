@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class WhyCollegemitra extends StatelessWidget {
   const WhyCollegemitra({super.key});
@@ -41,6 +40,7 @@ class CustomIcon {
 }
 
 Widget whyCollegemitra(List icons, BuildContext context) {
+  bool isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: List.generate(icons.length, (index) {
@@ -50,9 +50,9 @@ Widget whyCollegemitra(List icons, BuildContext context) {
               padding: const EdgeInsets.all(3),
               width: 60,
               height: 60,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white,
+                color: isDark ? Colors.transparent : Colors.white,
               ),
               child: Center(
                 child: Image.asset(

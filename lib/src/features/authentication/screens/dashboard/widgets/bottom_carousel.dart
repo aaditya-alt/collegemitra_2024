@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ class BottomCarousel extends StatefulWidget {
 
 class _BottomCarouselState extends State<BottomCarousel> {
   late YoutubePlayerController _controller;
-  late Box<List<String>> footerVideoIdBox;
+
   bool _isPlayerReady = false;
   List<String> youtubeVideoIds = [];
   int currentIndex = 0;
@@ -23,7 +24,6 @@ class _BottomCarouselState extends State<BottomCarousel> {
 
   @override
   void initState() {
-    footerVideoIdBox = Hive.box<List<String>>('footerVideoIds');
     _getDataFromCache();
     initializeYoutube();
     super.initState();
@@ -35,7 +35,8 @@ class _BottomCarouselState extends State<BottomCarousel> {
   }
 
   void _getDataFromCache() {
-    final cachedData = footerVideoIdBox.get('footerVideoIds');
+    Box box = Hive.box('footerVideoIds');
+    final cachedData = box.get('Ids');
     if (cachedData == null || cachedData.isEmpty) {
       // If cache is empty or data is not available, fetch data from the database
       initializeYoutube();
@@ -48,10 +49,12 @@ class _BottomCarouselState extends State<BottomCarousel> {
   }
 
   Future<void> initializeYoutube() async {
+    Box box = Hive.box('footerVideoIds');
     youtubeVideoLinks = await getYoutubeVideoLinks("FOOTER");
-    youtubeVideoIds = convertLinksToIds(youtubeVideoLinks);
+
     setState(() {
-      footerVideoIdBox.put('footerVideoIds', youtubeVideoIds);
+      youtubeVideoIds = convertLinksToIds(youtubeVideoLinks);
+      box.put('Ids', youtubeVideoIds);
     }); // Trigger a rebuild to update the CarouselSlider
   }
 
@@ -108,8 +111,9 @@ class _BottomCarouselState extends State<BottomCarousel> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  Image.network(
-                    'https://img.youtube.com/vi/${youtubeVideoIds[index]}/0.jpg',
+                  CachedNetworkImage(
+                    imageUrl:
+                        'https://img.youtube.com/vi/${youtubeVideoIds[index]}/0.jpg',
                     fit: BoxFit.cover,
                     width: double.infinity,
                     height: double.infinity,

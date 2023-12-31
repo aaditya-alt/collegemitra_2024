@@ -1,6 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collegemitra/src/constants/colors.dart';
+import 'package:collegemitra/src/features/authentication/models/blog_section_model.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class PopularBlogs extends StatefulWidget {
@@ -13,36 +14,23 @@ class PopularBlogs extends StatefulWidget {
 }
 
 class _PopularBlogsState extends State<PopularBlogs> {
-  late Box<List<blogSection>> blogBox;
   List<blogSection> blogDetails = [];
 
   @override
   void initState() {
-    blogBox = Hive.box<List<blogSection>>('blogDetails');
-    _getDataFromCache();
+    _getData();
     super.initState();
   }
 
-  void _getDataFromCache() {
-    final cachedData = blogBox.get('blogDetails');
-    if (cachedData == null || cachedData.isEmpty) {
-      // If cache is empty or data is not available, fetch data from the database
-      _getData();
-    } else {
-      // If cache is not empty, display data from cache
-      setState(() {
-        blogDetails = cachedData;
-      });
-    }
-  }
-
   void _getData() async {
-    blogDetails = await getDataFromDatabase(widget.counsellingName);
-    // Set isLoading to false after fetching data
-    setState(() {
-      // Save the fetched data to the cache
-      blogBox.put('blogDetails', blogDetails);
-    });
+    try {
+      blogDetails = await getDataFromDatabase(widget.counsellingName);
+
+      setState(() {});
+    } catch (error) {
+      // Handle the error (e.g., log it or show a user-friendly message)
+      print("Error fetching data: $error");
+    }
   }
 
   @override
@@ -77,19 +65,6 @@ class _PopularBlogsState extends State<PopularBlogs> {
       ),
     );
   }
-}
-
-// ignore: camel_case_types
-class blogSection {
-  final String image;
-  final String title;
-  final String subTitle;
-
-  blogSection({
-    required this.image,
-    required this.title,
-    required this.subTitle,
-  });
 }
 
 Future<List<blogSection>> getDataFromDatabase(String counselling) async {
@@ -144,8 +119,8 @@ Widget newBlogsCard(BuildContext context, String title, String subTitle,
               padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  image,
+                child: CachedNetworkImage(
+                  imageUrl: image,
                   width: double.infinity,
                   height: 120,
                   fit: BoxFit.cover,

@@ -1,9 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collegemitra/src/constants/colors.dart';
+import 'package:collegemitra/src/features/authentication/models/testimonial_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class TestimonialSection extends StatefulWidget {
@@ -15,33 +14,33 @@ class TestimonialSection extends StatefulWidget {
 }
 
 class _TestimonialSectionState extends State<TestimonialSection> {
-  late Box<List<Testimonial>> testimonialBox;
+  // late Box<List<Testimonial>> testimonialBox;
   List<Testimonial> testimonialsDetails = [];
   @override
   void initState() {
-    testimonialBox = Hive.box<List<Testimonial>>('testimonialDetails');
-    _getDataFromCache();
+    // testimonialBox = Hive.box<List<Testimonial>>('testimonialDetails');
+    _getData();
     super.initState();
   }
 
-  void _getDataFromCache() {
-    final cachedData = testimonialBox.get('testimonialDetails');
-    if (cachedData == null || cachedData.isEmpty) {
-      // If cache is empty or data is not available, fetch data from the database
-      _getData();
-    } else {
-      // If cache is not empty, display data from cache
-      setState(() {
-        testimonialsDetails = cachedData;
-      });
-    }
-  }
+  // void _getDataFromCache() {
+  //   final cachedData = testimonialBox.get('testimonialDetails');
+  //   if (cachedData == null || cachedData.isEmpty) {
+  //     // If cache is empty or data is not available, fetch data from the database
+  //     _getData();
+  //   } else {
+  //     // If cache is not empty, display data from cache
+  //     setState(() {
+  //       testimonialsDetails = cachedData;
+  //     });
+  //   }
+  // }
 
   void _getData() async {
     testimonialsDetails = await getDataFromDatabase(widget.counsellingName);
     // Set isLoading to false after fetching data
     setState(() {
-      testimonialBox.put('testimonialDetails', testimonialsDetails);
+      // testimonialBox.put('testimonialDetails', testimonialsDetails);
     }); // Trigger a rebuild
   }
 
@@ -68,31 +67,18 @@ class _TestimonialSectionState extends State<TestimonialSection> {
         itemBuilder: (BuildContext context, int i) => SizedBox(
             child: Row(
           children: [
+            const SizedBox(width: 15),
             newTestimonialCard(
                 testimonialsDetails[i].name,
                 testimonialsDetails[i].image,
                 testimonialsDetails[i].designation,
                 testimonialsDetails[i].review,
                 context),
-            const SizedBox(width: 15),
           ],
         )),
       ),
     );
   }
-}
-
-class Testimonial {
-  final String image;
-  final String name;
-  final String designation;
-  final String review;
-  Testimonial({
-    required this.image,
-    required this.name,
-    required this.designation,
-    required this.review,
-  });
 }
 
 Future<List<Testimonial>> getDataFromDatabase(String counselling) async {
@@ -125,9 +111,10 @@ Widget newTestimonialCard(String name, String image, String designation,
   var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
   return Container(
     padding: const EdgeInsets.all(8),
+    height: MediaQuery.of(context).size.height / 3.1,
     width: MediaQuery.of(context).size.width / 1.17,
     decoration: BoxDecoration(
-      color: isDark ? Colors.black : Colors.white,
+      color: isDark ? const Color.fromARGB(255, 10, 10, 10) : Colors.white,
       boxShadow: const [
         BoxShadow(
           blurRadius: 4,
@@ -141,73 +128,62 @@ Widget newTestimonialCard(String name, String image, String designation,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            RatingBar.builder(
-              onRatingUpdate: (newValue) => print(newValue),
-              itemBuilder: (context, index) => const Icon(
-                Icons.star_rounded,
-                color: tAccentColor,
-              ),
-              direction: Axis.horizontal,
-              initialRating: 4,
-              unratedColor: const Color(0xFFE0E3E7),
-              itemCount: 5,
-              itemSize: 24,
-              glowColor: tAccentColor,
-            ),
-          ],
-        ),
         Expanded(
           flex: 0,
-          child: Text(
-            review,
-            style: const TextStyle(
-              fontFamily: 'Readex Pro',
-              color: Color(0xFF57636C),
-              fontSize: 16,
-              fontWeight: FontWeight.normal,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 10, bottom: 4),
+            child: Text(
+              review,
+              style: const TextStyle(
+                fontFamily: 'Readex Pro',
+                color: Color(0xFF57636C),
+                fontSize: 16,
+                fontWeight: FontWeight.normal,
+              ),
             ),
           ),
         ),
-        Row(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                image,
-                width: 40,
-                height: 40,
-                fit: BoxFit.cover,
+        Padding(
+          padding: const EdgeInsets.only(left: 10, bottom: 4),
+          child: Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: CachedNetworkImage(
+                  imageUrl: image,
+                  width: 40,
+                  height: 40,
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-            const SizedBox(width: 8),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: TextStyle(
-                    fontFamily: 'Readex Pro',
-                    color: isDark
-                        ? const Color.fromARGB(255, 255, 255, 255)
-                        : const Color(0xFF14181B),
-                    fontSize: 14,
-                    fontWeight: FontWeight.normal,
+              const SizedBox(width: 8),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: TextStyle(
+                      fontFamily: 'Readex Pro',
+                      color: isDark
+                          ? const Color.fromARGB(255, 255, 255, 255)
+                          : const Color(0xFF14181B),
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal,
+                    ),
                   ),
-                ),
-                Text(
-                  designation,
-                  style: const TextStyle(
-                    fontFamily: 'Readex Pro',
-                    color: Color(0xFF57636C),
-                    fontSize: 12,
-                    fontWeight: FontWeight.normal,
+                  Text(
+                    designation,
+                    style: const TextStyle(
+                      fontFamily: 'Readex Pro',
+                      color: Color(0xFF57636C),
+                      fontSize: 12,
+                      fontWeight: FontWeight.normal,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ],
     ),
