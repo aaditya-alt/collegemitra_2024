@@ -158,8 +158,7 @@ class _DashboardState extends State<Dashboard> {
                 ),
               ),
               style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    const Color.fromARGB(255, 255, 129, 39), // Button color
+                backgroundColor: tPrimaryColor, // Button color
 
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -194,19 +193,9 @@ class _DashboardState extends State<Dashboard> {
           const BottomCarousel(),
         ],
       ),
-      // drawer: Drawer(
-      //   child: SingleChildScrollView(
-      //     child: Column(
-      //       children: [
-      //         MyHeaderDrawer(),
-      //         const DrawerList(),
-      //       ],
-      //     ),
-      //   ),
-      // ),
       bottomNavigationBar: NavigationBar(
         backgroundColor: isDark ? Colors.black : Colors.white,
-        indicatorColor: tAccentColor.shade200,
+        indicatorColor: isDark ? tPrimaryColor : tPrimaryColor.shade200,
         height: 65,
         elevation: 2,
         selectedIndex: 0,

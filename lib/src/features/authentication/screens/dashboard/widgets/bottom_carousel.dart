@@ -25,7 +25,6 @@ class _BottomCarouselState extends State<BottomCarousel> {
   @override
   void initState() {
     _getDataFromCache();
-    initializeYoutube();
     super.initState();
   }
 

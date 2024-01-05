@@ -22,6 +22,7 @@ class AllColleges {
 class CollegeDetails {
   String collegeShortName;
   String collegeFullName;
+  String collegeType;
   String nearbyAirport;
   String nearbyRailway;
   String nearbyBus;
@@ -46,6 +47,7 @@ class CollegeDetails {
   CollegeDetails({
     required this.collegeShortName,
     required this.collegeFullName,
+    required this.collegeType,
     required this.nearbyAirport,
     required this.nearbyRailway,
     required this.nearbyBus,
@@ -140,6 +142,7 @@ Future<List<CollegeDetails>> getCollegeDetailsList(int collegeId) async {
     return CollegeDetails(
       collegeShortName: row['short_name'].toString(),
       collegeFullName: row['full_name'].toString(),
+      collegeType: row['type'].toString(),
       nearbyAirport: row['nearby_airport'].toString(),
       nearbyRailway: row['nearby_railway'].toString(),
       nearbyBus: row['nearby_bus'],

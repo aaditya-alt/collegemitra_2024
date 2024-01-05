@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:collegemitra/src/repository/authentication_repository/excel_college_predictor.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
 Future<List<String>> getCollegesList(String counselling) async {
@@ -61,16 +61,40 @@ Widget detailsDropdownNew(
       children: [
         SizedBox(
           width: mobileWidth - 40,
-          child: CustomDropdown<String>(
-            closedFillColor: Colors.transparent,
-            closedBorder:
-                Border.all(color: const Color.fromARGB(255, 138, 136, 136)),
-            hintText: hint,
-            items: list,
-            initialItem: list[0],
-            onChanged: (value) {
-              onChanged(value);
-            },
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton2<String>(
+              isExpanded: true,
+              hint: Text(
+                'Select Item',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Theme.of(context).hintColor,
+                ),
+              ),
+              items: list
+                  .map((String item) => DropdownMenuItem<String>(
+                        value: item,
+                        child: Text(
+                          item,
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                      ))
+                  .toList(),
+              value: list[0],
+              onChanged: (String? value) {
+                onChanged(value!);
+              },
+              buttonStyleData: const ButtonStyleData(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                height: 40,
+                width: 140,
+              ),
+              menuItemStyleData: const MenuItemStyleData(
+                height: 40,
+              ),
+            ),
           ),
         ),
       ],

@@ -44,7 +44,7 @@ class _FeatureScreenState extends State<FeatureScreen> {
     final size = MediaQuery.of(context).size;
     List<CustomIcon> featureIcons_1 = [
       CustomIcon(
-        icon: "assets/images/dashboard_images/3d-target.png",
+        icon: "assets/images/dashboard_images/about.png",
         name: "Know About",
         counselling: widget.appBarTitle,
       ),
@@ -54,7 +54,7 @@ class _FeatureScreenState extends State<FeatureScreen> {
         counselling: widget.appBarTitle,
       ),
       CustomIcon(
-        icon: "assets/images/dashboard_images/chart.png",
+        icon: "assets/images/dashboard_images/rank.png",
         name: "Predict Rank",
         counselling: widget.appBarTitle,
       ),
@@ -180,7 +180,7 @@ class _FeatureScreenState extends State<FeatureScreen> {
       ),
       bottomNavigationBar: NavigationBar(
         backgroundColor: isDark ? Colors.black : Colors.white,
-        indicatorColor: tAccentColor.shade200,
+        indicatorColor: isDark ? tPrimaryColor : tPrimaryColor.shade200,
         height: 65,
         elevation: 2,
         selectedIndex: 0,

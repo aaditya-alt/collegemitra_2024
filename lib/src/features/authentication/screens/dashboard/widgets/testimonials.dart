@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/models/testimonial_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class TestimonialSection extends StatefulWidget {
@@ -134,9 +133,11 @@ Widget newTestimonialCard(String name, String image, String designation,
             padding: const EdgeInsets.only(left: 10, bottom: 4),
             child: Text(
               review,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Readex Pro',
-                color: Color(0xFF57636C),
+                color: isDark
+                    ? const Color.fromARGB(255, 196, 196, 196)
+                    : const Color(0xFF57636C),
                 fontSize: 16,
                 fontWeight: FontWeight.normal,
               ),

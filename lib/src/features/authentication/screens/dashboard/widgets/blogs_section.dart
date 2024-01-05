@@ -148,9 +148,11 @@ Widget newBlogsCard(BuildContext context, String title, String subTitle,
               padding: const EdgeInsetsDirectional.fromSTEB(8, 0, 0, 0),
               child: Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                     fontFamily: 'Plus Jakarta Sans',
-                    color: Color(0xFF14181B),
+                    color: isDark
+                        ? const Color.fromARGB(255, 215, 214, 214)
+                        : const Color(0xFF14181B),
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     overflow: TextOverflow.ellipsis),

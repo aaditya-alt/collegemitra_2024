@@ -33,7 +33,7 @@ dependencies:
   jitsi_meet_flutter_sdk: ^0.1.8
   rive: ^0.12.3
   flutter_svg: ^1.1.6
-  animated_custom_dropdown: ^2.0.0
+  dropdown_button2: ^2.3.9
   flutter_native_splash: ^2.3.6
   easy_loader: ^2.0.0
   flutter_lints: ^2.0.3
@@ -48,6 +48,7 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   cached_network_image: ^3.3.0
+  flutter_dropdown: ^1.0.1+hotfix.1
 
   
   
@@ -84,6 +85,8 @@ flutter:
     - assets/images/profile_images/profile-image.jpeg
     - assets/images/dashboard_images/t10delhi.jpg
     - assets/images/dashboard_images/support.png
+    - assets/images/dashboard_images/about.png
+    - assets/images/dashboard_images/rank.png
     - assets/images/dashboard_images/background.png
     - assets/images/dashboard_images/background.jpeg
     - assets/images/dashboard_images/graduation.png
@@ -93,7 +96,6 @@ flutter:
     - assets/images/dashboard_images/3d-target.png
     - assets/images/dashboard_images/love.png
     - assets/images/dashboard_images/shield.png
-    - assets/images/dashboard_images/chart.png
     - assets/images/dashboard_images/bachelors-degree.png
     - assets/images/dashboard_images/benchmarking.png
     - assets/images/dashboard_images/justice-scale.png

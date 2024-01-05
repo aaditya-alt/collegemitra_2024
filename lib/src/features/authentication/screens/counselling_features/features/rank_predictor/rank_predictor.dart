@@ -1,14 +1,16 @@
 import 'dart:developer';
 
 import 'dart:ui';
-
-import 'package:animated_custom_dropdown/custom_dropdown.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/controllers/rank_predictor_controller.dart';
 import 'package:collegemitra/src/features/authentication/screens/general_utils/carousel_slider.dart';
+import 'package:collegemitra/src/features/authentication/screens/general_utils/dropdown.dart';
 import 'package:collegemitra/src/features/authentication/screens/welcome/animated_button.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:easy_loader/easy_loader.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dropdown/flutter_dropdown.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rive/rive.dart';
@@ -22,9 +24,11 @@ class RankPredictor extends StatefulWidget {
 }
 
 class _RankPredictorState extends State<RankPredictor> {
+  final TextEditingController examDateController = TextEditingController();
+  final TextEditingController examShiftController = TextEditingController();
   bool isLoading = false;
 
-  String examdate = "20 Feb 2023";
+  String examDate = "20 Feb 2023";
   String examShift = "1st Shift";
 
   @override
@@ -33,8 +37,15 @@ class _RankPredictorState extends State<RankPredictor> {
   }
 
   @override
+  void dispose() {
+    examDateController.dispose();
+    examShiftController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final _controller = Get.put(RankPredictorController());
+    final controller = Get.put(RankPredictorController());
     var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     final size = MediaQuery.of(context).size.width;
     var counselling;
@@ -60,189 +71,231 @@ class _RankPredictorState extends State<RankPredictor> {
     ];
 
     return Scaffold(
+      backgroundColor: isDark
+          ? const Color.fromARGB(255, 19, 19, 19)
+          : const Color(0xFFF1F4F8),
       appBar: AppBar(
-        backgroundColor: tAccentColor,
-        title: const Text(
-          "JEE Mains 2024 Rank Predictor",
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
+        backgroundColor: isDark ? Colors.black : Colors.white,
+        automaticallyImplyLeading: false,
+        leading: InkWell(
+          splashColor: Colors.transparent,
+          focusColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          onTap: () async {
+            Get.back();
+          },
+          child: Icon(
+            Icons.chevron_left_rounded,
+            color: isDark ? Colors.white : const Color(0xFF14181B),
+            size: 32,
           ),
         ),
-        centerTitle: true,
+        title: Text(
+          'Rank Predictor',
+          style: TextStyle(
+            fontFamily: 'Plus Jakarta Sans',
+            color: isDark ? Colors.white : const Color(0xFF14181B),
+            fontSize: 16,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+        actions: [],
+        centerTitle: false,
+        elevation: 0,
       ),
-      body: Stack(
-        children: [
-          Positioned(
-            width: size * 1.7,
-            left: 100,
-            bottom: 100,
-            child: Image.asset(
-              "assets/images/dashboard_images/background_new.png",
-            ),
-          ),
-          Positioned.fill(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 30, sigmaY: 45),
-              child: const SizedBox(),
-            ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height,
-            width: size,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Column(
-                    children: [
-                      const MyCarouselSlider(),
-                      const SizedBox(height: 15),
-                      detailsDropdown("Select your exam date", dates, size,
-                          (value) {
-                        setState(() {
-                          examdate = value;
-                        });
-                      }, "JEE Mains 2024 Exam Date",
-                          "Enter the Correct details about the date when your JEE Mains 2024 exam were held."),
-                      detailsDropdown("Select your shift", shift, size,
-                          (value) {
-                        setState(() {
-                          examShift = value;
-                        });
-                      }, "JEE Mains 2024 Exam Shift",
-                          "Enter the correct shift detail about on the selected date which shift was yours like it could be one from the given option, please choose carefully."),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 14, right: 56, top: 14, bottom: 12),
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          controller: _controller.marks,
-                          decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.all(10),
-                              label: Text("Enter Expected marks"),
-                              prefixIcon: Icon(Icons.fingerprint)),
+      body: SafeArea(
+        top: true,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CachedNetworkImage(
+                      fadeInDuration: const Duration(milliseconds: 100),
+                      fadeOutDuration: const Duration(milliseconds: 100),
+                      imageUrl:
+                          'https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/college_images/public/Purple%20and%20Blue%20Gradient%20Modern%203D%20Illusrtative%20Creative%20Marketing%20Agency%20Banner%20(1).png',
+                      width: MediaQuery.sizeOf(context).width,
+                      height: 150,
+                      fit: BoxFit.cover,
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(20, 16, 0, 0),
+                      child: Text(
+                        'Rank Predictor',
+                        style: TextStyle(
+                          fontFamily: 'Outfit',
+                          color:
+                              isDark ? Colors.white : const Color(0xFF14181B),
+                          fontSize: 24,
+                          fontWeight: FontWeight.normal,
                         ),
                       ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 14, vertical: 10),
-                    child: AnimatedBtn(
-                      press: () {
-                        setState(() {
-                          isLoading = true;
-                        });
-
-                        // _controller.printDetails(
-                        //     examdate, examShift, _controller.marks.text);
-
-                        String dificulty =
-                            decideDifficulty(examdate, examShift);
-
-                        double marks = double.parse(_controller.marks.text);
-
-                        if (!marks.isNaN) {
-                          calculateScore(dificulty, 900000, marks, context);
-                        } else {
-                          Get.snackbar("Error", "Please Enter a valid marks");
-                        }
-
-                        // Get.to(() => const LoginScreen());
-
-                        // Future.delayed(
-                        //   const Duration(milliseconds: 800),
-                        //   () {
-                        //     setState(() {
-                        //       isShowSignInDialog = true;
-                        //     });
-                        //   },
-                        // );
-                        setState(() {
-                          isLoading = false;
-                        });
-                      },
-                      buttonText: "Predict my rank",
                     ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 24, horizontal: 14),
-                    child: Text(
-                      "Counselling support & Guidance, College Cutoff details and College Features and comparing different colleges.",
-                      style: TextStyle(
-                          fontSize: 12, color: Color.fromARGB(255, 78, 78, 78)),
+                    Padding(
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(20, 8, 0, 0),
+                      child: Text(
+                        'JEE Mains 2024',
+                        style: TextStyle(
+                          fontFamily: 'Lexend Deca',
+                          color: isDark
+                              ? const Color.fromARGB(255, 169, 160, 254)
+                              : const Color(0xFF4B39EF),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Visibility(
-            visible: isLoading,
-            child: Container(
-              color:
-                  Colors.black.withOpacity(0.5), // Adjust the opacity as needed
-              child: Center(
-                child: Image.asset(
-                  "assets/gif/loader.gif",
-                  width: size / 4,
+                    Padding(
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(20, 12, 20, 4),
+                      child: Text(
+                        'The best of all 3 worlds, Row & Flow offers high intensity rowing and strength intervals followed by athletic based yoga sure to enhance flexible and clear the mind.',
+                        style: TextStyle(
+                          fontFamily: 'Plus Jakarta Sans',
+                          color: isDark
+                              ? const Color.fromARGB(255, 178, 176, 176)
+                              : const Color(0xFF57636C),
+                          fontSize: 16,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    ),
+                    const Divider(
+                      height: 24,
+                      thickness: 2,
+                      indent: 20,
+                      endIndent: 20,
+                      color: Color(0xFFE0E3E7),
+                    ),
+                    ListView(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(
+                              16, 0, 16, 8),
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: isDark ? Colors.black : Colors.white,
+                              boxShadow: const [
+                                BoxShadow(
+                                  blurRadius: 3,
+                                  color: Color(0x2F1D2429),
+                                  offset: Offset(0, 1),
+                                )
+                              ],
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  16, 12, 16, 12),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  detailsDropdown(
+                                      "Select your exam date", dates, size,
+                                      (value) {
+                                    setState(() {
+                                      examDate = value;
+                                    });
+                                  },
+                                      "JEE Mains 2024 Exam Date",
+                                      "Enter the Correct details about the date when your JEE Mains 2024 exam were held.",
+                                      context),
+                                  detailsDropdown(
+                                      "Select your shift", shift, size,
+                                      (value) {
+                                    setState(() {
+                                      examShift = value;
+                                    });
+                                  },
+                                      "JEE Mains 2024 Exam Shift",
+                                      "Enter the correct shift detail about on the selected date which shift was yours like it could be one from the given option, please choose carefully.",
+                                      context),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 14, bottom: 12),
+                                    child: TextFormField(
+                                      keyboardType: TextInputType.number,
+                                      controller: controller.marks,
+                                      decoration: const InputDecoration(
+                                          contentPadding: EdgeInsets.all(10),
+                                          label: Text("Enter Expected marks"),
+                                          prefixIcon: Icon(Icons.numbers)),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 24),
+              child: SizedBox(
+                width: 300,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () {
+                    controller.printDetails(
+                        examDate, examShift, controller.marks.text);
 
-  Widget detailsDropdown(String hint, List<String> list, double mobileWidth,
-      Function(String) onChanged, String title, String description) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          SizedBox(
-            width: mobileWidth - 80,
-            child: DropdownButton<String>(
-              borderRadius: BorderRadius.circular(14),
+                    String dificulty = decideDifficulty(examDate, examShift);
 
-              value: list[0],
-              hint: Text(hint),
-              items: list.map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (value) {
-                onChanged(value!);
-                print('Changing value to: $value');
-              },
-              underline: Container(
-                // Remove default underline
-                height: 1,
-                color: Colors.grey,
+                    double marks = double.parse(controller.marks.text);
+
+                    if (!marks.isNaN) {
+                      calculateScore(dificulty, 900000, marks, context);
+                    } else {
+                      Get.snackbar("Error", "Please Enter a valid marks");
+                    }
+                  },
+                  style: const ButtonStyle(
+                    padding: MaterialStatePropertyAll(
+                      EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                    ),
+                    backgroundColor: MaterialStatePropertyAll(tAccentColor),
+                    foregroundColor: MaterialStatePropertyAll(Colors.white),
+                    elevation: MaterialStatePropertyAll(3),
+                    textStyle: MaterialStatePropertyAll(
+                      TextStyle(
+                        fontFamily: 'Plus Jakarta Sans',
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    side: MaterialStatePropertyAll(
+                      BorderSide(
+                        color: Colors.transparent,
+                        width: 1,
+                      ),
+                    ),
+                  ),
+                  child: const Text("Predict Rank"),
+                ),
               ),
-              isExpanded: true, // Ensure the dropdown takes the full width
-            ),
-          ),
-          GestureDetector(
-            child: const Icon(
-              Icons.info_rounded,
-              size: 30,
-              color: tAccentColor,
-            ),
-            onTap: () {
-              showInformation(context, title, description);
-            },
-          ),
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -509,6 +562,7 @@ Future<void> showInformation(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                const SizedBox(height: 15),
                 ClipRRect(
                   borderRadius:
                       const BorderRadius.vertical(top: Radius.circular(16.0)),

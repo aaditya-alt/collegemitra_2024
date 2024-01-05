@@ -1,3 +1,4 @@
+import 'package:collegemitra/src/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class PromoCard extends StatelessWidget {
@@ -30,7 +31,7 @@ class PromoCard extends StatelessWidget {
               height: size.height / 4.5,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(22),
-                color: const Color(0xFF40BAD5),
+                color: tPrimaryColor,
                 boxShadow: const [kDefaultShadow],
               ),
               child: Container(
@@ -76,7 +77,7 @@ class PromoCard extends StatelessWidget {
                                 counselling_name != 'GGSIPU Delhi')
                             ? '$counselling_name Mentorship ?'
                             : 'Need Guidance ?',
-                        style: Theme.of(context).textTheme.titleLarge,
+                        style: Theme.of(context).textTheme.headlineMedium,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 3,
                       ),
@@ -88,15 +89,16 @@ class PromoCard extends StatelessWidget {
                         vertical: 20 / 4,
                       ),
                       decoration: const BoxDecoration(
-                        color: Color(0xFFFFA41B),
+                        color: tAccentColor,
                         borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(22),
                           topRight: Radius.circular(22),
                         ),
                       ),
                       child: Text(
-                        "\$399",
-                        style: Theme.of(context).textTheme.labelLarge,
+                        "\₹399",
+                        style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                            fontWeight: FontWeight.bold, color: Colors.white),
                       ),
                     ),
                   ],

@@ -41,6 +41,7 @@ class _ShowBranchesState extends State<ShowBranches> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     List<String> userDetailsName = [
       "Counselling",
       "Domicile",
@@ -68,13 +69,13 @@ class _ShowBranchesState extends State<ShowBranches> {
           SliverAppBar(
             expandedHeight: 80.0,
             pinned: true,
-            backgroundColor: tAccentColor,
+            backgroundColor: isDark ? tAccentColor : tAccentColor.shade200,
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
                 widget.collegeName,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
-                  color: Colors.black,
+                  color: isDark ? Colors.white : Colors.black,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -93,6 +94,8 @@ class _ShowBranchesState extends State<ShowBranches> {
                   child: TextField(
                     onChanged: filterBranches,
                     decoration: InputDecoration(
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
                       hintText: "Search Branches...",
                       suffixIcon: IconButton(
                         onPressed: () {},
@@ -162,15 +165,22 @@ class _ShowBranchesState extends State<ShowBranches> {
                 return Column(
                   children: [
                     ListTile(
-                      tileColor:
-                          isExpanded[i] ? Colors.grey.shade200 : Colors.white,
+                      tileColor: isExpanded[i]
+                          ? isDark
+                              ? const Color.fromARGB(255, 30, 30, 30)
+                              : Colors.grey.shade200
+                          : isDark
+                              ? const Color.fromARGB(255, 8, 8, 8)
+                              : Colors.white,
                       title: Row(
                         children: [
                           Container(
                             width: 50,
                             height: 50,
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: isDark
+                                  ? const Color.fromARGB(255, 200, 200, 200)
+                                  : Colors.white,
                               borderRadius: BorderRadius.circular(25),
                             ),
                             child: Center(
@@ -185,10 +195,10 @@ class _ShowBranchesState extends State<ShowBranches> {
                               children: [
                                 Text(
                                   branches.branchName,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 15,
-                                    color: Colors.black,
+                                    color: isDark ? Colors.white : Colors.black,
                                   ),
                                 ),
                                 Text(
@@ -223,7 +233,7 @@ class _ShowBranchesState extends State<ShowBranches> {
                     ),
                     if (isExpanded[i])
                       SizedBox(
-                        height: MediaQuery.of(context).size.height / 3.7,
+                        height: MediaQuery.of(context).size.height / 3.6,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: branches.rounds.length,
@@ -231,7 +241,7 @@ class _ShowBranchesState extends State<ShowBranches> {
                             var round = branches.rounds[j];
                             return Card(
                               color: tPrimaryColor.shade300,
-                              elevation: 8, // Adjust the elevation as needed
+                              elevation: 4, // Adjust the elevation as needed
                               margin: const EdgeInsets.all(10),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15.0),

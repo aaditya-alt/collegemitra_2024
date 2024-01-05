@@ -1,3 +1,4 @@
+import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/models/all_colleges_model.dart';
 import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/all_colleges/widgets/about.dart';
 import 'package:flutter/material.dart';
@@ -108,17 +109,22 @@ class Recruiters extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-        side: const BorderSide(
-          style: BorderStyle.solid,
-          width: 3,
-          color: Colors.deepOrange,
-        ),
+    bool isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: isDark
+            ? const Color.fromARGB(255, 10, 10, 10)
+            : const Color.fromARGB(255, 245, 245, 245),
+        boxShadow: const [
+          BoxShadow(
+            blurRadius: 4,
+            color: Color(0x3F14181B),
+            offset: Offset(0, 3),
+          )
+        ],
+        borderRadius: BorderRadius.circular(8),
       ),
-      elevation: 4,
-      color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: Column(
@@ -129,11 +135,11 @@ class Recruiters extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.deepOrange,
+                color: tPrimaryColor,
               ),
             ),
             const Divider(
-              color: Colors.deepOrange,
+              color: tPrimaryColor,
             ),
             Logos(companyImages: companyImages),
           ],
@@ -178,15 +184,25 @@ class PlacementPercentage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     return Container(
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: const Color.fromARGB(186, 255, 182, 115),
+        color: isDark
+            ? const Color.fromARGB(255, 10, 10, 10)
+            : const Color.fromARGB(255, 245, 245, 245),
+        boxShadow: const [
+          BoxShadow(
+            blurRadius: 4,
+            color: Color(0x3F14181B),
+            offset: Offset(0, 3),
+          )
+        ],
+        borderRadius: BorderRadius.circular(8),
       ),
-      padding: const EdgeInsets.all(7),
       child: Table(
         border: TableBorder.all(
-          color: Colors.white,
+          color: Colors.grey,
           width: 2,
           borderRadius: BorderRadius.circular(10),
         ),

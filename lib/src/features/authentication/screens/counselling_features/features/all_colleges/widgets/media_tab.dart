@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/models/all_colleges_model.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
@@ -40,16 +42,22 @@ class MyImageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-        side: const BorderSide(
-          style: BorderStyle.solid,
-          width: 3,
-          color: Colors.deepOrange,
-        ),
+    bool isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: isDark
+            ? const Color.fromARGB(255, 10, 10, 10)
+            : const Color.fromARGB(255, 245, 245, 245),
+        boxShadow: const [
+          BoxShadow(
+            blurRadius: 4,
+            color: Color(0x3F14181B),
+            offset: Offset(0, 3),
+          ),
+        ],
+        borderRadius: BorderRadius.circular(8),
       ),
-      margin: const EdgeInsets.all(16.0),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         child: Column(
@@ -60,11 +68,11 @@ class MyImageCard extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.deepOrange,
+                color: tPrimaryColor,
               ),
             ),
             const Divider(
-              color: Colors.deepOrange,
+              color: tPrimaryColor,
             ),
             SizedBox(
               height: 200.0,
@@ -81,8 +89,8 @@ class MyImageCard extends StatelessWidget {
                             itemCount: collegeImages.length,
                             builder: (context, index) {
                               return PhotoViewGalleryPageOptions(
-                                imageProvider:
-                                    NetworkImage(collegeImages[index]),
+                                imageProvider: CachedNetworkImageProvider(
+                                    collegeImages[index]),
                                 minScale:
                                     PhotoViewComputedScale.contained * 0.8,
                                 maxScale: PhotoViewComputedScale.covered * 2,
@@ -101,8 +109,8 @@ class MyImageCard extends StatelessWidget {
                       padding: const EdgeInsets.all(6.0),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(15),
-                        child: Image.network(
-                          collegeImages[index],
+                        child: CachedNetworkImage(
+                          imageUrl: collegeImages[index],
                           height: 150, // Adjust the width as needed
                           fit: BoxFit.cover,
                         ),
@@ -134,16 +142,22 @@ class MyVideoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-        side: const BorderSide(
-          style: BorderStyle.solid,
-          width: 3,
-          color: Colors.deepOrange,
-        ),
+    bool isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: isDark
+            ? const Color.fromARGB(255, 10, 10, 10)
+            : const Color.fromARGB(255, 245, 245, 245),
+        boxShadow: const [
+          BoxShadow(
+            blurRadius: 4,
+            color: Color(0x3F14181B),
+            offset: Offset(0, 3),
+          )
+        ],
+        borderRadius: BorderRadius.circular(8),
       ),
-      margin: const EdgeInsets.all(16.0),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         child: Column(
@@ -154,11 +168,11 @@ class MyVideoCard extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.deepOrange,
+                color: tPrimaryColor,
               ),
             ),
             const Divider(
-              color: Colors.deepOrange,
+              color: tPrimaryColor,
             ),
             SizedBox(
               height: 200.0,
@@ -200,7 +214,7 @@ class MyVideoCard extends StatelessWidget {
                             // height: 150.0,
                             decoration: BoxDecoration(
                               image: DecorationImage(
-                                image: NetworkImage(
+                                image: CachedNetworkImageProvider(
                                     'https://img.youtube.com/vi/$videoId/0.jpg'),
                                 fit: BoxFit.cover,
                               ),

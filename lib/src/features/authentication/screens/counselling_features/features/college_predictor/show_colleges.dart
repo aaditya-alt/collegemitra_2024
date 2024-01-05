@@ -109,13 +109,15 @@ class _ShowCollegesState extends State<ShowColleges> {
     List<String> stateNames = uniqueStateNames.toList();
 
     final size = MediaQuery.of(context).size;
+    bool isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
         title: Text(
           "${widget.counsellingName} Colleges",
+          style: TextStyle(color: isDark ? Colors.white : Colors.black),
         ),
         centerTitle: true,
-        backgroundColor: tAccentColor,
+        backgroundColor: isDark ? tAccentColor : tAccentColor.shade200,
       ),
       body: Stack(
         children: [
@@ -138,6 +140,8 @@ class _ShowCollegesState extends State<ShowColleges> {
                     child: TextField(
                       onChanged: filterColleges,
                       decoration: InputDecoration(
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
                         hintText: "Search Colleges...",
                         suffixIcon: IconButton(
                           onPressed: () {
@@ -314,7 +318,7 @@ class _ShowCollegesState extends State<ShowColleges> {
               Stack(
                 children: [
                   Container(
-                    color: tAccentColor.shade200,
+                    color: tAccentColor.shade400,
                     height: 57,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
@@ -427,8 +431,13 @@ class _ShowCollegesState extends State<ShowColleges> {
                     final isEvenIndex = index.isEven;
 
                     return ListTile(
-                      tileColor:
-                          isEvenIndex ? Colors.grey.shade200 : Colors.white,
+                      tileColor: isEvenIndex
+                          ? isDark
+                              ? const Color.fromARGB(255, 30, 30, 30)
+                              : Colors.grey.shade200
+                          : isDark
+                              ? const Color.fromARGB(255, 8, 8, 8)
+                              : Colors.white,
                       title: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -437,7 +446,9 @@ class _ShowCollegesState extends State<ShowColleges> {
                             width: 50,
                             height: 50,
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: isDark
+                                  ? const Color.fromARGB(255, 200, 200, 200)
+                                  : Colors.white,
                               borderRadius: BorderRadius.circular(25),
                             ),
                             child: getCollegeChance(college),
@@ -449,10 +460,10 @@ class _ShowCollegesState extends State<ShowColleges> {
                               children: [
                                 Text(
                                   college.collegeName,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15,
-                                    color: Colors.black,
+                                    color: isDark ? Colors.white : Colors.black,
                                   ),
                                 ),
                                 Text(

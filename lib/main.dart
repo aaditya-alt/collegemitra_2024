@@ -29,6 +29,7 @@ void main() async {
 
   await Hive.openBox('headerVideoIds');
   await Hive.openBox('footerVideoIds');
+  await Hive.openBox('user');
 
   runApp(const App());
 }

@@ -12,8 +12,8 @@ import 'package:excel/excel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/state_manager.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hive/hive.dart';
 
 class AuthenticationRepository extends GetxController {
   static AuthenticationRepository get instance => Get.find();
@@ -31,11 +31,13 @@ class AuthenticationRepository extends GetxController {
 
   Future<void> getUserData(String? email) async {
     if (email != null) {
+      Box box = Hive.box('user');
+      final cachedUserName = box.get('userName');
+      final cachedUserRole = box.get('userRole');
       // Check if user data is already in the cache
-      if (userDataCache.containsKey(email)) {
-        final userDetails = userDataCache[email]!;
-        userRole = userDetails['role'] as String;
-        userName = userDetails['fullName'] as String;
+      if (cachedUserName != "" && cachedUserRole != "") {
+        userRole = cachedUserRole;
+        userName = cachedUserName;
         userName = userName.split(" ")[0];
       } else {
         // If not in the cache, fetch from Firebase
@@ -45,11 +47,9 @@ class AuthenticationRepository extends GetxController {
         userName = userDetails.fullName.toString();
         userName = userName.split(" ")[0];
 
-        // Store in the cache for future use
-        userDataCache[email] = {
-          'role': userRole,
-          'fullName': userName,
-        };
+        Box box = Hive.box('user');
+        box.put('userName', userName);
+        box.put('userRole', userRole);
       }
     } else {
       Get.snackbar("Error", "Email is null, please provide email");

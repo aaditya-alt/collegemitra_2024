@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/models/all_colleges_model.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -66,17 +68,22 @@ class Hostel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-        side: const BorderSide(
-          style: BorderStyle.solid,
-          width: 3,
-          color: Colors.deepOrange,
-        ),
+    bool isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: isDark
+            ? const Color.fromARGB(255, 10, 10, 10)
+            : const Color.fromARGB(255, 245, 245, 245),
+        boxShadow: const [
+          BoxShadow(
+            blurRadius: 4,
+            color: Color(0x3F14181B),
+            offset: Offset(0, 3),
+          )
+        ],
+        borderRadius: BorderRadius.circular(8),
       ),
-      elevation: 4,
-      color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: Column(
@@ -87,11 +94,11 @@ class Hostel extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.deepOrange,
+                color: tPrimaryColor,
               ),
             ),
             const Divider(
-              color: Colors.deepOrange,
+              color: tPrimaryColor,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -149,14 +156,15 @@ class ImageSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 10),
       child: Stack(
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.network(
-              collegeImage,
+            child: CachedNetworkImage(
+              imageUrl: collegeImage,
               height: 200, // Adjust the height as needed
               width: double.infinity,
               fit: BoxFit.cover,
@@ -168,7 +176,7 @@ class ImageSection extends StatelessWidget {
             right: 0,
             child: Container(
               height: 170,
-              alignment: Alignment.bottomCenter,
+              alignment: Alignment.bottomLeft,
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(10),
@@ -185,7 +193,7 @@ class ImageSection extends StatelessWidget {
                 ),
               ),
               padding: const EdgeInsets.symmetric(vertical: 10)
-                  .copyWith(left: 8, right: 15),
+                  .copyWith(left: 8, right: size.width * 0.25),
               child: Text(
                 collegeName,
                 style: const TextStyle(
@@ -215,17 +223,22 @@ class Connectivity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-        side: const BorderSide(
-          style: BorderStyle.solid,
-          width: 3,
-          color: Colors.deepOrange,
-        ),
+    bool isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: isDark
+            ? const Color.fromARGB(255, 10, 10, 10)
+            : const Color.fromARGB(255, 245, 245, 245),
+        boxShadow: const [
+          BoxShadow(
+            blurRadius: 4,
+            color: Color(0x3F14181B),
+            offset: Offset(0, 3),
+          )
+        ],
+        borderRadius: BorderRadius.circular(8),
       ),
-      elevation: 4,
-      color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: Column(
@@ -236,11 +249,11 @@ class Connectivity extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.deepOrange,
+                color: tPrimaryColor,
               ),
             ),
             const Divider(
-              color: Colors.deepOrange,
+              color: tPrimaryColor,
             ),
             const SizedBox(width: 5),
             RichText(
@@ -264,9 +277,9 @@ class Connectivity extends StatelessWidget {
                   ),
                   TextSpan(
                     text: nearbyAirport,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
-                      color: Colors.black,
+                      color: isDark ? Colors.white : Colors.black,
                     ),
                   ),
                 ],
@@ -294,9 +307,9 @@ class Connectivity extends StatelessWidget {
                   ),
                   TextSpan(
                     text: nearbyRailway,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
-                      color: Colors.black,
+                      color: isDark ? Colors.white : Colors.black,
                     ),
                   ),
                 ],
@@ -324,9 +337,9 @@ class Connectivity extends StatelessWidget {
                   ),
                   TextSpan(
                     text: nearbyBus,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
-                      color: Colors.black,
+                      color: isDark ? Colors.white : Colors.black,
                     ),
                   ),
                 ],
@@ -361,17 +374,22 @@ class ContactDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-        side: const BorderSide(
-          style: BorderStyle.solid,
-          width: 3,
-          color: Colors.deepOrange,
-        ),
+    bool isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: isDark
+            ? const Color.fromARGB(255, 10, 10, 10)
+            : const Color.fromARGB(255, 245, 245, 245),
+        boxShadow: const [
+          BoxShadow(
+            blurRadius: 4,
+            color: Color(0x3F14181B),
+            offset: Offset(0, 3),
+          )
+        ],
+        borderRadius: BorderRadius.circular(8),
       ),
-      elevation: 4,
-      color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: Column(
@@ -382,11 +400,11 @@ class ContactDetails extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.deepOrange,
+                color: tPrimaryColor,
               ),
             ),
             const Divider(
-              color: Colors.deepOrange,
+              color: tPrimaryColor,
             ),
             const SizedBox(width: 5),
             buildLink("Website", Icons.browser_updated, website),
@@ -446,17 +464,22 @@ class Placements extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-        side: const BorderSide(
-          style: BorderStyle.solid,
-          width: 3,
-          color: Colors.deepOrange,
-        ),
+    bool isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: isDark
+            ? const Color.fromARGB(255, 10, 10, 10)
+            : const Color.fromARGB(255, 245, 245, 245),
+        boxShadow: const [
+          BoxShadow(
+            blurRadius: 4,
+            color: Color(0x3F14181B),
+            offset: Offset(0, 3),
+          )
+        ],
+        borderRadius: BorderRadius.circular(8),
       ),
-      elevation: 4,
-      color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: Column(
@@ -467,11 +490,11 @@ class Placements extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.deepOrange,
+                color: tPrimaryColor,
               ),
             ),
             const Divider(
-              color: Colors.deepOrange,
+              color: tPrimaryColor,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -532,17 +555,22 @@ class Introduction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-        side: const BorderSide(
-          style: BorderStyle.solid,
-          width: 3,
-          color: Colors.deepOrange,
-        ),
+    bool isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: isDark
+            ? const Color.fromARGB(255, 10, 10, 10)
+            : const Color.fromARGB(255, 245, 245, 245),
+        boxShadow: const [
+          BoxShadow(
+            blurRadius: 4,
+            color: Color(0x3F14181B),
+            offset: Offset(0, 3),
+          )
+        ],
+        borderRadius: BorderRadius.circular(8),
       ),
-      elevation: 4,
-      color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: Column(
@@ -553,18 +581,18 @@ class Introduction extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.deepOrange,
+                color: tPrimaryColor,
               ),
             ),
             const Divider(
-              color: Colors.deepOrange,
+              color: tPrimaryColor,
             ),
             RichText(
               textAlign: TextAlign.justify,
               text: TextSpan(
                 text: description,
-                style: const TextStyle(
-                  color: Colors.black,
+                style: TextStyle(
+                  color: isDark ? Colors.white : Colors.black,
                   fontSize: 14,
                 ),
               ),
@@ -583,7 +611,9 @@ class Introduction extends StatelessWidget {
                   ),
                   TextSpan(
                     text: foundedIn,
-                    style: const TextStyle(color: Colors.black, fontSize: 14),
+                    style: TextStyle(
+                        color: isDark ? Colors.white : Colors.black,
+                        fontSize: 14),
                   ),
                 ],
               ),
@@ -603,8 +633,8 @@ class Introduction extends StatelessWidget {
                   ),
                   TextSpan(
                     text: ranking,
-                    style: const TextStyle(
-                      color: Colors.black,
+                    style: TextStyle(
+                      color: isDark ? Colors.white : Colors.black,
                       fontSize: 14,
                     ),
                   ),
@@ -625,7 +655,9 @@ class Introduction extends StatelessWidget {
                   ),
                   TextSpan(
                     text: address,
-                    style: const TextStyle(color: Colors.black, fontSize: 14),
+                    style: TextStyle(
+                        color: isDark ? Colors.white : Colors.black,
+                        fontSize: 14),
                   ),
                 ],
               ),
@@ -675,17 +707,23 @@ class Facilities extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-        side: const BorderSide(
-          style: BorderStyle.solid,
-          width: 3,
-          color: Colors.deepOrange,
-        ),
+    bool isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
+
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: isDark
+            ? const Color.fromARGB(255, 10, 10, 10)
+            : const Color.fromARGB(255, 245, 245, 245),
+        boxShadow: const [
+          BoxShadow(
+            blurRadius: 4,
+            color: Color(0x3F14181B),
+            offset: Offset(0, 3),
+          )
+        ],
+        borderRadius: BorderRadius.circular(8),
       ),
-      elevation: 4,
-      color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: Column(
@@ -696,11 +734,11 @@ class Facilities extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.deepOrange,
+                color: tPrimaryColor,
               ),
             ),
             const Divider(
-              color: Colors.deepOrange,
+              color: tPrimaryColor,
             ),
             createFacilityRow([
               {

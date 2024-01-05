@@ -1,11 +1,10 @@
 import 'dart:developer';
-
-import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/college_predictor/college_predictor.dart';
 import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/rank_predictor/rank_predictor.dart';
 import 'package:collegemitra/src/features/authentication/screens/general_utils/rounded_container.dart';
 import 'package:collegemitra/src/features/authentication/screens/general_utils/shadow.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
@@ -91,19 +90,45 @@ class _BestServicesState extends State<BestServices> {
                                     horizontal: 12, vertical: 12),
                                 child: SizedBox(
                                   width: size.width - 80,
-                                  child: CustomDropdown<String>(
-                                    closedFillColor: Colors.transparent,
-                                    closedBorder: Border.all(
-                                      color: const Color.fromARGB(
-                                          255, 138, 136, 136),
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton2<String>(
+                                      isExpanded: true,
+                                      hint: Text(
+                                        'Select Item',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Theme.of(context).hintColor,
+                                        ),
+                                      ),
+                                      items: counsellingList
+                                          .map((String item) =>
+                                              DropdownMenuItem<String>(
+                                                value: item,
+                                                child: Text(
+                                                  item,
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ))
+                                          .toList(),
+                                      value: selectedCounselling,
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          selectedCounselling = value!;
+                                        });
+                                      },
+                                      buttonStyleData: const ButtonStyleData(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 16),
+                                        height: 40,
+                                        width: 140,
+                                      ),
+                                      menuItemStyleData:
+                                          const MenuItemStyleData(
+                                        height: 40,
+                                      ),
                                     ),
-                                    hintText: "Select the Counselling",
-                                    items: counsellingList,
-                                    initialItem: counsellingList[0],
-                                    onChanged: (value) {
-                                      selectedCounselling = value;
-                                      log('changing value to: $value');
-                                    },
                                   ),
                                 ),
                               ),

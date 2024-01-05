@@ -1,12 +1,11 @@
 import 'dart:developer';
 import 'dart:io';
 import 'dart:math';
-
-import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:collegemitra/src/admin/college_details_cms.dart';
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/screens/general_utils/carousel_slider.dart';
 import 'package:collegemitra/src/repository/authentication_repository/authentication_repository.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -91,9 +90,22 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  final TextEditingController counsellingControllerBlogs =
+      TextEditingController();
+  final TextEditingController counsellingControllerTestimonials =
+      TextEditingController();
+  final TextEditingController sectionController = TextEditingController();
   String selectedSection = "Select the section";
   String selectedCounsellingForBlogs = "Select the Counselling";
   String selectedCounsellingForTestimonials = "Select the Counselling";
+
+  @override
+  void dispose() {
+    counsellingControllerBlogs.dispose();
+    counsellingControllerTestimonials.dispose();
+    sectionController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +149,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             },
             "Select Section",
             "Please Select the section that you want to explore",
-            context,
+            sectionController,
           ),
           showDataTableForHeaderAndFooter(selectedSection),
           const SizedBox(height: 15),
@@ -169,7 +181,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             },
             "Select Counselling",
             "Please Select the counselling for blogs Card that you want to explore",
-            context,
+            counsellingControllerBlogs,
           ),
           showDataTableForBlogsCard(selectedCounsellingForBlogs),
           const SizedBox(height: 15),
@@ -202,7 +214,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             },
             "Select Counselling",
             "Please Select the counselling for Testimonials that you want to explore",
-            context,
+            counsellingControllerTestimonials,
           ),
           showDataTableForTestimonials(selectedCounsellingForTestimonials),
 
@@ -215,6 +227,114 @@ class _DashboardScreenState extends State<DashboardScreen> {
           setState(() {});
         },
         child: const Icon(Icons.refresh),
+      ),
+    );
+  }
+
+  Widget detailsDropdown(
+      String hint,
+      List<String> list,
+      double mobileWidth,
+      Function(String) onChanged,
+      String title,
+      String description,
+      TextEditingController textEditingController) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          SizedBox(
+            width: mobileWidth - 80,
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton2<String>(
+                isExpanded: true,
+                hint: Text(
+                  'Select Item',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context).hintColor,
+                  ),
+                ),
+                items: list
+                    .map((item) => DropdownMenuItem(
+                          value: item,
+                          child: Text(
+                            item,
+                            style: const TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ))
+                    .toList(),
+                value: list[0],
+                onChanged: (value) {
+                  onChanged(value!);
+                },
+                buttonStyleData: const ButtonStyleData(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  height: 40,
+                  width: 200,
+                ),
+                dropdownStyleData: const DropdownStyleData(
+                  maxHeight: 200,
+                ),
+                menuItemStyleData: const MenuItemStyleData(
+                  height: 40,
+                ),
+                dropdownSearchData: DropdownSearchData(
+                  searchController: textEditingController,
+                  searchInnerWidgetHeight: 50,
+                  searchInnerWidget: Container(
+                    height: 50,
+                    padding: const EdgeInsets.only(
+                      top: 8,
+                      bottom: 4,
+                      right: 8,
+                      left: 8,
+                    ),
+                    child: TextFormField(
+                      expands: true,
+                      maxLines: null,
+                      controller: textEditingController,
+                      decoration: InputDecoration(
+                        isDense: true,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 8,
+                        ),
+                        hintText: 'Search for an item...',
+                        hintStyle: const TextStyle(fontSize: 12),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                  ),
+                  searchMatchFn: (item, searchValue) {
+                    return item.value.toString().contains(searchValue);
+                  },
+                ),
+                //This to clear the search value when you close the menu
+                onMenuStateChange: (isOpen) {
+                  if (!isOpen) {
+                    textEditingController.clear();
+                  }
+                },
+              ),
+            ),
+          ),
+          GestureDetector(
+            child: const Icon(
+              Icons.info_rounded,
+              size: 30,
+              color: tAccentColor,
+            ),
+            onTap: () {
+              showInformation(context, title, description);
+            },
+          ),
+        ],
       ),
     );
   }
@@ -1217,8 +1337,18 @@ class CounsellingInformation extends StatefulWidget {
 }
 
 class _CounsellingInformationState extends State<CounsellingInformation> {
+  final TextEditingController counsellingController = TextEditingController();
+  final TextEditingController counsellingControllerForVideos =
+      TextEditingController();
   String selectedCounselling = "Select the counselling";
   String selectedCounsellingForVideos = "Select the counselling";
+
+  @override
+  void dispose() {
+    counsellingController.dispose();
+    counsellingControllerForVideos.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1258,7 +1388,7 @@ class _CounsellingInformationState extends State<CounsellingInformation> {
             },
             "Select Counselling",
             "Please Select the counselling that you want to explore",
-            context,
+            counsellingController,
           ),
           showDataTable(selectedCounselling),
           const Divider(color: Colors.blue, thickness: 4, height: 15),
@@ -1283,7 +1413,7 @@ class _CounsellingInformationState extends State<CounsellingInformation> {
             },
             "Select Counselling",
             "Please Select the counselling that you want to explore",
-            context,
+            counsellingControllerForVideos,
           ),
           showDataTableForCounsellingVideos(selectedCounsellingForVideos),
           const SizedBox(height: 100),
@@ -1295,6 +1425,114 @@ class _CounsellingInformationState extends State<CounsellingInformation> {
           setState(() {});
         },
         child: const Icon(Icons.refresh),
+      ),
+    );
+  }
+
+  Widget detailsDropdown(
+      String hint,
+      List<String> list,
+      double mobileWidth,
+      Function(String) onChanged,
+      String title,
+      String description,
+      TextEditingController textEditingController) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          SizedBox(
+            width: mobileWidth - 80,
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton2<String>(
+                isExpanded: true,
+                hint: Text(
+                  'Select Item',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context).hintColor,
+                  ),
+                ),
+                items: list
+                    .map((item) => DropdownMenuItem(
+                          value: item,
+                          child: Text(
+                            item,
+                            style: const TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ))
+                    .toList(),
+                value: list[0],
+                onChanged: (value) {
+                  onChanged(value!);
+                },
+                buttonStyleData: const ButtonStyleData(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  height: 40,
+                  width: 200,
+                ),
+                dropdownStyleData: const DropdownStyleData(
+                  maxHeight: 200,
+                ),
+                menuItemStyleData: const MenuItemStyleData(
+                  height: 40,
+                ),
+                dropdownSearchData: DropdownSearchData(
+                  searchController: textEditingController,
+                  searchInnerWidgetHeight: 50,
+                  searchInnerWidget: Container(
+                    height: 50,
+                    padding: const EdgeInsets.only(
+                      top: 8,
+                      bottom: 4,
+                      right: 8,
+                      left: 8,
+                    ),
+                    child: TextFormField(
+                      expands: true,
+                      maxLines: null,
+                      controller: textEditingController,
+                      decoration: InputDecoration(
+                        isDense: true,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 8,
+                        ),
+                        hintText: 'Search for an item...',
+                        hintStyle: const TextStyle(fontSize: 12),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                  ),
+                  searchMatchFn: (item, searchValue) {
+                    return item.value.toString().contains(searchValue);
+                  },
+                ),
+                //This to clear the search value when you close the menu
+                onMenuStateChange: (isOpen) {
+                  if (!isOpen) {
+                    textEditingController.clear();
+                  }
+                },
+              ),
+            ),
+          ),
+          GestureDetector(
+            child: const Icon(
+              Icons.info_rounded,
+              size: 30,
+              color: tAccentColor,
+            ),
+            onTap: () {
+              showInformation(context, title, description);
+            },
+          ),
+        ],
       ),
     );
   }
@@ -1667,56 +1905,6 @@ Widget showDataTable(String counselling) {
       )
     ]);
   });
-}
-
-Widget detailsDropdown(
-    String hint,
-    List<String> list,
-    double mobileWidth,
-    Function(String) onChanged,
-    String title,
-    String description,
-    BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 2),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        SizedBox(
-          width: mobileWidth - 85,
-          child: CustomDropdown<String>(
-            closedFillColor: Colors.transparent,
-            closedBorder:
-                Border.all(color: const Color.fromARGB(255, 138, 136, 136)),
-            hintText: hint,
-            items: list,
-            initialItem: list[0],
-            onChanged: (value) {
-              onChanged(value);
-            },
-          ),
-        ),
-        GestureDetector(
-          child: const Icon(
-            Icons.info_rounded,
-            size: 30,
-            color: tAccentColor,
-          ),
-          onTap: () {
-            // showDialog(
-            //   context: context,
-            //   builder: (BuildContext context) {
-            //     return const AlertDialog(
-            //       title: Text("What"),
-            //     );
-            //   },
-            // );
-            showInformation(context, title, description);
-          },
-        ),
-      ],
-    ),
-  );
 }
 
 Future<void> editContentModalBottomSheet(int id, String title,

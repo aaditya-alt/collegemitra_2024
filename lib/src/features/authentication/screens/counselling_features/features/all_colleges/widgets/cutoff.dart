@@ -1,3 +1,4 @@
+import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/models/all_colleges_model.dart';
 import 'package:collegemitra/src/repository/authentication_repository/excel_college_predictor.dart';
 import 'package:flutter/material.dart';
@@ -5,16 +6,29 @@ import 'package:get/get.dart';
 
 class CutoffPage extends StatefulWidget {
   final String collegeName;
+  final String collegeType;
 
-  const CutoffPage({super.key, required this.collegeName});
+  const CutoffPage(
+      {super.key, required this.collegeName, required this.collegeType});
 
   @override
   State<CutoffPage> createState() => _CutoffPageState();
 }
 
 class _CutoffPageState extends State<CutoffPage> {
+  List<String> rounds = ["JOSAA Round 6", "CSAB Round 2"];
+
+  @override
+  void initState() {
+    if (widget.collegeType == "IIT") {
+      rounds.remove('CSAB Round 2');
+    }
+    super.initState();
+  }
+
   String selectedCategory = "EWS";
   String selectedRound = "JOSAA Round 6";
+
   bool isLoading = false;
 
   List<String> categories = [
@@ -30,7 +44,6 @@ class _CutoffPageState extends State<CutoffPage> {
     'ST (PwD)'
   ];
 
-  List<String> rounds = ["JOSAA Round 6", "CSAB Round 2"];
   List<Cutoff> cutoffData = [];
 
   @override
@@ -59,8 +72,7 @@ class _CutoffPageState extends State<CutoffPage> {
                 borderRadius: BorderRadius.circular(15),
                 child: ElevatedButton(
                   style: const ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(
-                        Color.fromARGB(255, 255, 121, 3)),
+                    backgroundColor: MaterialStatePropertyAll(tPrimaryColor),
                   ),
                   onPressed: () async {
                     setState(() {
@@ -99,7 +111,7 @@ class _CutoffPageState extends State<CutoffPage> {
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.deepOrange, width: 2),
+        border: Border.all(color: tPrimaryColor, width: 2),
       ),
       child: DropdownButton<String>(
         isExpanded: true,
@@ -155,15 +167,25 @@ class CutoffTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     return Container(
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: const Color.fromARGB(186, 255, 182, 115),
+        color: isDark
+            ? const Color.fromARGB(255, 10, 10, 10)
+            : const Color.fromARGB(255, 245, 245, 245),
+        boxShadow: const [
+          BoxShadow(
+            blurRadius: 4,
+            color: Color(0x3F14181B),
+            offset: Offset(0, 3),
+          )
+        ],
+        borderRadius: BorderRadius.circular(8),
       ),
-      padding: const EdgeInsets.all(7),
       child: Table(
         border: TableBorder.all(
-          color: Colors.white,
+          color: Colors.grey,
           width: 2,
           borderRadius: BorderRadius.circular(10),
         ),

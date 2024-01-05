@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/models/all_colleges_model.dart';
 import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/all_colleges/show_college_details.dart';
@@ -18,6 +19,8 @@ class ShowAllColleges extends StatefulWidget {
 class _ShowAllCollegesState extends State<ShowAllColleges> {
   bool isLoading = false;
   List<AllColleges> collegeDetails = [];
+  List<AllColleges> filteredColleges = [];
+
   String counselling = "JOSAA";
 
   @override
@@ -32,10 +35,22 @@ class _ShowAllCollegesState extends State<ShowAllColleges> {
     collegeDetails = await getAllColleges(widget.counselling);
     // Set isLoading to false after fetching data
     setState(() {
+      filteredColleges = List.from(collegeDetails);
       isLoading = false;
     });
 
     // Trigger a rebuild
+  }
+
+  void filterColleges(String query) {
+    setState(() {
+      isLoading = true;
+      filteredColleges = collegeDetails
+          .where((college) =>
+              college.collegeName.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+      isLoading = false;
+    });
   }
 
   @override
@@ -67,6 +82,7 @@ class _ShowAllCollegesState extends State<ShowAllColleges> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: TextField(
+                      onChanged: filterColleges,
                       decoration: InputDecoration(
                         focusedBorder: InputBorder.none,
                         enabledBorder: InputBorder.none,
@@ -86,7 +102,7 @@ class _ShowAllCollegesState extends State<ShowAllColleges> {
                   ),
                 ),
               ),
-              AllCollegesList(collegeList: collegeDetails),
+              AllCollegesList(collegeList: filteredColleges),
             ],
           ),
           Visibility(
@@ -142,6 +158,8 @@ class AllCollegesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
+    final size = MediaQuery.of(context).size;
     return Expanded(
       child: ListView.builder(
           scrollDirection: Axis.vertical,
@@ -155,8 +173,12 @@ class AllCollegesList extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
                 child: Card(
                   borderOnForeground: true,
-                  color: Colors.white,
-                  surfaceTintColor: Colors.white,
+                  color: isDark
+                      ? const Color.fromARGB(255, 10, 10, 10)
+                      : Colors.white,
+                  surfaceTintColor: isDark
+                      ? const Color.fromARGB(255, 10, 10, 10)
+                      : Colors.white,
                   elevation: 4,
                   child: Column(
                     children: [
@@ -164,8 +186,8 @@ class AllCollegesList extends StatelessWidget {
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              collegeList![index].collegeImage,
+                            child: CachedNetworkImage(
+                              imageUrl: collegeList![index].collegeImage,
                               height: 200, // Adjust the height as needed
                               width: double.infinity,
                               fit: BoxFit.cover,
@@ -177,7 +199,7 @@ class AllCollegesList extends StatelessWidget {
                             right: 0,
                             child: Container(
                               height: MediaQuery.of(context).size.height / 5,
-                              alignment: Alignment.bottomCenter,
+                              alignment: Alignment.bottomLeft,
                               decoration: BoxDecoration(
                                 borderRadius: const BorderRadius.only(
                                   bottomLeft: Radius.circular(10),
@@ -194,7 +216,7 @@ class AllCollegesList extends StatelessWidget {
                                 ),
                               ),
                               padding: const EdgeInsets.symmetric(vertical: 10)
-                                  .copyWith(left: 8, right: 15),
+                                  .copyWith(left: 9, right: size.width * 0.25),
                               child: Text(
                                 collegeList![index].collegeName,
                                 style: const TextStyle(

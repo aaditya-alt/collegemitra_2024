@@ -1,7 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/screens/video_player/information_youtube_video.dart';
 import 'package:flutter/material.dart';
-import 'package:collegemitra/src/utils/theme/widget_themes/text_theme.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -69,64 +69,66 @@ class _InformativeVideosState extends State<InformativeVideos> {
     }
 
     return SizedBox(
-      height: 228,
-      width: 200,
+      height: 230,
       child: ListView.builder(
           controller: pageController,
           scrollDirection: Axis.horizontal,
           itemCount: videoCards.length,
-          itemBuilder: (BuildContext context, int i) => Card(
-                elevation: 4,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        SizedBox(
-                          height: 160,
-                          width: 300,
-                          child: ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(15),
-                                topRight: Radius.circular(15)),
-                            child: Image.network(
-                              'https://img.youtube.com/vi/${youtubeVideoIds[i]}/hqdefault.jpg',
-                              fit: BoxFit.cover,
+          itemBuilder: (BuildContext context, int i) => SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: Card(
+                  surfaceTintColor: isDark
+                      ? const Color.fromARGB(255, 42, 42, 42)
+                      : const Color.fromARGB(255, 245, 245, 245),
+                  color: isDark
+                      ? const Color.fromARGB(255, 42, 42, 42)
+                      : const Color.fromARGB(255, 245, 245, 245),
+                  elevation: 3,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(15),
+                                  topRight: Radius.circular(15)),
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                    'https://img.youtube.com/vi/${youtubeVideoIds[i]}/hqdefault.jpg',
+                                fit: BoxFit.cover,
+                                height: 150,
+                              ),
                             ),
                           ),
-                        ),
-                        GestureDetector(
-                          onTap: () => Get.to(YoutubeVideoPlayer(
-                            videoURL: videoCards[i].videoURL,
-                          )),
-                          child: Icon(
-                            Icons.play_circle_fill_rounded,
-                            color: isDark ? Colors.white : Colors.black,
-                            size: 30,
+                          GestureDetector(
+                            onTap: () => Get.to(YoutubeVideoPlayer(
+                              videoURL: videoCards[i].videoURL,
+                            )),
+                            child: const Icon(
+                              Icons.play_circle_fill_rounded,
+                              color: tPrimaryColor,
+                              size: 30,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 8.0, bottom: 8.0, right: 0),
-                      child: Row(children: [
-                        Text(
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
                           videoCards[i].title,
                           style: Theme.of(context).textTheme.titleMedium,
-                          softWrap: true,
                           selectionColor: isDark ? Colors.white : Colors.black,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
                         ),
-                        // const SizedBox(width: 30),
-                        // Text(
-                        //   videoCards[i].time_in_ago,
-                        //   style: Theme.of(context).textTheme.bodySmall,
-                        // ),
-                      ]),
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
               )),
     );
@@ -145,7 +147,7 @@ class VideoCard {
 Future<List<VideoCard>> getDataFromDatabase(String counselling) async {
   final supabase = Supabase.instance.client;
   final response = await supabase
-      .from("testimonials")
+      .from("counselling_videos")
       .select()
       .eq("counselling", counselling);
 
