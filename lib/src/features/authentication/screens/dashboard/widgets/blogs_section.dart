@@ -29,8 +29,13 @@ class _PopularBlogsState extends State<PopularBlogs> {
       setState(() {});
     } catch (error) {
       // Handle the error (e.g., log it or show a user-friendly message)
-      print("Error fetching data: $error");
+      debugPrint("Error fetching data: $error");
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override

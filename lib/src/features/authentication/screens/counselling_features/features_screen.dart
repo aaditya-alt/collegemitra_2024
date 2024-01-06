@@ -1,16 +1,10 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:collegemitra/src/constants/colors.dart';
-import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/college_predictor/college_predictor.dart';
 import 'package:collegemitra/src/features/authentication/screens/counselling_features/widgets/informative_videos.dart';
-import 'package:collegemitra/src/features/authentication/screens/dashboard/dashboard_screen.dart';
 import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/blogs_section.dart';
 import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/bottom_carousel.dart';
 import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/counselling_buttons.dart';
-import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/counselling_list_items.dart';
 import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/premium_promo.dart';
 import 'package:collegemitra/src/features/authentication/screens/general_utils/carousel_slider.dart';
-import 'package:collegemitra/src/features/authentication/screens/general_utils/drawer_header.dart';
-import 'package:collegemitra/src/features/authentication/screens/general_utils/drawer_list.dart';
 import 'package:collegemitra/src/features/authentication/screens/meeting/meeting_home_screen.dart';
 import 'package:collegemitra/src/features/authentication/screens/premium/premium_purchase.dart';
 import 'package:collegemitra/src/features/authentication/screens/profile/profile_screen.dart';

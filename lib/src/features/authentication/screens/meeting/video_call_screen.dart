@@ -1,13 +1,7 @@
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/screens/meeting/widgets/meeting_options.dart';
-import 'package:collegemitra/src/repository/authentication_repository/authentication_repository.dart';
 import 'package:collegemitra/src/repository/authentication_repository/meeting_repository.dart';
-import 'package:collegemitra/src/repository/authentication_repository/user_repository.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:jitsi_meet_flutter_sdk/jitsi_meet_flutter_sdk.dart';
 
 class VideoCallScreen extends StatefulWidget {
   const VideoCallScreen({super.key});

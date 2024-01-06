@@ -1,6 +1,4 @@
-import 'package:collegemitra/src/constants/image_strings.dart';
 import 'package:collegemitra/src/constants/sizes.dart';
-import 'package:collegemitra/src/constants/text_strings.dart';
 import 'package:collegemitra/src/features/authentication/screens/login/login_footer_widget.dart';
 import 'package:collegemitra/src/features/authentication/screens/login/login_form_widget.dart';
 import 'package:collegemitra/src/features/authentication/screens/login/login_header_widget.dart';

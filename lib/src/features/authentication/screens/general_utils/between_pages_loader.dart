@@ -28,9 +28,9 @@ void showWait(BuildContext context) {
                   children: <Widget>[
                     SizedBox(
                         width: MediaQuery.of(context).size.width,
-                        child: CircularProgressIndicator()),
+                        child: const CircularProgressIndicator()),
                     Container(
-                      margin: EdgeInsets.symmetric(vertical: 20),
+                      margin: const EdgeInsets.symmetric(vertical: 20),
                       child: const Text(
                         "LOADING...",
                         style: TextStyle(color: Colors.white),

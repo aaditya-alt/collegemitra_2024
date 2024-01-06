@@ -1,5 +1,4 @@
 import 'package:collegemitra/src/constants/colors.dart';
-import 'package:easy_loader/easy_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:collegemitra/src/utils/theme/widget_themes/text_theme.dart';
 
 class OTPScreen extends StatelessWidget {
   const OTPScreen({super.key});

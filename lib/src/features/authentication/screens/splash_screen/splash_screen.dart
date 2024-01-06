@@ -6,12 +6,10 @@ import 'package:collegemitra/src/constants/image_strings.dart';
 import 'package:collegemitra/src/constants/sizes.dart';
 import 'package:collegemitra/src/constants/text_strings.dart';
 import 'package:flutter/material.dart';
-import 'package:collegemitra/src/utils/theme/widget_themes/text_theme.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class SplashScreen extends StatelessWidget {
-  SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

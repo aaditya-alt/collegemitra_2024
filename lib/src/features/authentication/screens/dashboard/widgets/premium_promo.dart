@@ -96,7 +96,7 @@ class PromoCard extends StatelessWidget {
                         ),
                       ),
                       child: Text(
-                        "\₹399",
+                        "₹399",
                         style: Theme.of(context).textTheme.labelLarge!.copyWith(
                             fontWeight: FontWeight.bold, color: Colors.white),
                       ),

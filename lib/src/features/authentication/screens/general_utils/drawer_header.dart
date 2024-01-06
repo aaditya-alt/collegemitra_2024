@@ -2,6 +2,8 @@ import 'package:collegemitra/src/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class MyHeaderDrawer extends StatefulWidget {
+  const MyHeaderDrawer({super.key});
+
   @override
   _MyHeaderDrawerState createState() => _MyHeaderDrawerState();
 }
@@ -18,7 +20,7 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            margin: EdgeInsets.only(bottom: 10),
+            margin: const EdgeInsets.only(bottom: 10),
             height: 70,
             decoration: const BoxDecoration(
               shape: BoxShape.circle,

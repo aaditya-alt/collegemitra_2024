@@ -4,7 +4,6 @@ import 'package:collegemitra/src/constants/text_strings.dart';
 import 'package:collegemitra/src/features/authentication/models/model_on_boarding.dart';
 import 'package:collegemitra/src/features/authentication/screens/on_boarding/on_boarding_page_widget.dart';
 import 'package:collegemitra/src/features/authentication/screens/welcome/welcome_screen.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:liquid_swipe/PageHelpers/LiquidController.dart';
 

@@ -1,13 +1,10 @@
-import 'dart:developer';
 import 'dart:io';
-import 'dart:math';
 import 'package:collegemitra/src/admin/college_details_cms.dart';
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/screens/general_utils/carousel_slider.dart';
 import 'package:collegemitra/src/repository/authentication_repository/authentication_repository.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
@@ -533,7 +530,7 @@ Future<void> editContentModalBottomSheetForTestimonials(
                   children: [
                     Text(
                       'Edit Testimonial Card',
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 16),
@@ -671,7 +668,7 @@ Future<void> addContentModalBottomSheetForTestimonials(
                   children: [
                     Text(
                       'Add Testimonial Card',
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 16),
@@ -919,7 +916,7 @@ Future<void> editContentModalBottomSheetForBlogsCard(int id, String title,
                   children: [
                     Text(
                       'Edit Blogs Card',
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 16),
@@ -1045,7 +1042,7 @@ Future<void> addContentModalBottomSheetForBlogsCard(
                   children: [
                     Text(
                       'Add Blogs Card',
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 16),
@@ -1230,7 +1227,7 @@ Future<void> editContentModalBottomSheetHeaderAndFooter(
                   children: [
                     Text(
                       'Edit Video Link',
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 16),
@@ -1291,7 +1288,7 @@ Future addContentModalBottomSheetHeaderAndFooter(
                 children: [
                   Text(
                     'Add Video Link',
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.titleLarge,
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 12),
@@ -1675,7 +1672,7 @@ Future<void> editContentModalBottomSheetForVideos(
                   children: [
                     Text(
                       'Edit Counselling Videos',
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 16),
@@ -1743,7 +1740,7 @@ Future addVideosModalBottomSheet(String counselling, BuildContext context) {
                 children: [
                   Text(
                     'Add Content',
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.titleLarge,
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 12),
@@ -1932,7 +1929,7 @@ Future<void> editContentModalBottomSheet(int id, String title,
                   children: [
                     Text(
                       'Edit Content',
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 16),
@@ -2056,7 +2053,7 @@ Future addContentModalBottomSheet(String counselling, BuildContext context) {
                 children: [
                   Text(
                     'Add Content',
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.titleLarge,
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 12),

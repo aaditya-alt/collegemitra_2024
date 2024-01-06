@@ -1,10 +1,7 @@
 import 'package:collegemitra/src/common_widgets/fade_in_animation/fade_in_animation_controller.dart';
 import 'package:collegemitra/src/common_widgets/fade_in_animation/fade_in_animation_model.dart';
-import 'package:collegemitra/src/constants/image_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 class TFadeInAnimation extends StatelessWidget {
   TFadeInAnimation({

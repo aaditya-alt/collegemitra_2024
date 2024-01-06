@@ -1,11 +1,4 @@
 import 'package:collegemitra/firebase_options.dart';
-import 'package:collegemitra/src/features/authentication/controllers/otp_controller.dart';
-import 'package:collegemitra/src/features/authentication/models/blog_section_model.dart';
-import 'package:collegemitra/src/features/authentication/models/testimonial_model.dart';
-import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/blogs_section.dart';
-import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/testimonials.dart';
-import 'package:collegemitra/src/features/authentication/screens/on_boarding/on_boarding_screen.dart';
-import 'package:collegemitra/src/features/authentication/screens/splash_screen/splash_screen.dart';
 
 import 'package:collegemitra/src/repository/authentication_repository/authentication_repository.dart';
 import 'package:collegemitra/src/utils/theme/theme.dart';
@@ -30,6 +23,7 @@ void main() async {
   await Hive.openBox('headerVideoIds');
   await Hive.openBox('footerVideoIds');
   await Hive.openBox('user');
+  await Hive.openBox('colleges');
 
   runApp(const App());
 }

@@ -4,7 +4,6 @@ import 'package:collegemitra/src/constants/sizes.dart';
 import 'package:collegemitra/src/constants/text_strings.dart';
 import 'package:collegemitra/src/features/authentication/screens/forget_password/forget_password_otp/otp_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:collegemitra/src/utils/theme/widget_themes/text_field_theme.dart';
 import 'package:get/get.dart';
 
 class ForgetPasswordPhoneScreen extends StatelessWidget {

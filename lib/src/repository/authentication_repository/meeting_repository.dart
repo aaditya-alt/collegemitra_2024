@@ -1,6 +1,5 @@
 import 'package:collegemitra/src/repository/authentication_repository/authentication_repository.dart';
 import 'package:collegemitra/src/repository/authentication_repository/user_repository.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:jitsi_meet_flutter_sdk/jitsi_meet_flutter_sdk.dart';
 

@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'package:collegemitra/src/admin/admin_dashboard.dart';
 import 'package:collegemitra/src/admin/college_details_controller.dart';
 import 'package:collegemitra/src/admin/widgets/branchwise_placements.dart';
 import 'package:flutter/material.dart';
@@ -392,7 +390,7 @@ class _CollegeDetailsCMSState extends State<CollegeDetailsCMS> {
                                     ElevatedButton(
                                         onPressed: (() =>
                                             Navigator.pop(context)),
-                                        child: Text("Okay"))
+                                        child: const Text("Okay"))
                                   ],
                                 );
                               });

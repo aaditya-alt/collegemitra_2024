@@ -2,12 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/controllers/college_predictor_controller.dart';
 import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/college_predictor/show_colleges.dart';
-import 'package:collegemitra/src/features/authentication/screens/general_utils/carousel_slider.dart';
 import 'package:collegemitra/src/features/authentication/screens/general_utils/dropdown.dart';
-import 'package:collegemitra/src/features/authentication/screens/welcome/animated_button.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -184,7 +180,7 @@ class _CollegePredictorState extends State<CollegePredictor> {
             fontWeight: FontWeight.normal,
           ),
         ),
-        actions: [],
+        actions: const [],
         centerTitle: false,
         elevation: 0,
       ),

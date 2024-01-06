@@ -1,4 +1,3 @@
-import 'package:collegemitra/src/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class TRoundedContainer extends StatelessWidget {

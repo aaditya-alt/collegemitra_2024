@@ -1,5 +1,4 @@
 import 'package:collegemitra/src/constants/colors.dart';
-import 'package:collegemitra/src/features/authentication/controllers/college_predictor_controller.dart';
 import 'package:collegemitra/src/features/authentication/models/user_model.dart';
 import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/college_predictor/show_branches.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,7 @@ class ShowColleges extends StatefulWidget {
   final String counsellingName;
 
   const ShowColleges({
-    Key? key,
+    super.key,
     required this.collegesToShow,
     required this.counsellingName,
     required this.userDetails,
@@ -550,7 +549,8 @@ class CheckboxOptions extends StatefulWidget {
   final List<String> options;
   final List<String> selectedOptions;
 
-  const CheckboxOptions({required this.options, required this.selectedOptions});
+  const CheckboxOptions(
+      {super.key, required this.options, required this.selectedOptions});
 
   @override
   _CheckboxOptionsState createState() => _CheckboxOptionsState();

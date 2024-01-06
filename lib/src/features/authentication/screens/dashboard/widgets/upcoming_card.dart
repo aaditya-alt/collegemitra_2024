@@ -45,7 +45,7 @@ class UpcomingCard extends StatelessWidget {
               ),
               const SizedBox(height: 18),
               Container(
-                padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8.0),
+                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8.0),
                 decoration: BoxDecoration(
                     color: Colors.white10,
                     borderRadius: BorderRadius.circular(10)),

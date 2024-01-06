@@ -199,7 +199,7 @@ class _BranchPredictorState extends State<BranchPredictor> {
             fontWeight: FontWeight.normal,
           ),
         ),
-        actions: [],
+        actions: const [],
         centerTitle: false,
         elevation: 0,
       ),
@@ -637,7 +637,6 @@ class _BranchPredictorState extends State<BranchPredictor> {
               },
             ),
           ),
-          const SizedBox(width: 6),
           GestureDetector(
             child: const Icon(
               Icons.info_rounded,

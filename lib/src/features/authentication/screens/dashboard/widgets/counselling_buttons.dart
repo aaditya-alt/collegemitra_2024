@@ -1,3 +1,4 @@
+import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/compare_colleges/compare_colleges.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:collegemitra/src/constants/colors.dart';
@@ -127,6 +128,10 @@ class _CounsellingButtonState extends State<CounsellingButton> {
               counselling: icon.counselling,
             ));
         break;
+      case 'Comparison':
+        Get.to(() => CompareColleges(
+              counsellingName: icon.counselling,
+            ));
       default:
         Get.to(() => FeatureScreen(appBarTitle: icon.name));
     }

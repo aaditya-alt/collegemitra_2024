@@ -1,19 +1,12 @@
-import 'dart:developer';
 
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/controllers/rank_predictor_controller.dart';
-import 'package:collegemitra/src/features/authentication/screens/general_utils/carousel_slider.dart';
 import 'package:collegemitra/src/features/authentication/screens/general_utils/dropdown.dart';
-import 'package:collegemitra/src/features/authentication/screens/welcome/animated_button.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:easy_loader/easy_loader.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dropdown/flutter_dropdown.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rive/rive.dart';
 
 class RankPredictor extends StatefulWidget {
   var counsellingName;
@@ -100,7 +93,7 @@ class _RankPredictorState extends State<RankPredictor> {
             fontWeight: FontWeight.normal,
           ),
         ),
-        actions: [],
+        actions: const [],
         centerTitle: false,
         elevation: 0,
       ),

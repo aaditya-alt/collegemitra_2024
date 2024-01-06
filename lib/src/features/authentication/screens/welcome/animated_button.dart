@@ -34,7 +34,7 @@ class AnimatedBtn extends StatelessWidget {
                   const SizedBox(width: 8),
                   Text(
                     buttonText,
-                    style: Theme.of(context).textTheme.button,
+                    style: Theme.of(context).textTheme.labelLarge,
                   )
                 ],
               ),

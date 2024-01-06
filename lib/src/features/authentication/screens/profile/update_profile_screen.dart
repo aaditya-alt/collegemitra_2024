@@ -5,8 +5,6 @@ import 'package:collegemitra/src/constants/text_strings.dart';
 import 'package:collegemitra/src/features/authentication/controllers/profile_controller.dart';
 import 'package:collegemitra/src/features/authentication/models/user_model.dart';
 import 'package:collegemitra/src/features/authentication/screens/dashboard/dashboard_screen.dart';
-import 'package:collegemitra/src/features/authentication/screens/general_utils/drawer_header.dart';
-import 'package:collegemitra/src/features/authentication/screens/general_utils/drawer_list.dart';
 import 'package:collegemitra/src/features/authentication/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

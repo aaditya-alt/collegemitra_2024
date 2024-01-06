@@ -6,20 +6,14 @@ import 'package:collegemitra/src/features/authentication/screens/dashboard/widge
 import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/counselling_list_items.dart';
 import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/premium_promo.dart';
 import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/testimonials.dart';
-import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/upcoming_card.dart';
 import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/why_collegemitra.dart';
 import 'package:collegemitra/src/features/authentication/screens/general_utils/carousel_slider.dart';
-import 'package:collegemitra/src/features/authentication/screens/general_utils/drawer_header.dart';
-import 'package:collegemitra/src/features/authentication/screens/general_utils/drawer_list.dart';
 import 'package:collegemitra/src/features/authentication/screens/meeting/meeting_home_screen.dart';
-import 'package:collegemitra/src/features/authentication/screens/premium/chat/chat_users.dart';
 import 'package:collegemitra/src/features/authentication/screens/premium/premium_purchase.dart';
 import 'package:collegemitra/src/features/authentication/screens/profile/profile_screen.dart';
 import 'package:collegemitra/src/repository/authentication_repository/authentication_repository.dart';
-import 'package:collegemitra/src/repository/authentication_repository/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 
 class Dashboard extends StatefulWidget {

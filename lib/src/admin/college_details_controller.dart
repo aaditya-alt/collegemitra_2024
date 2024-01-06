@@ -1,4 +1,3 @@
-import 'package:collegemitra/src/repository/authentication_repository/authentication_repository.dart';
 import 'package:collegemitra/src/repository/authentication_repository/excel_college_predictor.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

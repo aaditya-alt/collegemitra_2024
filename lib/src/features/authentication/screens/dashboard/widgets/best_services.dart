@@ -1,12 +1,8 @@
-import 'dart:developer';
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/college_predictor/college_predictor.dart';
 import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/rank_predictor/rank_predictor.dart';
-import 'package:collegemitra/src/features/authentication/screens/general_utils/rounded_container.dart';
-import 'package:collegemitra/src/features/authentication/screens/general_utils/shadow.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 
 class BestServices extends StatefulWidget {

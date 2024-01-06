@@ -2,7 +2,6 @@ import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/constants/sizes.dart';
 import 'package:collegemitra/src/constants/text_strings.dart';
 import 'package:collegemitra/src/features/authentication/controllers/login_controller.dart';
-import 'package:collegemitra/src/features/authentication/screens/forget_password/forget_password_options/forget_password_btn_widget.dart';
 import 'package:collegemitra/src/features/authentication/screens/forget_password/forget_password_options/forget_password_modal_bottom_sheet.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
