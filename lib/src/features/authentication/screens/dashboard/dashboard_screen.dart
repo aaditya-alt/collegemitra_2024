@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/best_services.dart';
 import 'package:collegemitra/src/features/authentication/screens/dashboard/widgets/blogs_section.dart';
@@ -15,8 +16,10 @@ import 'package:collegemitra/src/repository/authentication_repository/authentica
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Dashboard extends StatefulWidget {
+  // ignore: prefer_typing_uninitialized_variables
   final username;
   const Dashboard({super.key, this.username});
 
@@ -25,16 +28,44 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  String imageLink = "";
+  getPromotionalImage() async {
+    final supabase = Supabase.instance.client;
+
+    final response = await supabase
+            .from('promotional_image')
+            .select('image_link')
+            .eq('counselling', 'POPULAR')
+            .limit(
+                1) // Limit the result to 1 row, assuming you only need one image
+        ;
+
+    final List<dynamic>? data = response is List ? response : response['data'];
+    if (data != null && data.isNotEmpty) {
+      imageLink = data[0]['image_link'];
+
+      imageLink = response;
+    }
+  }
+
+  @override
+  void initState() {
+    getPromotionalImage();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     String firstName;
+
     final auth = AuthenticationRepository.instance;
     if (widget.username == null) {
       firstName = auth.userName;
     } else {
       firstName = widget.username;
     }
+
     return Scaffold(
       appBar: AppBar(
           elevation: 0,
@@ -165,10 +196,12 @@ class _DashboardState extends State<Dashboard> {
 
           const SizedBox(height: 20),
 
-          Image.asset(
-            'assets/images/dashboard_images/reminder.png',
-            width: MediaQuery.sizeOf(context).width,
-          ),
+          imageLink != ""
+              ? CachedNetworkImage(
+                  imageUrl: imageLink,
+                  width: MediaQuery.sizeOf(context).width,
+                )
+              : const SizedBox(height: 0),
 
           const SizedBox(height: 10),
           Text(

@@ -10,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class AuthenticationRepository extends GetxController {
   static AuthenticationRepository get instance => Get.find();
@@ -23,15 +24,35 @@ class AuthenticationRepository extends GetxController {
   String userName = "";
 
   // Local cache to store user data
-  final Map<String, dynamic> userDataCache = {};
+  Box? userDataBox; // Change the type to Box?
 
   Future<void> getUserData(String? email) async {
     if (email != null) {
-      print("Firebase query");
-      final userDetails = await _userRepo.getUserDetails(email);
-      userRole = userDetails.role.toString();
-      userName = userDetails.fullName.toString();
-      userName = userName.split(" ")[0];
+      print("Fetching user data for email: $email");
+
+      // Open a unique Hive box for each user based on email
+      userDataBox = await Hive.openBox(email);
+
+      // Check if user data is already present in Hive
+      if (userDataBox!.isEmpty) {
+        // User data is not present in Hive, fetch from Firebase
+        print("User data not found in Hive, fetching from Firebase");
+        var userDetails = await _userRepo.getUserDetails(email);
+
+        // Mocking user details, replace this with actual implementation
+        userRole = userDetails.role.toString();
+        userName = userDetails.fullName.toString();
+        userName = userName.split(" ")[0];
+
+        // Store user data in the user-specific Hive box
+        userDataBox?.put('userRole', userRole);
+        userDataBox?.put('userName', userName);
+      } else {
+        // User data is already present in Hive, retrieve from Hive
+        print("User data found in Hive");
+        userRole = userDataBox!.get('userRole', defaultValue: "");
+        userName = userDataBox!.get('userName', defaultValue: "");
+      }
     } else {
       Get.snackbar("Error", "Email is null, please provide email");
     }

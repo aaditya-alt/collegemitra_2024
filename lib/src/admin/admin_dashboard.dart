@@ -1,15 +1,12 @@
 import 'dart:io';
 import 'package:collegemitra/src/admin/college_details_cms.dart';
-import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/screens/general_utils/carousel_slider.dart';
+import 'package:collegemitra/src/features/authentication/screens/general_utils/dropdown.dart';
 import 'package:collegemitra/src/repository/authentication_repository/authentication_repository.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
-
-import '../features/authentication/screens/counselling_features/features/rank_predictor/rank_predictor.dart';
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({Key? key}) : super(key: key);
@@ -87,20 +84,13 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  final TextEditingController counsellingControllerBlogs =
-      TextEditingController();
-  final TextEditingController counsellingControllerTestimonials =
-      TextEditingController();
-  final TextEditingController sectionController = TextEditingController();
   String selectedSection = "Select the section";
   String selectedCounsellingForBlogs = "Select the Counselling";
   String selectedCounsellingForTestimonials = "Select the Counselling";
+  String selectedCounsellingForPromotionalImage = "Select the Counselling";
 
   @override
   void dispose() {
-    counsellingControllerBlogs.dispose();
-    counsellingControllerTestimonials.dispose();
-    sectionController.dispose();
     super.dispose();
   }
 
@@ -146,7 +136,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             },
             "Select Section",
             "Please Select the section that you want to explore",
-            sectionController,
+            context,
           ),
           showDataTableForHeaderAndFooter(selectedSection),
           const SizedBox(height: 15),
@@ -178,7 +168,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             },
             "Select Counselling",
             "Please Select the counselling for blogs Card that you want to explore",
-            counsellingControllerBlogs,
+            context,
           ),
           showDataTableForBlogsCard(selectedCounsellingForBlogs),
           const SizedBox(height: 15),
@@ -211,9 +201,44 @@ class _DashboardScreenState extends State<DashboardScreen> {
             },
             "Select Counselling",
             "Please Select the counselling for Testimonials that you want to explore",
-            counsellingControllerTestimonials,
+            context,
           ),
           showDataTableForTestimonials(selectedCounsellingForTestimonials),
+
+          const SizedBox(height: 15),
+
+          //Testimonial section
+
+          const Divider(
+            thickness: 4,
+            color: Colors.blue,
+            height: 15,
+          ),
+          const SizedBox(height: 25),
+          Text(
+            "Promotional Image",
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          Text(
+            "Select Counselling and start CRUD Operation...",
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          const SizedBox(height: 10),
+          detailsDropdown(
+            "Select the Counselling",
+            counselling,
+            MediaQuery.of(context).size.width,
+            (value) {
+              setState(() {
+                selectedCounsellingForPromotionalImage = value;
+              });
+            },
+            "Select Counselling",
+            "Please Select the counselling for promotional Image that you want to explore",
+            context,
+          ),
+          showDataTableForPromotionalImage(
+              selectedCounsellingForPromotionalImage),
 
           const SizedBox(height: 100),
         ],
@@ -227,113 +252,223 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
+}
 
-  Widget detailsDropdown(
-      String hint,
-      List<String> list,
-      double mobileWidth,
-      Function(String) onChanged,
-      String title,
-      String description,
-      TextEditingController textEditingController) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          SizedBox(
-            width: mobileWidth - 80,
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton2<String>(
-                isExpanded: true,
-                hint: Text(
-                  'Select Item',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Theme.of(context).hintColor,
-                  ),
-                ),
-                items: list
-                    .map((item) => DropdownMenuItem(
-                          value: item,
-                          child: Text(
-                            item,
-                            style: const TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        ))
-                    .toList(),
-                value: list[0],
-                onChanged: (value) {
-                  onChanged(value!);
-                },
-                buttonStyleData: const ButtonStyleData(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  height: 40,
-                  width: 200,
-                ),
-                dropdownStyleData: const DropdownStyleData(
-                  maxHeight: 200,
-                ),
-                menuItemStyleData: const MenuItemStyleData(
-                  height: 40,
-                ),
-                dropdownSearchData: DropdownSearchData(
-                  searchController: textEditingController,
-                  searchInnerWidgetHeight: 50,
-                  searchInnerWidget: Container(
-                    height: 50,
-                    padding: const EdgeInsets.only(
-                      top: 8,
-                      bottom: 4,
-                      right: 8,
-                      left: 8,
-                    ),
-                    child: TextFormField(
-                      expands: true,
-                      maxLines: null,
-                      controller: textEditingController,
-                      decoration: InputDecoration(
-                        isDense: true,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 8,
-                        ),
-                        hintText: 'Search for an item...',
-                        hintStyle: const TextStyle(fontSize: 12),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
+//Show data for promotional Image
+Widget showDataTableForPromotionalImage(String counselling) {
+  print("Called the showData Table");
+  final supabase = Supabase.instance.client;
+
+  // Fetch data from Supabase based on the selected counselling
+  const tableName = 'promotional_image';
+  const counsellingColumn = 'counselling';
+
+  return Builder(builder: (BuildContext builderContext) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      const SizedBox(height: 16),
+      FutureBuilder(
+        // Fetch data using Supabase query
+        future: supabase
+            .from(tableName)
+            .select()
+            .eq(counsellingColumn, counselling),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else if (!snapshot.hasData || snapshot.data == null) {
+            return const Text('No data available.');
+          } else {
+            // Extract data from snapshot
+            final dynamic responseData = snapshot.data!;
+
+            // Check if the response is a list with a 'data' property
+            final List<dynamic>? data =
+                responseData is List ? responseData : responseData['data'];
+
+            if (data == null || data.isEmpty) {
+              return const Text('No data available.');
+            }
+
+            // Define DataTable columns
+            final columns = [
+              const DataColumn(label: Text('ID')),
+              const DataColumn(label: Text('Image Link')),
+              const DataColumn(label: Text('Image')),
+              const DataColumn(label: Text('Actions')),
+            ];
+
+            // Define DataTable rows
+            final rows = data.map<DataRow>((row) {
+              return DataRow(
+                cells: [
+                  DataCell(Text('${row['id']}')),
+                  DataCell(Text('${row['image_link']}')),
+                  DataCell(Image.network(
+                    "${row['image_link']}",
+                    width: MediaQuery.of(context).size.width / 2,
+                  )),
+                  DataCell(Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.edit),
+                        onPressed: () {
+                          editContentModalBottomSheetForPromotionalImage(
+                              row['id'], row['image_link'], builderContext);
+                          // editContentModalBottomSheetForTestimonials(
+                          //     row['id'],
+                          //     row['name'],
+                          //     row['designation'],
+                          //     row['image_link'],
+                          //     row['comment'],
+                          //     builderContext);
+                        },
                       ),
-                    ),
-                  ),
-                  searchMatchFn: (item, searchValue) {
-                    return item.value.toString().contains(searchValue);
-                  },
-                ),
-                //This to clear the search value when you close the menu
-                onMenuStateChange: (isOpen) {
-                  if (!isOpen) {
-                    textEditingController.clear();
-                  }
-                },
+                      IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () async {
+                          bool confirmDelete =
+                              await showDeleteConfirmationDialog(context);
+                          if (confirmDelete) {
+                            // Delete the content from Supabase
+                            final response = await supabase
+                                .from(tableName)
+                                .delete()
+                                .match({'id': row['id']});
+
+                            // Content deleted successfully
+                            showConfirmationDialog(
+                                builderContext, 'Content Deleted');
+                          }
+                          // Implement delete action
+                        },
+                      ),
+                    ],
+                  )),
+                ],
+              );
+            }).toList();
+
+            // Wrap the DataTable with SingleChildScrollView and Scrollbar
+            return SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Scrollbar(
+                child: DataTable(columns: columns, rows: rows),
               ),
-            ),
+            );
+          }
+        },
+      )
+    ]);
+  });
+}
+
+//Edit data for promotional Image
+Future<void> editContentModalBottomSheetForPromotionalImage(
+    int id, String imageLink, BuildContext context) async {
+  final supabase = Supabase.instance.client;
+
+  TextEditingController imageLinkController =
+      TextEditingController(text: imageLink);
+
+  File? pickedImage; // Add a variable to store the picked image file
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      // Set the picked image file path to the image controller
+      imageLinkController.text = pickedFile.path;
+      pickedImage = File(pickedFile.path); // Store the picked image file
+    }
+  }
+
+  Future<void> uploadImageAndHandleUpdate(
+      int id, String imagePath, BuildContext context) async {
+    final file = File(imagePath);
+    final random = const Uuid().v1();
+    String defaultHalfPath =
+        "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public";
+    final response = await supabase.storage
+        .from('testimonials_images')
+        .upload('public/$random.jpg', file); // Use a unique filename
+
+    // Update the content in Supabase with the new image link
+    String fullImageLink =
+        "$defaultHalfPath/testimonials_images/public/$random.jpg";
+    final updateResponse = await supabase.from('promotional_image').update({
+      'image_link': fullImageLink,
+      // Use the key from the storage response
+    }).match({'id': id});
+  }
+
+  try {
+    await showModalBottomSheet(
+      showDragHandle: true,
+      useSafeArea: true,
+      isScrollControlled: true, // Full height modal
+      context: context,
+      builder: (context) => SingleChildScrollView(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: Wrap(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      'Edit Promotional Image',
+                      style: Theme.of(context).textTheme.titleLarge,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                            child: pickedImage != null
+                                ? Image.file(
+                                    pickedImage!,
+                                    height: 100,
+                                  )
+                                : Image.network(
+                                    imageLinkController.text.trim(),
+                                    height: 100,
+                                  )),
+                        IconButton(
+                          icon: const Icon(Icons.image),
+                          onPressed: _pickImage,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () async {
+                        uploadImageAndHandleUpdate(
+                            id, imageLinkController.text.trim(), context);
+
+                        // Content updated successfully
+                        Navigator.pop(context); // Close the bottom sheet
+                        showConfirmationDialog(
+                            context, 'Promotional Image Updated');
+                      },
+                      child: const Text('Submit'),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          GestureDetector(
-            child: const Icon(
-              Icons.info_rounded,
-              size: 30,
-              color: tAccentColor,
-            ),
-            onTap: () {
-              showInformation(context, title, description);
-            },
-          ),
-        ],
+        ),
       ),
     );
+  } catch (error) {
+    // Handle other errors
+    print('Error: $error');
   }
 }
 
@@ -1334,16 +1469,11 @@ class CounsellingInformation extends StatefulWidget {
 }
 
 class _CounsellingInformationState extends State<CounsellingInformation> {
-  final TextEditingController counsellingController = TextEditingController();
-  final TextEditingController counsellingControllerForVideos =
-      TextEditingController();
   String selectedCounselling = "Select the counselling";
   String selectedCounsellingForVideos = "Select the counselling";
 
   @override
   void dispose() {
-    counsellingController.dispose();
-    counsellingControllerForVideos.dispose();
     super.dispose();
   }
 
@@ -1385,7 +1515,7 @@ class _CounsellingInformationState extends State<CounsellingInformation> {
             },
             "Select Counselling",
             "Please Select the counselling that you want to explore",
-            counsellingController,
+            context,
           ),
           showDataTable(selectedCounselling),
           const Divider(color: Colors.blue, thickness: 4, height: 15),
@@ -1410,7 +1540,7 @@ class _CounsellingInformationState extends State<CounsellingInformation> {
             },
             "Select Counselling",
             "Please Select the counselling that you want to explore",
-            counsellingControllerForVideos,
+            context,
           ),
           showDataTableForCounsellingVideos(selectedCounsellingForVideos),
           const SizedBox(height: 100),
@@ -1422,114 +1552,6 @@ class _CounsellingInformationState extends State<CounsellingInformation> {
           setState(() {});
         },
         child: const Icon(Icons.refresh),
-      ),
-    );
-  }
-
-  Widget detailsDropdown(
-      String hint,
-      List<String> list,
-      double mobileWidth,
-      Function(String) onChanged,
-      String title,
-      String description,
-      TextEditingController textEditingController) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          SizedBox(
-            width: mobileWidth - 80,
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton2<String>(
-                isExpanded: true,
-                hint: Text(
-                  'Select Item',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Theme.of(context).hintColor,
-                  ),
-                ),
-                items: list
-                    .map((item) => DropdownMenuItem(
-                          value: item,
-                          child: Text(
-                            item,
-                            style: const TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        ))
-                    .toList(),
-                value: list[0],
-                onChanged: (value) {
-                  onChanged(value!);
-                },
-                buttonStyleData: const ButtonStyleData(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  height: 40,
-                  width: 200,
-                ),
-                dropdownStyleData: const DropdownStyleData(
-                  maxHeight: 200,
-                ),
-                menuItemStyleData: const MenuItemStyleData(
-                  height: 40,
-                ),
-                dropdownSearchData: DropdownSearchData(
-                  searchController: textEditingController,
-                  searchInnerWidgetHeight: 50,
-                  searchInnerWidget: Container(
-                    height: 50,
-                    padding: const EdgeInsets.only(
-                      top: 8,
-                      bottom: 4,
-                      right: 8,
-                      left: 8,
-                    ),
-                    child: TextFormField(
-                      expands: true,
-                      maxLines: null,
-                      controller: textEditingController,
-                      decoration: InputDecoration(
-                        isDense: true,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 8,
-                        ),
-                        hintText: 'Search for an item...',
-                        hintStyle: const TextStyle(fontSize: 12),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ),
-                  ),
-                  searchMatchFn: (item, searchValue) {
-                    return item.value.toString().contains(searchValue);
-                  },
-                ),
-                //This to clear the search value when you close the menu
-                onMenuStateChange: (isOpen) {
-                  if (!isOpen) {
-                    textEditingController.clear();
-                  }
-                },
-              ),
-            ),
-          ),
-          GestureDetector(
-            child: const Icon(
-              Icons.info_rounded,
-              size: 30,
-              color: tAccentColor,
-            ),
-            onTap: () {
-              showInformation(context, title, description);
-            },
-          ),
-        ],
       ),
     );
   }

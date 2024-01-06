@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:collegemitra/src/admin/college_details_controller.dart';
 import 'package:collegemitra/src/admin/widgets/branchwise_placements.dart';
+import 'package:collegemitra/src/features/authentication/screens/general_utils/dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -39,7 +42,6 @@ class _CollegeDetailsCMSState extends State<CollegeDetailsCMS> {
     'medical_support': true,
     // Add more facilities as needed
   };
-  TextEditingController companyImagesController = TextEditingController();
 
   // Map to store company names and their corresponding image links
   Map<String, String> branchPlacementPercentage = {};
@@ -78,7 +80,7 @@ class _CollegeDetailsCMSState extends State<CollegeDetailsCMS> {
                   ),
                   const Divider(color: Colors.blue, thickness: 4, height: 15),
                   const SizedBox(height: 20),
-                  detailsDropdownNew("Select the Counselling", counselling,
+                  detailsDropdown("Select the Counselling", counselling,
                       MediaQuery.of(context).size.width, (value) async {
                     setState(() {
                       selectedCounselling = value;
@@ -96,24 +98,42 @@ class _CollegeDetailsCMSState extends State<CollegeDetailsCMS> {
 
                   colleges.isEmpty
                       ? const SizedBox(height: 0)
-                      : detailsDropdownNew("Select the college", colleges,
-                          MediaQuery.of(context).size.width, (value) {
+                      : detailsDropdown("Select the college", colleges,
+                          MediaQuery.of(context).size.width, (value) async {
                           setState(() {
+                            isLoading = true;
                             selectedCollege = value;
+                          });
+                          await controller.populateCollegeDetailsFromSupabase(
+                              selectedCollege, (jsonData) {
+                            Map<String, dynamic> placementData =
+                                jsonDecode(jsonData);
+                            branchPlacementPercentage = placementData.map(
+                              (branch, percentage) =>
+                                  MapEntry(branch, percentage.toString()),
+                            );
+                          });
+
+                          setState(() {
+                            isLoading = false;
                           });
                         },
                           "Please select the college",
                           "Select the college to add or edit the details about college",
                           context),
 
+                  const SizedBox(height: 10),
+
                   Text(
                     selectedCollege,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
+
+                  const SizedBox(height: 10),
                   TextFormField(
                     controller: controller.shortName,
-                    decoration:
-                        const InputDecoration(labelText: "College Short Name"),
+                    decoration: const InputDecoration(
+                        labelText: "College Short Name (IIT Mandi)"),
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
@@ -123,8 +143,8 @@ class _CollegeDetailsCMSState extends State<CollegeDetailsCMS> {
                   const SizedBox(height: 10),
                   TextFormField(
                     controller: controller.address,
-                    decoration:
-                        const InputDecoration(labelText: "College Address"),
+                    decoration: const InputDecoration(
+                        labelText: "College Complete Address"),
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
@@ -148,39 +168,68 @@ class _CollegeDetailsCMSState extends State<CollegeDetailsCMS> {
                   TextFormField(
                     controller: controller.accreditation,
                     decoration: const InputDecoration(
-                        labelText: "Accreditation (NAAC Grade)"),
+                        labelText:
+                            "Accreditation (NAAC Grade) - Not For IIT, NIT & IIIT"),
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: controller.type,
+                    decoration: const InputDecoration(
+                        labelText: "College Type - NIT or IIT or Govt."),
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: controller.establishedIn,
+                    decoration:
+                        const InputDecoration(labelText: "Founded In - 1987"),
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: controller.description,
+                    decoration: const InputDecoration(
+                        labelText: "Small 3 line Description"),
+                    maxLines: 3,
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
                     controller: controller.campusArea,
-                    decoration:
-                        const InputDecoration(labelText: "Campus Area(In KM)"),
+                    decoration: const InputDecoration(
+                        labelText: "Campus Area(In KM^2)"),
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
                     controller: controller.averagePackage,
                     decoration: const InputDecoration(
-                        labelText: "Average Package(In LPA)"),
+                        labelText: "Average Package(In LPA) - 6.4 LPA"),
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
                     controller: controller.highestPackage,
                     decoration: const InputDecoration(
-                        labelText: "Highest Package(In LPA)"),
+                        labelText: "Highest Package(In LPA) - 56.4 LPA"),
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
                     controller: controller.mainImage,
                     decoration: const InputDecoration(
-                        labelText: "College Main Image Link"),
+                        labelText:
+                            "College Main Image Link - .jpg, .png, .jpeg"),
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
                     controller: controller.images,
                     decoration: const InputDecoration(
                         labelText:
-                            "College Images Link seperated by comma, atleast 5"),
+                            "College Images Link seperated by comma, atleast 7 - - .jpg, .png, .jpeg"),
                     maxLines: 4,
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: controller.videoLinks,
+                    decoration: const InputDecoration(
+                        labelText:
+                            "1 or 2 Youtube Video Link seperated by comma"),
+                    maxLines: 2,
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
@@ -190,22 +239,23 @@ class _CollegeDetailsCMSState extends State<CollegeDetailsCMS> {
                     maxLines: 1,
                   ),
                   const SizedBox(height: 10),
+
                   TextFormField(
                     controller: controller.fees,
-                    decoration:
-                        const InputDecoration(labelText: "College Fees"),
+                    decoration: const InputDecoration(
+                        labelText: "College Fees - ₹56,000 Yearly"),
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
                     controller: controller.boysHostelFee,
-                    decoration:
-                        const InputDecoration(labelText: "Boys Hostel Fees"),
+                    decoration: const InputDecoration(
+                        labelText: "Boys Hostel Fees - ₹10,000"),
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
                     controller: controller.girlsHostelFee,
-                    decoration:
-                        const InputDecoration(labelText: "Girls Hostel Fees"),
+                    decoration: const InputDecoration(
+                        labelText: "Girls Hostel Fees - ₹10,000"),
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
@@ -315,6 +365,8 @@ class _CollegeDetailsCMSState extends State<CollegeDetailsCMS> {
                                   Expanded(
                                     flex: 2,
                                     child: TextFormField(
+                                      initialValue:
+                                          branchPlacementPercentage[branch],
                                       onChanged: (value) {
                                         setState(() {
                                           branchPlacementPercentage[branch] =
@@ -338,7 +390,7 @@ class _CollegeDetailsCMSState extends State<CollegeDetailsCMS> {
                   ),
                   const SizedBox(height: 15),
                   TextFormField(
-                    controller: companyImagesController,
+                    controller: controller.companyImagesController,
                     decoration: const InputDecoration(
                         labelText:
                             "Company Images that Come(Seperated by Comma)"),
@@ -374,7 +426,7 @@ class _CollegeDetailsCMSState extends State<CollegeDetailsCMS> {
                           await controller.storeCollegeDetailsToSupabase(
                               selectedCollege,
                               selectedCounselling,
-                              companyImagesController.text.trim(),
+                              controller.companyImagesController.text.trim(),
                               branchesToJson(branches, commonFee),
                               facilitiesToJson(facilityValues),
                               companiesToJson(branchPlacementPercentage));
@@ -425,10 +477,40 @@ class _CollegeDetailsCMSState extends State<CollegeDetailsCMS> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          controller.updateCollegeDetailsToSupabase(
+              selectedCollege,
+              selectedCounselling,
+              controller.companyImagesController.text.trim(),
+              branchesToJson(branches, commonFee),
+              facilitiesToJson(facilityValues),
+              companiesToJson(branchPlacementPercentage));
+
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text("Success"),
+                  content: Text("$selectedCollege data has been updated!"),
+                  actions: [
+                    ElevatedButton(
+                        onPressed: (() => Navigator.pop(context)),
+                        child: const Text("Okay"))
+                  ],
+                );
+              });
+
           // Scroll to the previous position
           setState(() {});
         },
-        child: const Icon(Icons.refresh),
+        child: Container(
+          width: 100,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          padding: const EdgeInsets.all(8),
+          child: const Text("Update"),
+        ),
       ),
     );
   }
