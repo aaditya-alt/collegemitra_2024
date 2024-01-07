@@ -42,7 +42,7 @@ class _DashboardState extends State<Dashboard> {
 
     final List<dynamic>? data = response is List ? response : response['data'];
     if (data != null && data.isNotEmpty) {
-      imageLink = data[0]['image_link'];
+      imageLink = data.map((row) => row['image_link'].toString()).toString();
 
       imageLink = response;
     }

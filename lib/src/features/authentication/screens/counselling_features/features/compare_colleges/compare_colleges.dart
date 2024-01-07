@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/models/all_colleges_model.dart';
+import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/compare_colleges/show_compare_parameters.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -448,7 +449,11 @@ class _CompareCollegesState extends State<CompareColleges> {
                                       });
                                       debugPrint(
                                           "Second College parameters : ${secondCollegeDetails[0].campusArea}");
-                                    })
+                                    }),
+                                    Get.to(() => CompareParameters(
+                                        firstCollegedata: firstCollegeDetails,
+                                        secondCollegedata:
+                                            secondCollegeDetails)),
                                   }
                                 : null
                             : null;
