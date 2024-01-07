@@ -43,8 +43,8 @@ class _FeatureScreenState extends State<FeatureScreen> {
         counselling: widget.appBarTitle,
       ),
       CustomIcon(
-        icon: "assets/images/dashboard_images/search.png",
-        name: "Predictor",
+        icon: "assets/images/dashboard_images/seats.png",
+        name: "Timeline",
         counselling: widget.appBarTitle,
       ),
       CustomIcon(
@@ -53,25 +53,25 @@ class _FeatureScreenState extends State<FeatureScreen> {
         counselling: widget.appBarTitle,
       ),
       CustomIcon(
-        icon: "assets/images/dashboard_images/office.png",
-        name: "Branch",
+        icon: "assets/images/dashboard_images/benchmarking.png",
+        name: "College List",
         counselling: widget.appBarTitle,
       ),
     ];
     List<CustomIcon> featureIcons_2 = [
+      CustomIcon(
+        icon: "assets/images/dashboard_images/search.png",
+        name: "Predictor",
+        counselling: widget.appBarTitle,
+      ),
       CustomIcon(
         icon: "assets/images/dashboard_images/justice.png",
         name: "Comparison",
         counselling: widget.appBarTitle,
       ),
       CustomIcon(
-        icon: "assets/images/dashboard_images/seats.png",
-        name: "Seat Matrix",
-        counselling: widget.appBarTitle,
-      ),
-      CustomIcon(
-        icon: "assets/images/dashboard_images/benchmarking.png",
-        name: "College List",
+        icon: "assets/images/dashboard_images/office.png",
+        name: "Predict Branch",
         counselling: widget.appBarTitle,
       ),
       CustomIcon(

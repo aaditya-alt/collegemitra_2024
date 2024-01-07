@@ -241,13 +241,109 @@ class CompareParameters extends StatelessWidget {
           cardForParameters(
               isDark,
               context,
-              "Average Placement Percentage",
+              "B.Tech Placement Percentage",
               addPercentagePlacement(firstCollegedata[0].branchesFees)
                   .toString(),
               addPercentagePlacement(secondCollegedata[0].branchesFees)
                   .toString(),
               firstCollegedata[0].branchesFees.length * 100,
               secondCollegedata[0].branchesFees.length * 100),
+          const SizedBox(height: 15),
+          cardForNormalInfo(
+              isDark,
+              context,
+              "Yearly Fees",
+              "Comparison On Fees",
+              Icons.currency_rupee,
+              firstCollegedata[0].imageUrlString[0],
+              secondCollegedata[0].imageUrlString[0],
+              firstCollegedata[0].branchesFees[0].fee,
+              secondCollegedata[0].branchesFees[0].fee),
+          const SizedBox(height: 15),
+          cardForNormalInfo(
+            isDark,
+            context,
+            "Campus Area",
+            "Compus Area comparison",
+            Icons.area_chart,
+            firstCollegedata[0].imageUrlString[1],
+            secondCollegedata[0].imageUrlString[1],
+            firstCollegedata[0].campusArea,
+            secondCollegedata[0].campusArea,
+          ),
+          const SizedBox(height: 15),
+          cardForNormalInfo(
+            isDark,
+            context,
+            "Ranking",
+            "Rank comparison",
+            Icons.leaderboard,
+            firstCollegedata[0].imageUrlString[2],
+            secondCollegedata[0].imageUrlString[2],
+            firstCollegedata[0].ranking,
+            secondCollegedata[0].ranking,
+          ),
+          const SizedBox(height: 15),
+          cardForNormalInfo(
+            isDark,
+            context,
+            "Establishment",
+            "Establishment comparison",
+            Icons.foundation,
+            firstCollegedata[0].imageUrlString[3],
+            secondCollegedata[0].imageUrlString[3],
+            firstCollegedata[0].foundedIn,
+            secondCollegedata[0].foundedIn,
+          ),
+          const SizedBox(height: 15),
+          cardForNormalInfo(
+            isDark,
+            context,
+            "Hostel Fee",
+            "Hostel fee comparison",
+            Icons.house,
+            firstCollegedata[0].imageUrlString[0],
+            secondCollegedata[0].imageUrlString[0],
+            firstCollegedata[0].boysHostelFee,
+            secondCollegedata[0].boysHostelFee,
+          ),
+          const SizedBox(height: 15),
+          cardForNormalInfo(
+            isDark,
+            context,
+            "Nearby Airport",
+            "Nearby Airpor comparison",
+            Icons.airplanemode_active,
+            firstCollegedata[0].imageUrlString[1],
+            secondCollegedata[0].imageUrlString[1],
+            firstCollegedata[0].nearbyAirport,
+            secondCollegedata[0].nearbyAirport,
+          ),
+          const SizedBox(height: 15),
+          cardForNormalInfo(
+            isDark,
+            context,
+            "Nearby Railway Station",
+            "Nearby Railway comparison",
+            Icons.directions_railway,
+            firstCollegedata[0].imageUrlString[2],
+            secondCollegedata[0].imageUrlString[2],
+            firstCollegedata[0].nearbyRailway,
+            secondCollegedata[0].nearbyRailway,
+          ),
+          const SizedBox(height: 15),
+          cardForNormalInfo(
+            isDark,
+            context,
+            "Nearby Bus Stand",
+            "Nearby Bus comparison",
+            Icons.bus_alert,
+            firstCollegedata[0].imageUrlString[3],
+            secondCollegedata[0].imageUrlString[3],
+            firstCollegedata[0].nearbyBus,
+            secondCollegedata[0].nearbyBus,
+          ),
+          const SizedBox(height: 20),
         ],
       ),
     );
@@ -309,12 +405,12 @@ Widget cardForParameters(
                         backgroundColor:
                             const Color.fromARGB(255, 229, 229, 229),
                         center: Text(
-                          "${(parseAndConvertToPercentage(firstParameter, firstbandWidthValue) * 100).ceil().toString()}%",
+                          "${((parseAndConvertToPercentage(firstParameter, firstbandWidthValue) * 100).toDouble().ceil()).toString()}%",
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                       ),
                     ),
-                    Text(firstParameter,
+                    Text("$firstParameter of $firstbandWidthValue",
                         style: Theme.of(context).textTheme.titleSmall),
                   ],
                 ),
@@ -337,12 +433,12 @@ Widget cardForParameters(
                         backgroundColor:
                             const Color.fromARGB(255, 229, 229, 229),
                         center: Text(
-                          "${(parseAndConvertToPercentage(secondParameter, secondbandWidthValue) * 100).ceil().toString()}%",
+                          "${((parseAndConvertToPercentage(secondParameter, secondbandWidthValue) * 100).toDouble().ceil()).toString()}%",
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                       ),
                     ),
-                    Text(secondParameter,
+                    Text("$secondParameter of $secondbandWidthValue",
                         style: Theme.of(context).textTheme.titleSmall),
                   ],
                 ),
@@ -355,24 +451,195 @@ Widget cardForParameters(
   );
 }
 
-double parseAndConvertToPercentage(String packageValue, double bandWidthValue) {
+double parseAndConvertToPercentage(
+    String? packageValue, double bandWidthValue) {
   try {
-    // Remove non-numeric characters and convert to double
-    double value =
-        double.parse(packageValue.replaceAll(RegExp(r'[^0-9.]'), ''));
+    if (packageValue == null || bandWidthValue == 0) {
+      return 0.0;
+    }
 
-    // Assuming the maximum average package is 30 LPA
-    return value / bandWidthValue;
+    double value =
+        double.tryParse(packageValue.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0.0;
+
+    double percentage = value / bandWidthValue;
+
+    if (percentage.isNaN || percentage.isInfinite) {
+      return 0.0;
+    }
+
+    return percentage;
   } catch (e) {
-    // Handle parsing errors
     return 0.0;
   }
 }
 
-double addPercentagePlacement(List<Branch> branches) {
+double addPercentagePlacement(List<Branch?> branches) {
   return branches.fold(0.0, (finalValue, branch) {
-    double value = double.parse(
-        branch.percentagePlacement.replaceAll(RegExp(r'[^0-9.]'), ''));
-    return finalValue + value;
+    // ignore: unnecessary_null_comparison
+    if (branch == null || branch.percentagePlacement == null) {
+      return finalValue; // If branch or percentagePlacement is null, skip it
+    }
+
+    double value = double.tryParse(
+            branch.percentagePlacement.replaceAll(RegExp(r'[^0-9.]'), '')) ??
+        0.0;
+    return (finalValue + value).toDouble();
   });
+}
+
+Widget cardForNormalInfo(
+    isdark,
+    BuildContext context,
+    String title,
+    String subTitle,
+    IconData icon,
+    String firstCollegeImages,
+    String secondCollegeImages,
+    String firstcollegeparameter,
+    String secondcollegeparamenter) {
+  var size = MediaQuery.of(context).size;
+  return // Generated code for this Container Widget...
+      Container(
+    padding: const EdgeInsets.all(8),
+    decoration: BoxDecoration(
+      color: isdark
+          ? const Color.fromARGB(255, 10, 10, 10)
+          : const Color.fromARGB(255, 245, 245, 245),
+      boxShadow: const [
+        BoxShadow(
+          blurRadius: 4,
+          color: Color(0x3F14181B),
+          offset: Offset(0, 3),
+        )
+      ],
+      borderRadius: BorderRadius.circular(8),
+    ),
+    child: Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 107, 146, 255),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              alignment: const AlignmentDirectional(0, 0),
+              child: Icon(
+                icon,
+                color: Colors.white,
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Text(title, style: Theme.of(context).textTheme.titleMedium),
+          ],
+        ),
+        const Divider(
+          color: Colors.grey,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            SizedBox(
+              width: size.width / 2.5,
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 78,
+                      height: 78,
+                      decoration: BoxDecoration(
+                        color: const Color(0x4D9489F5),
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: const Color(0xFF6F61EF),
+                          width: 2,
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(2),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: CachedNetworkImage(
+                            imageUrl: firstCollegeImages,
+                            width: 90,
+                            height: 90,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                      child: Text(
+                        firstcollegeparameter,
+                        style: Theme.of(context).textTheme.titleSmall,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              width: size.width / 2.5,
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 78,
+                      height: 78,
+                      decoration: BoxDecoration(
+                        color: const Color(0x4D9489F5),
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: const Color(0xFF6F61EF),
+                          width: 2,
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(2),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: CachedNetworkImage(
+                            imageUrl: secondCollegeImages,
+                            width: 90,
+                            height: 90,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                      child: Text(
+                        secondcollegeparamenter,
+                        style: Theme.of(context).textTheme.titleSmall,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        )
+      ],
+    ),
+  );
 }

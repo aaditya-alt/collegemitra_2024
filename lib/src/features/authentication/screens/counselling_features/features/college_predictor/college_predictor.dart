@@ -173,12 +173,7 @@ class _CollegePredictorState extends State<CollegePredictor> {
         ),
         title: Text(
           'College Predictor',
-          style: TextStyle(
-            fontFamily: 'Plus Jakarta Sans',
-            color: isDark ? Colors.white : const Color(0xFF14181B),
-            fontSize: 16,
-            fontWeight: FontWeight.normal,
-          ),
+          style: Theme.of(context).textTheme.titleMedium,
         ),
         actions: const [],
         centerTitle: false,

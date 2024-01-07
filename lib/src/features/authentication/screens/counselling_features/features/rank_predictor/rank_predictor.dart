@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collegemitra/src/constants/colors.dart';
@@ -86,12 +85,7 @@ class _RankPredictorState extends State<RankPredictor> {
         ),
         title: Text(
           'Rank Predictor',
-          style: TextStyle(
-            fontFamily: 'Plus Jakarta Sans',
-            color: isDark ? Colors.white : const Color(0xFF14181B),
-            fontSize: 16,
-            fontWeight: FontWeight.normal,
-          ),
+          style: Theme.of(context).textTheme.titleMedium,
         ),
         actions: const [],
         centerTitle: false,
@@ -248,6 +242,7 @@ class _RankPredictorState extends State<RankPredictor> {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
+                    Future.delayed(const Duration(seconds: 1));
                     controller.printDetails(
                         examDate, examShift, controller.marks.text);
 

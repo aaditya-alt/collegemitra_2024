@@ -50,6 +50,9 @@ dependencies:
   cached_network_image: ^3.3.0
   flutter_dropdown: ^1.0.1+hotfix.1
   percent_indicator: ^4.0.1
+  intl: ^0.17.0
+  timelines: ^0.1.0
+  
 
   
   

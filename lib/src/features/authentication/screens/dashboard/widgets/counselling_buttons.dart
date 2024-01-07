@@ -1,4 +1,5 @@
 import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/compare_colleges/compare_colleges.dart';
+import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/timeline/timeline_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:collegemitra/src/constants/colors.dart';
@@ -117,7 +118,7 @@ class _CounsellingButtonState extends State<CounsellingButton> {
       case 'Predict Rank':
         Get.to(() => RankPredictor(counsellingName: icon.counselling));
         break;
-      case 'Branch':
+      case 'Predict Branch':
         Get.to(() => BranchPredictor(counselling_name: icon.counselling));
         break;
       case 'Know About':
@@ -132,6 +133,8 @@ class _CounsellingButtonState extends State<CounsellingButton> {
         Get.to(() => CompareColleges(
               counsellingName: icon.counselling,
             ));
+      case 'Timeline':
+        Get.to(() => TimeLineScreen(counsellingName: icon.counselling));
       default:
         Get.to(() => FeatureScreen(appBarTitle: icon.name));
     }

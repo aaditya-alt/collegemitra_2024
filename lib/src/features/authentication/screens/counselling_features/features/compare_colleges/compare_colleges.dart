@@ -37,16 +37,20 @@ class _CompareCollegesState extends State<CompareColleges> {
   }
 
   void getAllcolleges() async {
-    final data = await getColleges(widget.counsellingName);
+    try {
+      final data = await getColleges(widget.counsellingName);
 
-    allColleges = data;
-
-    setState(() {
-      isLoading = false;
-    });
+      allColleges = data;
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
-  void getCollegeCompareParameters(int collegeId, callBack) async {
+  getCollegeCompareParameters(int collegeId, callBack) async {
     final data = await getCollegeDetailsList(collegeId);
     callBack(data);
   }
@@ -79,12 +83,7 @@ class _CompareCollegesState extends State<CompareColleges> {
         ),
         title: Text(
           '${widget.counsellingName} College Comparison',
-          style: TextStyle(
-            fontFamily: 'Plus Jakarta Sans',
-            color: isDark ? Colors.white : const Color(0xFF14181B),
-            fontSize: 16,
-            fontWeight: FontWeight.normal,
-          ),
+          style: Theme.of(context).textTheme.titleMedium,
         ),
         centerTitle: false,
         elevation: 0,
@@ -430,22 +429,25 @@ class _CompareCollegesState extends State<CompareColleges> {
                     width: 300,
                     height: 50,
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        isLoading = true;
+                        setState(() {});
                         firstCollegeSelected
                             ? secondCollegeSelected
                                 ? {
-                                    getCollegeCompareParameters(firstCollegeId,
-                                        (value) {
+                                    await getCollegeCompareParameters(
+                                        firstCollegeId, (value) {
                                       setState(() {
                                         firstCollegeDetails = value;
                                       });
                                       debugPrint(
                                           "First College parameters : ${firstCollegeDetails[0].campusArea}");
                                     }),
-                                    getCollegeCompareParameters(secondCollegeId,
-                                        (value) {
+                                    await getCollegeCompareParameters(
+                                        secondCollegeId, (value) {
                                       setState(() {
                                         secondCollegeDetails = value;
+                                        isLoading = false;
                                       });
                                       debugPrint(
                                           "Second College parameters : ${secondCollegeDetails[0].campusArea}");
@@ -523,33 +525,51 @@ class _CompareCollegesState extends State<CompareColleges> {
 }
 
 getColleges(String counselling) async {
-  final supabase = Supabase.instance.client;
-  final response = await supabase
-      .from('college_details')
-      .select('short_name, main_image, id')
-      .eq('counselling', counselling);
+  try {
+    final supabase = Supabase.instance.client;
+    final response = await supabase
+        .from('college_details')
+        .select('short_name, main_image, id')
+        .eq('counselling', counselling);
 
-  final List<dynamic>? data = response is List ? response : response['data'];
+    final List<dynamic>? data = response is List ? response : response['data'];
 
-  if (data == null || data.isEmpty) {
-    // Return an empty list if there is no data
-    return [];
+    if (data == null || data.isEmpty) {
+      // Return an empty list if there is no data
+      return [];
+    }
+
+    final List<collegeCompare> collegeNames = data.map<collegeCompare>((row) {
+      return collegeCompare(
+          collegeName: row['short_name'].toString(),
+          collegeImage: row['main_image'].toString(),
+          collegeId: row['id']);
+    }).toList();
+
+    return collegeNames;
+  } catch (e) {
+    Get.snackbar(
+      'Error',
+      'Something went wrong. Try again',
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.redAccent.withOpacity(0.1),
+      colorText: Colors.red,
+    );
   }
-
-  final List<collegeCompare> collegeNames = data.map<collegeCompare>((row) {
-    return collegeCompare(
-        collegeName: row['short_name'].toString(),
-        collegeImage: row['main_image'].toString(),
-        collegeId: row['id']);
-  }).toList();
-
-  return collegeNames;
 }
 
-Future bottomSheetToShowColleges(BuildContext context, isDark,
-    List<collegeCompare> data, String selectedCollege, onPressed) {
-  // Remove selectedCollege from the data list
-  data.removeWhere((college) => college.collegeName == selectedCollege);
+Future bottomSheetToShowColleges(
+  BuildContext context,
+  bool isDark,
+  List<collegeCompare> data,
+  String selectedCollege,
+  Function(String, String, int) onPressed,
+) {
+  // Create a copy of the data list
+  List<collegeCompare> updatedData = List.from(data);
+
+  // Remove selectedCollege from the copied list
+  updatedData.removeWhere((college) => college.collegeName == selectedCollege);
 
   return showModalBottomSheet(
     enableDrag: true,
@@ -563,18 +583,21 @@ Future bottomSheetToShowColleges(BuildContext context, isDark,
         child: ListView.builder(
           scrollDirection: Axis.vertical,
           padding: const EdgeInsets.all(8.0),
-          itemCount: data.length,
+          itemCount: updatedData.length,
           itemBuilder: (context, i) {
             return Column(
               children: [
                 InkWell(
                   onTap: () {
-                    onPressed(data[i].collegeName, data[i].collegeImage,
-                        data[i].collegeId);
+                    onPressed(
+                      updatedData[i].collegeName,
+                      updatedData[i].collegeImage,
+                      updatedData[i].collegeId,
+                    );
                     Navigator.pop(context);
                   },
                   child: Text(
-                    data[i].collegeName,
+                    updatedData[i].collegeName,
                     style: const TextStyle(
                       overflow: TextOverflow.ellipsis,
                       fontSize: 20,
@@ -615,5 +638,6 @@ getCollegesData(int collegeId) async {
     return data;
   } catch (e) {
     debugPrint("Error occuring during getting comparison parameters $e");
+    Get.snackbar('Error', "Some Error Occured During Getting Colleges Data");
   }
 }
