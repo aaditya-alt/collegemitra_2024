@@ -23,7 +23,6 @@ void main() async {
   await Hive.openBox('headerVideoIds');
   await Hive.openBox('footerVideoIds');
   await Hive.openBox('user');
-  await Hive.openBox('colleges');
 
   runApp(const App());
 }
