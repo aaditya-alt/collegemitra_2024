@@ -1,7 +1,7 @@
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/college_predictor/college_predictor.dart';
 import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/rank_predictor/rank_predictor.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:collegemitra/src/features/authentication/screens/general_utils/dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -74,60 +74,25 @@ class _BestServicesState extends State<BestServices> {
                           height: size.height - 2,
                           width: size.width - 20,
                           child: AlertDialog(
+                            title: Text(
+                              "Select the Counselling",
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
                             elevation: 4,
                             actions: [
-                              const SizedBox(height: 20),
-                              Text(
-                                "Select the Counselling",
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 12),
-                                child: SizedBox(
+                              SizedBox(
                                   width: size.width - 80,
-                                  child: DropdownButtonHideUnderline(
-                                    child: DropdownButton2<String>(
-                                      isExpanded: true,
-                                      hint: Text(
-                                        'Select Item',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: Theme.of(context).hintColor,
-                                        ),
-                                      ),
-                                      items: counsellingList
-                                          .map((String item) =>
-                                              DropdownMenuItem<String>(
-                                                value: item,
-                                                child: Text(
-                                                  item,
-                                                  style: const TextStyle(
-                                                    fontSize: 14,
-                                                  ),
-                                                ),
-                                              ))
-                                          .toList(),
-                                      value: selectedCounselling,
-                                      onChanged: (String? value) {
-                                        setState(() {
-                                          selectedCounselling = value!;
-                                        });
-                                      },
-                                      buttonStyleData: const ButtonStyleData(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 16),
-                                        height: 40,
-                                        width: 140,
-                                      ),
-                                      menuItemStyleData:
-                                          const MenuItemStyleData(
-                                        height: 40,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                                  child: detailsDropdown(
+                                      "Select the Counselling",
+                                      counsellingList,
+                                      size.width - 90, (value) {
+                                    setState(() {
+                                      selectedCounselling = value;
+                                    });
+                                  },
+                                      "Select the Counselling",
+                                      "Please select one of the counselling so that we could prpceed with the college predictor screen.",
+                                      context)),
                               ElevatedButton(
                                 onPressed: () => Get.to(() => CollegePredictor(
                                     counselling_name: selectedCounselling)),

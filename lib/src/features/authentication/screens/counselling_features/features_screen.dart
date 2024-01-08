@@ -38,44 +38,52 @@ class _FeatureScreenState extends State<FeatureScreen> {
     final size = MediaQuery.of(context).size;
     List<CustomIcon> featureIcons_1 = [
       CustomIcon(
-        icon: "assets/images/dashboard_images/about.png",
+        icon:
+            "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/feature_icons/about.png",
         name: "Know About",
         counselling: widget.appBarTitle,
       ),
       CustomIcon(
-        icon: "assets/images/dashboard_images/seats.png",
+        icon:
+            "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/feature_icons/seats.png",
         name: "Timeline",
         counselling: widget.appBarTitle,
       ),
       CustomIcon(
-        icon: "assets/images/dashboard_images/rank.png",
+        icon:
+            "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/feature_icons/rank.png",
         name: "Predict Rank",
         counselling: widget.appBarTitle,
       ),
       CustomIcon(
-        icon: "assets/images/dashboard_images/benchmarking.png",
+        icon:
+            "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/feature_icons/benchmarking.png",
         name: "College List",
         counselling: widget.appBarTitle,
       ),
     ];
     List<CustomIcon> featureIcons_2 = [
       CustomIcon(
-        icon: "assets/images/dashboard_images/search.png",
+        icon:
+            "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/feature_icons/search.png",
         name: "Predictor",
         counselling: widget.appBarTitle,
       ),
       CustomIcon(
-        icon: "assets/images/dashboard_images/justice.png",
+        icon:
+            "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/feature_icons/justice.png",
         name: "Comparison",
         counselling: widget.appBarTitle,
       ),
       CustomIcon(
-        icon: "assets/images/dashboard_images/office.png",
+        icon:
+            "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/feature_icons/office.png",
         name: "Predict Branch",
         counselling: widget.appBarTitle,
       ),
       CustomIcon(
-        icon: "assets/images/dashboard_images/ranking.png",
+        icon:
+            "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/feature_icons/ranking.png",
         name: "All Colleges",
         counselling: widget.appBarTitle,
       ),

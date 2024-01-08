@@ -197,7 +197,7 @@ class _CollegePredictorState extends State<CollegePredictor> {
                           fadeInDuration: const Duration(milliseconds: 100),
                           fadeOutDuration: const Duration(milliseconds: 100),
                           imageUrl:
-                              'https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/college_images/public/Purple%20and%20Blue%20Gradient%20Modern%203D%20Illusrtative%20Creative%20Marketing%20Agency%20Banner%20(2).png',
+                              'https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/Purple%20and%20Blue%20Gradient%20Modern%203D%20Illusrtative%20Creative%20Marketing%20Agency%20Banner%20(2).png',
                           width: MediaQuery.sizeOf(context).width,
                           height: 150,
                           fit: BoxFit.cover,
@@ -518,6 +518,7 @@ class _CollegePredictorState extends State<CollegePredictor> {
 
   Future<void> showInformation(
       BuildContext context, String title, String description) {
+    bool isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     return showDialog(
       barrierDismissible: true,
       useSafeArea: false,
@@ -532,14 +533,14 @@ class _CollegePredictorState extends State<CollegePredictor> {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16.0),
-              color: Colors.white,
+              color: isDark ? Colors.black : Colors.white,
             ),
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 10),
                   ClipRRect(
                     borderRadius:
                         const BorderRadius.vertical(top: Radius.circular(16.0)),
@@ -556,19 +557,12 @@ class _CollegePredictorState extends State<CollegePredictor> {
                       children: [
                         Text(
                           title,
-                          style: GoogleFonts.lato(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
                         const SizedBox(height: 15),
                         Text(
                           description,
-                          style: GoogleFonts.lato(
-                              fontSize: 18,
-                              color: Colors.black87,
-                              fontStyle: FontStyle.italic),
+                          style: Theme.of(context).textTheme.titleMedium,
                           textAlign: TextAlign.center,
                         ),
                       ],

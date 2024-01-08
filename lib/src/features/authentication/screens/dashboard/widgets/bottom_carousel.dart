@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -182,22 +183,32 @@ class _BottomCarouselState extends State<BottomCarousel> {
   }
 }
 
-Future<List<String>> getYoutubeVideoLinks(String position) async {
-  final supabase = Supabase.instance.client;
-  final response = await supabase
-      .from("header_footer_video")
-      .select("video_link")
-      .eq("position", position);
+getYoutubeVideoLinks(String position) async {
+  try {
+    final supabase = Supabase.instance.client;
+    final response = await supabase
+        .from("header_footer_video")
+        .select("video_link")
+        .eq("position", position);
 
-  final List<dynamic>? data = response is List ? response : response['data'];
+    final List<dynamic>? data = response is List ? response : response['data'];
 
-  if (data == null || data.isEmpty) {
-    // Return an empty list if there is no data
-    return [];
+    if (data == null || data.isEmpty) {
+      // Return an empty list if there is no data
+      return [];
+    }
+
+    final List<String> youtubeVideoLinks =
+        data.map((row) => row['video_link'].toString()).toList();
+
+    return youtubeVideoLinks;
+  } catch (e) {
+    Get.snackbar(
+      'Error',
+      'Something went wrong. Try again',
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.redAccent.withOpacity(0.1),
+      colorText: Colors.red,
+    );
   }
-
-  final List<String> youtubeVideoLinks =
-      data.map((row) => row['video_link'].toString()).toList();
-
-  return youtubeVideoLinks;
 }

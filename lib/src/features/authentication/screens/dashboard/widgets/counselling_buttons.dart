@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/compare_colleges/compare_colleges.dart';
 import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/timeline/timeline_screen.dart';
 import 'package:flutter/material.dart';
@@ -88,8 +89,8 @@ class _CounsellingButtonState extends State<CounsellingButton> {
     return isLoading && loadingIndex == index
         ? buildLoadingIndicator(isDark)
         : Center(
-            child: Image.asset(
-              icon.icon,
+            child: CachedNetworkImage(
+              imageUrl: icon.icon,
               fit: BoxFit.cover,
             ),
           );
@@ -143,17 +144,21 @@ class _CounsellingButtonState extends State<CounsellingButton> {
   Future<void> bottomSheet(BuildContext context) async {
     List<CustomIcon> customIcons = [
       CustomIcon(
-          icon: "assets/images/dashboard_images/counselling_images/josaa.png",
-          name: "JOSAA"),
+          icon:
+              "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/dashboard_icons/jacchd.png",
+          name: "JAC Chandigarh"),
       CustomIcon(
-          icon: "assets/images/dashboard_images/counselling_images/jacd.png",
-          name: "JAC Delhi"),
+          icon:
+              "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/dashboard_icons/utu.png",
+          name: "UTU"),
       CustomIcon(
-          icon: "assets/images/dashboard_images/counselling_images/ggsipu.png",
-          name: "GGSIPU Delhi"),
+          icon:
+              "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/dashboard_icons/ojee.png",
+          name: "OJEE"),
       CustomIcon(
-          icon: "assets/images/dashboard_images/counselling_images/uptu.png",
-          name: "UPTU"),
+          icon:
+              "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/dashboard_icons/wbjee.png",
+          name: "WBJEE"),
     ];
 
     showModalBottomSheet(
@@ -165,8 +170,9 @@ class _CounsellingButtonState extends State<CounsellingButton> {
 
   Widget buildBottomSheetContent(
       BuildContext context, List<CustomIcon> customIcons) {
+    bool isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     return Container(
-      color: Colors.white,
+      color: isDark ? Colors.black : Colors.white,
       height: 400,
       width: MediaQuery.of(context).size.width,
       child: Padding(
@@ -188,7 +194,6 @@ class _CounsellingButtonState extends State<CounsellingButton> {
                 children: [
                   counsellingRow(customIcons, context),
                   const SizedBox(height: 25),
-                  counsellingRow(customIcons, context),
                 ],
               ),
             ),

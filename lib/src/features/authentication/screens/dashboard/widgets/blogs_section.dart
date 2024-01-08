@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/models/blog_section_model.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class PopularBlogs extends StatefulWidget {
@@ -72,26 +73,38 @@ class _PopularBlogsState extends State<PopularBlogs> {
   }
 }
 
-Future<List<blogSection>> getDataFromDatabase(String counselling) async {
-  final supabase = Supabase.instance.client;
-  final response =
-      await supabase.from("blogs_card").select().eq("counselling", counselling);
+getDataFromDatabase(String counselling) async {
+  try {
+    final supabase = Supabase.instance.client;
+    final response = await supabase
+        .from("blogs_card")
+        .select()
+        .eq("counselling", counselling);
 
-  final List<dynamic>? data = response is List ? response : response['data'];
+    final List<dynamic>? data = response is List ? response : response['data'];
 
-  if (data == null || data.isEmpty) {
-    return [];
+    if (data == null || data.isEmpty) {
+      return [];
+    }
+
+    final List<blogSection> blogsDetails = data
+        .map<blogSection>((row) => blogSection(
+              image: row['image_link'].toString(),
+              title: row['title'].toString(),
+              subTitle: row['sub_title'].toString(),
+            ))
+        .toList();
+
+    return blogsDetails;
+  } catch (e) {
+    Get.snackbar(
+      'Error',
+      'Something went wrong. Try again',
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.redAccent.withOpacity(0.1),
+      colorText: Colors.red,
+    );
   }
-
-  final List<blogSection> blogsDetails = data
-      .map<blogSection>((row) => blogSection(
-            image: row['image_link'].toString(),
-            title: row['title'].toString(),
-            subTitle: row['sub_title'].toString(),
-          ))
-      .toList();
-
-  return blogsDetails;
 }
 
 Widget newBlogsCard(BuildContext context, String title, String subTitle,

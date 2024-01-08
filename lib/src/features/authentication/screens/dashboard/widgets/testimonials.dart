@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/models/testimonial_model.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class TestimonialSection extends StatefulWidget {
@@ -36,11 +37,13 @@ class _TestimonialSectionState extends State<TestimonialSection> {
   // }
 
   void _getData() async {
-    testimonialsDetails = await getDataFromDatabase(widget.counsellingName);
-    // Set isLoading to false after fetching data
-    setState(() {
-      // testimonialBox.put('testimonialDetails', testimonialsDetails);
-    }); // Trigger a rebuild
+    try {
+      testimonialsDetails = await getDataFromDatabase(widget.counsellingName);
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      setState(() {});
+    }
   }
 
   @override
@@ -80,29 +83,39 @@ class _TestimonialSectionState extends State<TestimonialSection> {
   }
 }
 
-Future<List<Testimonial>> getDataFromDatabase(String counselling) async {
-  final supabase = Supabase.instance.client;
-  final response = await supabase
-      .from("testimonials")
-      .select()
-      .eq("counselling", counselling);
+getDataFromDatabase(String counselling) async {
+  try {
+    final supabase = Supabase.instance.client;
+    final response = await supabase
+        .from("testimonials")
+        .select()
+        .eq("counselling", counselling);
 
-  final List<dynamic>? data = response is List ? response : response['data'];
+    final List<dynamic>? data = response is List ? response : response['data'];
 
-  if (data == null || data.isEmpty) {
-    return [];
+    if (data == null || data.isEmpty) {
+      return [];
+    }
+
+    final List<Testimonial> testimonialsDetails = data
+        .map<Testimonial>((row) => Testimonial(
+              image: row['image_link'].toString(),
+              name: row['name'].toString(),
+              designation: row['designation'].toString(),
+              review: row['comment'].toString(),
+            ))
+        .toList();
+
+    return testimonialsDetails;
+  } catch (e) {
+    Get.snackbar(
+      'Error',
+      'Something went wrong. Try again',
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.redAccent.withOpacity(0.1),
+      colorText: Colors.red,
+    );
   }
-
-  final List<Testimonial> testimonialsDetails = data
-      .map<Testimonial>((row) => Testimonial(
-            image: row['image_link'].toString(),
-            name: row['name'].toString(),
-            designation: row['designation'].toString(),
-            review: row['comment'].toString(),
-          ))
-      .toList();
-
-  return testimonialsDetails;
 }
 
 Widget newTestimonialCard(String name, String image, String designation,

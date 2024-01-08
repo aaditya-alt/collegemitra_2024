@@ -31,13 +31,19 @@ class _ShowAllCollegesState extends State<ShowAllColleges> {
   }
 
   void _getData() async {
-    await Future.delayed(const Duration(milliseconds: 150));
-    collegeDetails = await getAllColleges(widget.counselling);
+    try {
+      await Future.delayed(const Duration(milliseconds: 150));
+      collegeDetails = await getAllColleges(widget.counselling);
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      setState(() {
+        filteredColleges = List.from(collegeDetails);
+        isLoading = false;
+      });
+    }
+
     // Set isLoading to false after fetching data
-    setState(() {
-      filteredColleges = List.from(collegeDetails);
-      isLoading = false;
-    });
 
     // Trigger a rebuild
   }
@@ -122,30 +128,41 @@ class _ShowAllCollegesState extends State<ShowAllColleges> {
     );
   }
 
-  Future<List<AllColleges>> getAllColleges(String counselling) async {
-    final supabase = Supabase.instance.client;
-    final response = await supabase
-        .from("college_details")
-        .select()
-        .eq("counselling", counselling);
+  getAllColleges(String counselling) async {
+    try {
+      final supabase = Supabase.instance.client;
+      final response = await supabase
+          .from("college_details")
+          .select()
+          .eq("counselling", counselling);
 
-    final List<dynamic>? data = response is List ? response : response['data'];
+      final List<dynamic>? data =
+          response is List ? response : response['data'];
 
-    if (data == null || data.isEmpty) {
-      return [];
+      if (data == null || data.isEmpty) {
+        return [];
+      }
+
+      final List<AllColleges> allCollegesdetails = data
+          .map<AllColleges>((row) => AllColleges(
+                collegeName: row['full_name'].toString(),
+                collegeState: row['state'].toString(),
+                collegeType: row['type'].toString(),
+                collegeImage: row['main_image'].toString(),
+                collegeId: row['id'],
+              ))
+          .toList();
+
+      return allCollegesdetails;
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Something went wrong. Try again',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.redAccent.withOpacity(0.1),
+        colorText: Colors.red,
+      );
     }
-
-    final List<AllColleges> allCollegesdetails = data
-        .map<AllColleges>((row) => AllColleges(
-              collegeName: row['full_name'].toString(),
-              collegeState: row['state'].toString(),
-              collegeType: row['type'].toString(),
-              collegeImage: row['main_image'].toString(),
-              collegeId: row['id'],
-            ))
-        .toList();
-
-    return allCollegesdetails;
   }
 }
 

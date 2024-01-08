@@ -3,31 +3,39 @@ import 'package:collegemitra/src/features/authentication/screens/dashboard/widge
 //Counselling buttons to be used on dashboard
 List<CustomIcon> customIcons = [
   CustomIcon(
-      icon: "assets/images/dashboard_images/counselling_images/josaa.png",
+      icon:
+          "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/dashboard_icons/josaa.png",
       name: "JOSAA"),
   CustomIcon(
-      icon: "assets/images/dashboard_images/counselling_images/jacd.png",
+      icon:
+          "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/dashboard_icons/jacd.png",
       name: "JAC Delhi"),
   CustomIcon(
-      icon: "assets/images/dashboard_images/counselling_images/ggsipu.png",
+      icon:
+          "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/dashboard_icons/ggsipu.png",
       name: "GGSIPU Delhi"),
   CustomIcon(
-      icon: "assets/images/dashboard_images/counselling_images/uptu.png",
+      icon:
+          "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/dashboard_icons/uptu.png",
       name: "UPTU"),
 ];
 
 List<CustomIcon> allCounselling = [
   CustomIcon(
-      icon: "assets/images/dashboard_images/counselling_images/reap.png",
+      icon:
+          "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/dashboard_icons/reap.png",
       name: "REAP"),
   CustomIcon(
-      icon: "assets/images/dashboard_images/counselling_images/hstes.png",
+      icon:
+          "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/dashboard_icons/hstes.png",
       name: "HSTES"),
   CustomIcon(
-      icon: "assets/images/dashboard_images/counselling_images/ojee.png",
-      name: "OJEE"),
+      icon:
+          "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/dashboard_icons/mpdte.png",
+      name: "MPDTE"),
   CustomIcon(
-      icon: "assets/images/dashboard_images/counselling_images/more.png",
+      icon:
+          "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/dashboard_icons/more.png",
       name: "More"),
 ];
 

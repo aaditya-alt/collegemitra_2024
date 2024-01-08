@@ -29,6 +29,7 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   String imageLink = "";
+
   getPromotionalImage() async {
     final supabase = Supabase.instance.client;
 
@@ -40,12 +41,8 @@ class _DashboardState extends State<Dashboard> {
                 1) // Limit the result to 1 row, assuming you only need one image
         ;
 
-    final List<dynamic>? data = response is List ? response : response['data'];
-    if (data != null && data.isNotEmpty) {
-      imageLink = data.map((row) => row['image_link'].toString()).toString();
-
-      imageLink = response;
-    }
+    imageLink = response[0]['image_link'];
+    setState(() {});
   }
 
   @override
@@ -56,7 +53,7 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
+    bool isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     String firstName;
 
     final auth = AuthenticationRepository.instance;
@@ -168,7 +165,9 @@ class _DashboardState extends State<Dashboard> {
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                const PremiumPurchase();
+              },
               icon: const Icon(
                 Icons.star,
                 // Replace this with the desired icon
@@ -196,12 +195,10 @@ class _DashboardState extends State<Dashboard> {
 
           const SizedBox(height: 20),
 
-          imageLink != ""
-              ? CachedNetworkImage(
-                  imageUrl: imageLink,
-                  width: MediaQuery.sizeOf(context).width,
-                )
-              : const SizedBox(height: 0),
+          CachedNetworkImage(
+            imageUrl: imageLink,
+            width: MediaQuery.sizeOf(context).width,
+          ),
 
           const SizedBox(height: 10),
           Text(

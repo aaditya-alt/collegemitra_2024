@@ -531,7 +531,10 @@ calculateScore(
 
 Future<void> showInformation(
     BuildContext context, String title, String description) {
+  bool isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
   return showDialog(
+    barrierDismissible: true,
+    useSafeArea: false,
     context: context,
     builder: (BuildContext context) {
       return Dialog(
@@ -543,14 +546,13 @@ Future<void> showInformation(
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16.0),
-            color: Colors.white,
+            color: isDark ? Colors.black : Colors.white,
           ),
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(height: 15),
                 ClipRRect(
                   borderRadius:
                       const BorderRadius.vertical(top: Radius.circular(16.0)),
@@ -567,19 +569,12 @@ Future<void> showInformation(
                     children: [
                       Text(
                         title,
-                        style: GoogleFonts.lato(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
+                        style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       const SizedBox(height: 15),
                       Text(
                         description,
-                        style: GoogleFonts.lato(
-                            fontSize: 18,
-                            color: Colors.black87,
-                            fontStyle: FontStyle.italic),
+                        style: Theme.of(context).textTheme.titleMedium,
                         textAlign: TextAlign.center,
                       ),
                     ],
