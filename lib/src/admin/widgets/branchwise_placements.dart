@@ -1,8 +1,6 @@
 import 'dart:convert';
 
 import 'package:collegemitra/src/repository/authentication_repository/excel_college_predictor.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/material.dart';
 
 Future<List<String>> getCollegesList(String counselling) async {
   await Future.delayed(const Duration(seconds: 2));

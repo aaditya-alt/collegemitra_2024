@@ -553,7 +553,6 @@ class _BranchPredictorState extends State<BranchPredictor> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           SizedBox(
             width: mobileWidth - 95,

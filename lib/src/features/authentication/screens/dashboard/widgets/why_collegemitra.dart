@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class WhyCollegemitra extends StatelessWidget {
@@ -7,15 +8,20 @@ class WhyCollegemitra extends StatelessWidget {
   Widget build(BuildContext context) {
     List<CustomIcon> customIcons = [
       CustomIcon(
-          icon: "assets/images/dashboard_images/shield.png", name: "Assured"),
+          icon:
+              "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/why_collegemitra/shield.png",
+          name: "Assured"),
       CustomIcon(
-          icon: "assets/images/dashboard_images/3d-fire.png",
+          icon:
+              "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/why_collegemitra/3d-fire.png",
           name: "Fantastic"),
       CustomIcon(
-          icon: "assets/images/dashboard_images/love.png",
+          icon:
+              "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/why_collegemitra/love.png",
           name: "Love & Support"),
       CustomIcon(
-          icon: "assets/images/dashboard_images/3d-target.png",
+          icon:
+              "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/why_collegemitra/3d-target.png",
           name: "Accuracy"),
     ];
 
@@ -55,8 +61,8 @@ Widget whyCollegemitra(List icons, BuildContext context) {
                 color: isDark ? Colors.transparent : Colors.white,
               ),
               child: Center(
-                child: Image.asset(
-                  icons[index].icon,
+                child: CachedNetworkImage(
+                  imageUrl: icons[index].icon,
                   fit: BoxFit.cover,
                 ),
               )),

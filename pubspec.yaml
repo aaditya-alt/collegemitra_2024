@@ -24,18 +24,13 @@ dependencies:
   stream_channel: ^2.1.1
   firebase_core_platform_interface: ^4.8.0
   cloud_firestore: ^4.9.1
-  email_validator: '^2.1.16'
   google_sign_in: ^6.1.5
   line_awesome_flutter: ^2.0.0
-  flutter_rating_bar: ^4.0.1
   excel: ^2.1.0
   ionicons: ^0.1.2
   jitsi_meet_flutter_sdk: ^0.1.8
   rive: ^0.12.3
-  flutter_svg: ^1.1.6
-  dropdown_button2: ^2.3.9
   flutter_native_splash: ^2.3.6
-  easy_loader: ^2.0.0
   flutter_lints: ^2.0.3
   tuple: ^2.0.2
   rounded_expansion_tile: ^0.0.13
@@ -45,13 +40,13 @@ dependencies:
   photo_view: ^0.14.0
   url_launcher: ^6.0.9
   iconsax: ^0.0.8
-  hive: ^2.2.3
   hive_flutter: ^1.1.0
   cached_network_image: ^3.3.0
   flutter_dropdown: ^1.0.1+hotfix.1
   percent_indicator: ^4.0.1
   intl: ^0.17.0
   timeline_tile: ^2.0.0
+  dropdown_button2: ^2.3.9
   
 
   
@@ -60,7 +55,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
 
 flutter:
   uses-material-design: true
@@ -75,63 +69,21 @@ flutter:
     - assets/logo/google-logo.png
     - assets/logo/signup-logo.png
     - assets/logo/forgot-password.png
-    - assets/images/dashboard_images/hero_section.png
-    - assets/images/dashboard_images/nta.png
-    - assets/images/dashboard_images/counselling_images/hstes.png
-    - assets/images/dashboard_images/counselling_images/uptu.png
-    - assets/images/dashboard_images/counselling_images/ojee.png
-    - assets/images/dashboard_images/counselling_images/reap.png
-    - assets/images/dashboard_images/counselling_images/josaa.png
-    - assets/images/dashboard_images/counselling_images/jacd.png
-    - assets/images/dashboard_images/counselling_images/ggsipu.png
-    - assets/images/dashboard_images/counselling_images/more.png
     - assets/images/features_images/about.jpeg
     - assets/images/profile_images/profile-image.jpeg
-    - assets/images/dashboard_images/t10delhi.jpg
-    - assets/images/dashboard_images/support.png
-    - assets/images/dashboard_images/about.png
-    - assets/images/dashboard_images/rank.png
-    - assets/images/dashboard_images/background.png
-    - assets/images/dashboard_images/background.jpeg
-    - assets/images/dashboard_images/graduation.png
-    - assets/images/dashboard_images/background_new.png
-    - assets/images/dashboard_images/reminder.png
-    - assets/images/dashboard_images/3d-fire.png
-    - assets/images/dashboard_images/3d-target.png
-    - assets/images/dashboard_images/love.png
-    - assets/images/dashboard_images/shield.png
-    - assets/images/dashboard_images/bachelors-degree.png
-    - assets/images/dashboard_images/benchmarking.png
-    - assets/images/dashboard_images/justice-scale.png
-    - assets/images/dashboard_images/justice.png
-    - assets/images/dashboard_images/office.png
-    - assets/images/dashboard_images/ranking.png
-    - assets/images/dashboard_images/search.png
-    - assets/images/dashboard_images/seats.png
     - assets/cutoff_files/JOSAA_2023.xlsx
     - assets/cutoff_files/CSAB_2023.xlsx
     - assets/images/facebook.png
     - assets/images/spline.png
     - assets/images/riveAssets/shapes.riv
     - assets/images/riveAssets/button.riv
-    - assets/images/riveAssets/cartoon.riv
     - assets/images/splash_images/background.png
-    - assets/gif/happy.gif
-    - assets/gif/sad.gif
-    - assets/gif/love.gif
-    - assets/gif/neutral.gif
-    - assets/gif/faq.gif
-    - assets/gif/graduation-cap.gif
     - assets/gif/loader.gif
-    - assets/gif/home_loader.gif
     - assets/images/premium_panel/first.png
     - assets/images/premium_panel/second.png
     - assets/images/premium_panel/1.png
     - assets/images/premium_panel/2.png
-    - assets/NITW.jpg
-    - assets/campus/
-    - assets/facilities/
-    - assets/logos/
+   
 
 flutter_native_splash:
   image: 'assets/images/splash_images/background.png'

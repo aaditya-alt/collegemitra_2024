@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/models/user_model.dart';
 import 'package:collegemitra/src/features/authentication/screens/counselling_features/features/college_predictor/show_branches.dart';
@@ -534,14 +535,17 @@ Widget getCollegeChance(CollegeData college) {
   double chance = havingCount / int.parse(realCount.toString());
 
   if (chance >= 0.6) {
-    return Image.asset(
-        'assets/gif/happy.gif'); // Star emoji for great chance (yellow or gold star)
+    return CachedNetworkImage(
+        imageUrl:
+            'https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/happy.gif'); // Star emoji for great chance (yellow or gold star)
   } else if (chance >= 0.3 && chance < 0.6) {
-    return Image.asset(
-        'assets/gif/neutral.gif'); // Neutral face for fair chance (neutral face in yellow or orange tone)
+    return CachedNetworkImage(
+        imageUrl:
+            'https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/neutral.gif'); // Neutral face for fair chance (neutral face in yellow or orange tone)
   } else {
-    return Image.asset(
-        'assets/gif/sad.gif'); // Crying face for slim chance (crying face in yellow or orange tone)
+    return CachedNetworkImage(
+        imageUrl:
+            'https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/sad.gif'); // Crying face for slim chance (crying face in yellow or orange tone)
   }
 }
 

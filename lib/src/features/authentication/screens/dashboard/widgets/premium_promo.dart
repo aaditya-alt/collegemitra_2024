@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -51,8 +52,9 @@ class PromoCard extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   height: size.height / 4.5,
-                  child: Image.asset(
-                    'assets/images/dashboard_images/graduation.png',
+                  child: CachedNetworkImage(
+                    imageUrl:
+                        'https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/why_collegemitra/graduation.png',
                     fit: BoxFit.cover,
                   ),
                 ),

@@ -2,7 +2,6 @@ import 'package:collegemitra/src/constants/sizes.dart';
 import 'package:collegemitra/src/constants/text_strings.dart';
 import 'package:collegemitra/src/features/authentication/controllers/signup_controller.dart';
 import 'package:collegemitra/src/features/authentication/models/user_model.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,6 +15,18 @@ class SignUpFormWidget extends StatefulWidget {
 }
 
 class _SignUpFormWidgetState extends State<SignUpFormWidget> {
+  bool isValidEmail(String email) {
+    // Define a regular expression for email validation
+    final RegExp emailRegex = RegExp(
+      r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$',
+      caseSensitive: false,
+      multiLine: false,
+    );
+
+    // Use the RegExp's hasMatch method to check if the email is valid
+    return emailRegex.hasMatch(email);
+  }
+
   bool isLoading = false;
   @override
   Widget build(BuildContext context) {
@@ -85,8 +96,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
                           phoneNo: controller.phoneNo.text.trim(),
                           role: 'User');
 
-                      if (EmailValidator.validate(
-                          controller.email.text.trim())) {
+                      if (isValidEmail(controller.email.text.trim())) {
                         setState(() {
                           isLoading = true;
                         });

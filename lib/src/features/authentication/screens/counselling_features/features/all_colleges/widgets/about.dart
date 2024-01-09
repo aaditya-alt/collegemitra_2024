@@ -680,7 +680,7 @@ class Facilities extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(imagePath, height: 50),
+          CachedNetworkImage(imageUrl: imagePath, height: 50),
           Text(label),
         ],
       ),
@@ -742,48 +742,69 @@ class Facilities extends StatelessWidget {
             ),
             createFacilityRow([
               {
-                "imagePath": "assets/facilities/classroom.png",
+                "imagePath":
+                    "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/facilities/classroom.png",
                 "label": "Classroom"
               },
-              {"imagePath": "assets/facilities/bank.png", "label": "Bank"},
               {
-                "imagePath": "assets/facilities/auditorium.png",
+                "imagePath":
+                    "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/facilities/bank.png",
+                "label": "Bank"
+              },
+              {
+                "imagePath":
+                    "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/facilities/auditorium.png",
                 "label": "Auditorium"
               },
               {
-                "imagePath": "assets/facilities/bunk-bed.png",
+                "imagePath":
+                    "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/facilities/bunk-bed.png",
                 "label": "Hostel"
               },
             ], context),
             createFacilityRow([
               {
-                "imagePath": "assets/facilities/coffee.png",
+                "imagePath":
+                    "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/facilities/coffee.png",
                 "label": "Cafeteria"
               },
               {
-                "imagePath": "assets/facilities/computer-science.png",
+                "imagePath":
+                    "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/facilities/computer-science.png",
                 "label": "Comp. Lab"
               },
-              {"imagePath": "assets/facilities/dumbbells.png", "label": "Gym"},
               {
-                "imagePath": "assets/facilities/first-aid-kit.png",
+                "imagePath":
+                    "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/facilities/dumbbells.png",
+                "label": "Gym"
+              },
+              {
+                "imagePath":
+                    "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/facilities/first-aid-kit.png",
                 "label": "Medical"
               },
             ], context),
             createFacilityRow([
               {
-                "imagePath": "assets/facilities/library.png",
+                "imagePath":
+                    "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/facilities/library.png",
                 "label": "Library"
               },
               {
-                "imagePath": "assets/facilities/wireless-router.png",
+                "imagePath":
+                    "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/facilities/wireless-router.png",
                 "label": "Wi-Fi"
               },
               {
-                "imagePath": "assets/facilities/security.png",
+                "imagePath":
+                    "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/facilities/security.png",
                 "label": "Security"
               },
-              {"imagePath": "assets/facilities/sports.png", "label": "Sports"},
+              {
+                "imagePath":
+                    "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/facilities/sports.png",
+                "label": "Sports"
+              },
             ], context),
           ],
         ),

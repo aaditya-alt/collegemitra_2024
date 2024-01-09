@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collegemitra/src/constants/colors.dart';
 import 'package:collegemitra/src/features/authentication/models/user_model.dart';
 import 'package:flutter/material.dart';
@@ -365,16 +366,20 @@ Color _getColorBasedOnChance(double chance) {
 
 Widget _getGifBasedOnChance(double chance) {
   if (chance >= 0.8) {
-    return Image.asset(
-        'assets/gif/love.gif'); // Star emoji for great chance (yellow or gold star)
+    return CachedNetworkImage(
+        imageUrl:
+            'https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/love.gif'); // Star emoji for great chance (yellow or gold star)
   } else if (chance >= 0.6) {
-    return Image.asset(
-        'assets/gif/happy.gif'); // Smiling face for good chance (yellow or orange smiling face)
+    return CachedNetworkImage(
+        imageUrl:
+            'https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/happy.gif'); // Smiling face for good chance (yellow or orange smiling face)
   } else if (chance >= 0.4) {
-    return Image.asset(
-        'assets/gif/neutral.gif'); // Neutral face for fair chance (neutral face in yellow or orange tone)
+    return CachedNetworkImage(
+        imageUrl:
+            'https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/neutral.gif'); // Neutral face for fair chance (neutral face in yellow or orange tone)
   } else {
-    return Image.asset(
-        'assets/gif/sad.gif'); // Crying face for slim chance (crying face in yellow or orange tone)
+    return CachedNetworkImage(
+        imageUrl:
+            'https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/sad.gif'); // Crying face for slim chance (crying face in yellow or orange tone)
   }
 }

@@ -5,7 +5,6 @@ import 'package:collegemitra/src/features/authentication/controllers/rank_predic
 import 'package:collegemitra/src/features/authentication/screens/general_utils/dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class RankPredictor extends StatefulWidget {
   var counsellingName;
@@ -428,13 +427,15 @@ calculateScore(
     isScrollControlled: true,
     context: context,
     builder: (BuildContext context) {
+      bool isDark =
+          MediaQuery.of(context).platformBrightness == Brightness.dark;
       return Padding(
         padding: const EdgeInsets.all(16.0),
         child: Wrap(
           children: [
             Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: isDark ? Colors.black : Colors.white,
                 borderRadius: BorderRadius.circular(16.0),
               ),
               child: Padding(
@@ -443,8 +444,9 @@ calculateScore(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      "assets/gif/graduation-cap.gif",
+                    CachedNetworkImage(
+                      imageUrl:
+                          "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/graduation-cap.gif",
                       height: 100,
                       width: 100,
                     ),
@@ -556,8 +558,9 @@ Future<void> showInformation(
                 ClipRRect(
                   borderRadius:
                       const BorderRadius.vertical(top: Radius.circular(16.0)),
-                  child: Image.asset(
-                    "assets/gif/faq.gif",
+                  child: CachedNetworkImage(
+                    imageUrl:
+                        "https://kclsmsgznxxrnboeopjw.supabase.co/storage/v1/object/public/utility_images/public/faq.png",
                     width: double.maxFinite,
                     height: 150,
                     fit: BoxFit.cover,
@@ -570,6 +573,7 @@ Future<void> showInformation(
                       Text(
                         title,
                         style: Theme.of(context).textTheme.headlineMedium,
+                        textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 15),
                       Text(

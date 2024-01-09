@@ -3,7 +3,6 @@ import 'package:collegemitra/src/constants/sizes.dart';
 import 'package:collegemitra/src/constants/text_strings.dart';
 import 'package:collegemitra/src/features/authentication/controllers/login_controller.dart';
 import 'package:collegemitra/src/features/authentication/screens/forget_password/forget_password_options/forget_password_modal_bottom_sheet.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,6 +16,18 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+  bool isValidEmail(String email) {
+    // Define a regular expression for email validation
+    final RegExp emailRegex = RegExp(
+      r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$',
+      caseSensitive: false,
+      multiLine: false,
+    );
+
+    // Use the RegExp's hasMatch method to check if the email is valid
+    return emailRegex.hasMatch(email);
+  }
+
   bool isLoading = false;
   @override
   Widget build(BuildContext context) {
@@ -67,7 +78,7 @@ class _LoginFormState extends State<LoginForm> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () async {
-                  if (EmailValidator.validate(controller.email.text.trim())) {
+                  if (isValidEmail(controller.email.text.trim())) {
                     setState(() {
                       isLoading = true;
                     });

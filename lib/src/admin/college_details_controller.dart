@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:collegemitra/src/repository/authentication_repository/excel_college_predictor.dart';
-import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';

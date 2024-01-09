@@ -46,10 +46,20 @@ class CollegePredictorController extends GetxController {
     return data;
   }
 
-  Future<List<String>> getBranchesUsingExcel(String counselling) async {
-    final data =
-        await excelCollegePredictorRepo.getBranchesFromCounselling(counselling);
-    return data;
+  getBranchesUsingExcel(String counselling) async {
+    try {
+      final data = await excelCollegePredictorRepo
+          .getBranchesFromCounselling(counselling);
+      return data;
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Something went wrong. Try again',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.redAccent.withOpacity(0.1),
+        colorText: Colors.red,
+      );
+    }
   }
 
   getCollegesByBranches(
