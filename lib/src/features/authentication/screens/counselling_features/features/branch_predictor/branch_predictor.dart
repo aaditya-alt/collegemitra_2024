@@ -45,12 +45,13 @@ class _BranchPredictorState extends State<BranchPredictor> {
       await Future.delayed(const Duration(seconds: 1));
       final data =
           await _controller.getBranchesUsingExcel(widget.counselling_name);
-      setState(() {
-        branches = data;
-        isLoading = false;
-      });
+      branches = data;
     } catch (error) {
       print("Error loading branches: $error");
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
