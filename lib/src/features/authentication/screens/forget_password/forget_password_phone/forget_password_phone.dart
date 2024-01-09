@@ -11,6 +11,7 @@ class ForgetPasswordPhoneScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final phoneController = TextEditingController();
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -32,6 +33,7 @@ class ForgetPasswordPhoneScreen extends StatelessWidget {
                     child: Column(
                   children: [
                     TextFormField(
+                      controller: phoneController,
                       decoration: const InputDecoration(
                           label: Text(tPhoneNo),
                           hintText: tPhoneNo,
@@ -43,7 +45,9 @@ class ForgetPasswordPhoneScreen extends StatelessWidget {
                         width: double.infinity,
                         child: ElevatedButton(
                             onPressed: () {
-                              Get.to(() => const OTPScreen());
+                              Get.to(() => OTPScreen(
+                                    emailOrPhone: phoneController.text.trim(),
+                                  ));
                             },
                             child: const Text(
                               tNext,

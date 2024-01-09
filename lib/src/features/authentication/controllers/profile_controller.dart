@@ -39,7 +39,8 @@ class ProfileController extends GetxController {
   updateRecord(UserModel user, BuildContext context) async {
     await _userRepo.updateUserRecord(user);
 
-    showConfirmationDialog(context, "Your Profile Has been Updated!");
+    showConfirmationDialog(context,
+        "Your Profile Has been Updated! Edit will take some time to show into the App");
   }
 }
 

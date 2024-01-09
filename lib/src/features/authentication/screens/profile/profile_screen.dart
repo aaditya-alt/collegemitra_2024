@@ -8,6 +8,7 @@ import 'package:collegemitra/src/features/authentication/screens/meeting/meeting
 import 'package:collegemitra/src/features/authentication/screens/premium/premium_purchase.dart';
 import 'package:collegemitra/src/features/authentication/screens/profile/update_profile_screen.dart';
 import 'package:collegemitra/src/features/authentication/screens/profile/widgets/profile_menu_widget.dart';
+import 'package:collegemitra/src/features/authentication/screens/profile/widgets/settings.dart';
 import 'package:collegemitra/src/repository/authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -53,9 +54,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     bool isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: isDark
-          ? const Color.fromARGB(255, 19, 19, 19)
-          : const Color(0xFFF1F4F8),
+      backgroundColor: isDark ? Colors.black : Colors.white,
       appBar: AppBar(
         backgroundColor: isDark ? Colors.black : Colors.white,
         automaticallyImplyLeading: false,
@@ -166,63 +165,45 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0, 1, 0, 0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      InkWell(
-                        splashColor: Colors.transparent,
-                        focusColor: Colors.transparent,
-                        hoverColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        onTap: () {
+
+                const SizedBox(height: 15),
+                Center(
+                  child: Padding(
+                    padding:
+                        const EdgeInsetsDirectional.fromSTEB(24, 12, 24, 12),
+                    child: SizedBox(
+                      width: 190,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
                           Get.to(() =>
                               UpdateProfileScreen(email: email?.toString()));
                         },
-                        child: Container(
-                          width: MediaQuery.sizeOf(context).width,
-                          decoration: BoxDecoration(
-                            color: isDark ? Colors.black : Colors.white,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                24, 12, 24, 12),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Edit Profile',
-                                  style: Theme.of(context).textTheme.titleSmall,
-                                ),
-                                const Expanded(
-                                  child: Align(
-                                    alignment: AlignmentDirectional(0.9, 0),
-                                    child: Icon(
-                                      Icons.arrow_forward_ios,
-                                      color: Color(0xFF57636C),
-                                      size: 20,
-                                      weight: 10,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                        style: ButtonStyle(
+                          padding: const MaterialStatePropertyAll(
+                              EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0)),
+                          backgroundColor: MaterialStatePropertyAll(
+                              isDark ? tPrimaryColor : tPrimaryColor.shade300),
+                          elevation: const MaterialStatePropertyAll(3),
+                        ),
+                        child: Text(
+                          'Edit Profile',
+                          style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ),
-                    ],
+                    ),
                   ),
                 ),
 
-                const SizedBox(height: 10),
+                const SizedBox(height: 15),
 
                 //Menu
                 ProfileMenuWidget(
                     title: "Settings",
                     icon: LineAwesomeIcons.cog,
-                    onPress: () {}),
+                    onPress: () {
+                      Get.to(() => SettWidget(email: email));
+                    }),
                 ProfileMenuWidget(
                     title: "Billing Details",
                     icon: LineAwesomeIcons.wallet,

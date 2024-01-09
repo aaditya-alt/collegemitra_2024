@@ -2,7 +2,6 @@ import 'package:collegemitra/src/constants/sizes.dart';
 import 'package:collegemitra/src/constants/text_strings.dart';
 import 'package:collegemitra/src/features/authentication/screens/forget_password/forget_password_mail/forget_password_mail.dart';
 import 'package:collegemitra/src/features/authentication/screens/forget_password/forget_password_options/forget_password_btn_widget.dart';
-import 'package:collegemitra/src/features/authentication/screens/forget_password/forget_password_phone/forget_password_phone.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -34,15 +33,15 @@ Future<dynamic> buildShowModalBottomSheet(BuildContext context) {
             },
           ),
           const SizedBox(height: 20.0),
-          ForgetPasswordBtnWidget(
-            btnIcon: Icons.mobile_friendly_rounded,
-            title: tPhoneNo,
-            subTitle: tResetViaPhone,
-            onTap: () {
-              Navigator.pop(context);
-              Get.to(() => const ForgetPasswordPhoneScreen());
-            },
-          ),
+          // ForgetPasswordBtnWidget(
+          //   btnIcon: Icons.mobile_friendly_rounded,
+          //   title: tPhoneNo,
+          //   subTitle: tResetViaPhone,
+          //   onTap: () {
+          //     Navigator.pop(context);
+          //     Get.to(() => const ForgetPasswordPhoneScreen());
+          //   },
+          // ),
         ],
       ),
     ),

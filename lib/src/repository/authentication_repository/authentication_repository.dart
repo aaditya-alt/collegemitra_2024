@@ -1,4 +1,5 @@
 import 'package:collegemitra/src/admin/admin_dashboard.dart';
+import 'package:collegemitra/src/features/authentication/models/user_model.dart';
 import 'package:collegemitra/src/features/authentication/screens/dashboard/dashboard_screen.dart';
 import 'package:collegemitra/src/features/authentication/screens/login/login_screen.dart';
 import 'package:collegemitra/src/features/authentication/screens/mail_verification/mail_verification.dart';
@@ -87,17 +88,20 @@ class AuthenticationRepository extends GetxController {
     // ever(firebaseUser, _setInitialScreen);
   }
 
-  setInitialScreen(User? user, String role) {
+  void setInitialScreen(User? user, String role) {
     if (user == null) {
       Get.offAll(() => const WelcomeScreen());
     } else if (user.emailVerified) {
-      role == "User"
-          ? Get.offAll(() => Dashboard(
-                username: userName,
-              ))
-          : role == "Admin"
-              ? Get.offAll(() => const AdminDashboard())
-              : const MentorInProgressScreen();
+      if (role == "User") {
+        Get.offAll(() => Dashboard(username: userName));
+      } else if (role == "Admin") {
+        Get.offAll(() => const AdminDashboard());
+      } else if (role == "Mentor") {
+        Get.offAll(() => const MentorInProgressScreen());
+      } else {
+        // Handle unknown role (you might want to show an error or redirect to a default screen)
+        print("Unknown role: $role");
+      }
     } else {
       Get.offAll(() => const MailVerification());
     }
@@ -182,27 +186,93 @@ class AuthenticationRepository extends GetxController {
   }
 
   //Google Authentication
+  Future<UserCredential> signUpWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      // Check if the user canceled the Google sign-in
+      if (googleUser == null) {
+        throw Exception('Google sign-in was canceled');
+      }
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Sign in with the Google credential
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      // Access additional user details
+      final User? user = userCredential.user;
+
+      // Extract email, phone, and display name
+      final String? email = user?.email;
+      final String? phone = user
+          ?.phoneNumber; // Note: Google sign-in may not provide phone number
+      final String? displayName = user?.displayName;
+
+      final userData = UserModel(
+        email: email,
+        password: "",
+        fullName: displayName,
+        phoneNo: phone,
+        role: 'User',
+        imageLink:
+            "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png",
+      );
+
+      await _userRepo.createUser(userData);
+
+      // Print or use the obtained details as needed
+      print('Email: $email');
+      print('Phone: $phone');
+      print('Display Name: $displayName');
+
+      // Return the UserCredential
+      return userCredential;
+    } catch (e) {
+      Get.snackbar('Error', 'Error Occurred! Please try again later.');
+      throw e.hashCode;
+    }
+  }
+
+  //Login with google
   Future<UserCredential> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
+      // Check if the user canceled the Google sign-in
+      if (googleUser == null) {
+        throw Exception('Google sign-in was canceled');
+      }
+
       // Obtain the auth details from the request
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
 
       // Create a new credential
       final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
       );
 
-      // Once signed in, return the UserCredential
-      return await FirebaseAuth.instance.signInWithCredential(credential);
+      // Sign in with the Google credential
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      // Return the UserCredential
+      return userCredential;
     } catch (e) {
-      Get.snackbar('Error', 'Error Occured! Please Try again later.');
+      Get.snackbar('Error', 'Error Occurred! Please try again later.');
       throw e.hashCode;
     }
-    // Trigger the authentication flow
   }
 
 //Email Verification
@@ -260,6 +330,18 @@ class AuthenticationRepository extends GetxController {
       );
     }
     return null;
+  }
+
+  //Password reset with email
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      // Handle errors
+      // You might want to differentiate between different error scenarios
+      print("Error sending password reset email: $e");
+      throw e; // Re-throw the exception for further error handling, if needed
+    }
   }
 
 //User Logout

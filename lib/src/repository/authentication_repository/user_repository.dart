@@ -67,6 +67,9 @@ class UserRepository extends GetxController {
       userDataBox.put('phone', user.phoneNo);
       userDataBox.put('imageLink', user.imageLink);
       userDataBox.put('id', user.id);
+
+      userDataBox.flush();
+
       await _db
           .collection("Users")
           .doc(user.id)

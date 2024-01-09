@@ -39,10 +39,14 @@ class SignUpController extends GetxController {
   Future<void> googleSignIn() async {
     try {
       final auth = AuthenticationRepository.instance;
-      await auth.signInWithGoogle();
-      auth.setInitialScreen(auth.firebaseUser.value, "User");
+      final userCredential = await auth.signInWithGoogle();
+
+      // You can access the authenticated user using userCredential.user
+      auth.setInitialScreen(userCredential.user, "User");
     } catch (e) {
-      print(e.toString());
+      Get.snackbar('Error',
+          'Error occurred during Google sign-in. Please try again later.');
+      print('Google Sign-In Error: $e');
     }
   }
 

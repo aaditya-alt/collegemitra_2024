@@ -7,7 +7,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class OTPScreen extends StatelessWidget {
-  const OTPScreen({super.key});
+  final String emailOrPhone;
+  const OTPScreen({super.key, required this.emailOrPhone});
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +30,8 @@ class OTPScreen extends StatelessWidget {
             Text(tOtpSubTitle.toUpperCase(),
                 style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 40.0),
-            const Text(
-              "${tOtpMessage}aadityaranjan16@gmail.com",
+            Text(
+              "$tOtpMessage $emailOrPhone",
               textAlign: TextAlign.center,
             ),
             const SizedBox(
