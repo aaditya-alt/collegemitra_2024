@@ -1,8 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:collegemitra/main.dart';
 import 'package:collegemitra/src/constants/colors.dart';
-import 'package:collegemitra/src/constants/image_strings.dart';
-import 'package:collegemitra/src/constants/sizes.dart';
-import 'package:collegemitra/src/constants/text_strings.dart';
 import 'package:collegemitra/src/features/authentication/controllers/profile_controller.dart';
+import 'package:collegemitra/src/features/authentication/controllers/theme_controller.dart';
 import 'package:collegemitra/src/features/authentication/screens/dashboard/dashboard_screen.dart';
 import 'package:collegemitra/src/features/authentication/screens/meeting/meeting_home_screen.dart';
 import 'package:collegemitra/src/features/authentication/screens/premium/premium_purchase.dart';
@@ -14,141 +14,294 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({
+    super.key,
+  });
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  final controller = Get.put(ProfileController());
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    isLoading = true;
+    getDetails();
+    super.initState();
+  }
+
+  String fullName = "";
+  String? email = "";
+  String imageLink = "";
+
+  void getDetails() async {
+    final auth = AuthenticationRepository.instance;
+    fullName = auth.fullName;
+    email = auth.firebaseUser.value?.email;
+    imageLink = auth.imageLink;
+
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(ProfileController());
-    var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
+    bool isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     return Scaffold(
+      backgroundColor: isDark
+          ? const Color.fromARGB(255, 19, 19, 19)
+          : const Color(0xFFF1F4F8),
       appBar: AppBar(
+        backgroundColor: isDark ? Colors.black : Colors.white,
+        automaticallyImplyLeading: false,
         title: Text(
-          tProfile,
+          'Profile',
           style: Theme.of(context).textTheme.headlineMedium,
         ),
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: Icon(isDark ? LineAwesomeIcons.sun : LineAwesomeIcons.moon))
-        ],
+        actions: [],
+        centerTitle: false,
+        elevation: 0,
+        leading: InkWell(
+          splashColor: Colors.transparent,
+          focusColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          onTap: () async {
+            Get.back();
+          },
+          child: Icon(
+            Icons.chevron_left_rounded,
+            color: isDark ? Colors.white : const Color(0xFF14181B),
+            size: 32,
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Stack(
           children: [
-            Container(
-              padding: const EdgeInsets.all(tDefaultSize),
-              child: Column(
-                children: [
-                  Stack(
-                    children: [
-                      SizedBox(
-                        width: 120,
-                        height: 120,
-                        child: ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child:
-                                const Image(image: AssetImage(tProfileImage))),
+            Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Container(
+                      width: MediaQuery.sizeOf(context).width,
+                      decoration: BoxDecoration(
+                        color: isDark ? Colors.black : Colors.white,
+                        boxShadow: const [
+                          BoxShadow(
+                            blurRadius: 1,
+                            color: Color(0xFFF1F4F8),
+                            offset: Offset(0, 0),
+                          )
+                        ],
                       ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                            width: 35,
-                            height: 35,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              color: tPrimaryColor,
+                      child: Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            24, 12, 24, 12),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Container(
+                              width: 70,
+                              height: 70,
+                              decoration: BoxDecoration(
+                                color: isDark
+                                    ? const Color.fromARGB(255, 26, 25, 25)
+                                    : const Color(0xFFE0E3E7),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(2),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: CachedNetworkImage(
+                                    imageUrl: imageLink,
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
                             ),
-                            child: const Icon(LineAwesomeIcons.alternate_pencil,
-                                size: 20.0, color: Colors.black)),
+                            Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  16, 0, 0, 0),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    fullName,
+                                    style:
+                                        Theme.of(context).textTheme.titleLarge,
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsetsDirectional.fromSTEB(
+                                            0, 4, 0, 0),
+                                    child: Text(
+                                      email!,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.copyWith(
+                                              color: tPrimaryColor,
+                                              fontWeight: FontWeight.normal),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 1, 0, 0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      InkWell(
+                        splashColor: Colors.transparent,
+                        focusColor: Colors.transparent,
+                        hoverColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onTap: () {
+                          Get.to(() =>
+                              UpdateProfileScreen(email: email?.toString()));
+                        },
+                        child: Container(
+                          width: MediaQuery.sizeOf(context).width,
+                          decoration: BoxDecoration(
+                            color: isDark ? Colors.black : Colors.white,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                24, 12, 24, 12),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Edit Profile',
+                                  style: Theme.of(context).textTheme.titleSmall,
+                                ),
+                                const Expanded(
+                                  child: Align(
+                                    alignment: AlignmentDirectional(0.9, 0),
+                                    child: Icon(
+                                      Icons.arrow_forward_ios,
+                                      color: Color(0xFF57636C),
+                                      size: 20,
+                                      weight: 10,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
-                  Text(tProfileHeading,
-                      style: Theme.of(context).textTheme.headlineMedium),
-                  Text(tProfileSubHeading,
-                      style: Theme.of(context).textTheme.titleSmall),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                      width: 200,
-                      child: ElevatedButton(
-                        onPressed: () =>
-                            Get.to(() => const UpdateProfileScreen()),
-                        child: Text(tEditProfile,
-                            style: Theme.of(context).textTheme.titleMedium),
-                      )),
-                  const SizedBox(height: 30),
-                  const Divider(),
-                  const SizedBox(height: 10),
+                ),
 
-                  //Menu
-                  ProfileMenuWidget(
-                      title: "Settings",
-                      icon: LineAwesomeIcons.cog,
-                      onPress: () {}),
-                  ProfileMenuWidget(
-                      title: "Billing Details",
-                      icon: LineAwesomeIcons.wallet,
-                      onPress: () {}),
-                  ProfileMenuWidget(
-                      title: "User Management",
-                      icon: LineAwesomeIcons.user_check,
-                      onPress: () {}),
-                  const Divider(),
-                  const SizedBox(height: 10),
-                  ProfileMenuWidget(
-                      title: "Information",
-                      icon: LineAwesomeIcons.info,
-                      onPress: () {}),
-                  ProfileMenuWidget(
-                      title: "Logout",
-                      icon: LineAwesomeIcons.alternate_sign_out,
-                      textColor: Colors.red,
-                      endIcon: false,
-                      onPress: () {
-                        Get.defaultDialog(
-                          title: "LOGOUT",
-                          titleStyle: const TextStyle(fontSize: 20),
-                          content: const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 15.0),
-                            child: Text("Are you sure, you want to Logout?"),
+                const SizedBox(height: 10),
+
+                //Menu
+                ProfileMenuWidget(
+                    title: "Settings",
+                    icon: LineAwesomeIcons.cog,
+                    onPress: () {}),
+                ProfileMenuWidget(
+                    title: "Billing Details",
+                    icon: LineAwesomeIcons.wallet,
+                    onPress: () {}),
+                ProfileMenuWidget(
+                    title: "User Management",
+                    icon: LineAwesomeIcons.user_check,
+                    onPress: () {}),
+                const Divider(),
+                const SizedBox(height: 10),
+                ProfileMenuWidget(
+                    title: "Information",
+                    icon: LineAwesomeIcons.info,
+                    onPress: () {}),
+                ProfileMenuWidget(
+                    title: "Logout",
+                    icon: LineAwesomeIcons.alternate_sign_out,
+                    textColor: Colors.red,
+                    endIcon: false,
+                    onPress: () {
+                      Get.defaultDialog(
+                        title: "LOGOUT",
+                        titleStyle: const TextStyle(fontSize: 20),
+                        content: const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 15.0),
+                          child: Text("Are you sure, you want to Logout?"),
+                        ),
+                        confirm: Expanded(
+                          child: ElevatedButton(
+                            onPressed: () =>
+                                AuthenticationRepository.instance.logout(),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.redAccent,
+                                side: BorderSide.none),
+                            child: const Text("Yes"),
                           ),
-                          confirm: Expanded(
-                            child: ElevatedButton(
-                              onPressed: () =>
-                                  AuthenticationRepository.instance.logout(),
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.redAccent,
-                                  side: BorderSide.none),
-                              child: const Text("Yes"),
-                            ),
-                          ),
-                          cancel: OutlinedButton(
-                              onPressed: () => Get.back(),
-                              child: const Text("No")),
-                        );
-                      }),
-                ],
+                        ),
+                        cancel: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    const Color.fromARGB(255, 1, 174, 59),
+                                side: BorderSide.none),
+                            onPressed: () => Get.back(),
+                            child: const Text("No")),
+                      );
+                    }),
+              ],
+            ),
+            Visibility(
+              visible: isLoading,
+              child: Container(
+                color: Colors.black
+                    .withOpacity(0.5), // Adjust the opacity as needed
+                child: Center(
+                  child: Image.asset(
+                    "assets/gif/loader.gif",
+                    width: MediaQuery.of(context).size.width / 4,
+                  ),
+                ),
               ),
             ),
           ],
         ),
       ),
       bottomNavigationBar: NavigationBar(
-        backgroundColor: Colors.white,
-        indicatorColor: tAccentColor.shade200,
+        backgroundColor: isDark ? Colors.black : Colors.white,
+        indicatorColor: isDark ? tPrimaryColor : tPrimaryColor.shade200,
         height: 65,
         elevation: 2,
         selectedIndex: 3,
         onDestinationSelected: (index) {
-          if (index == 0) {
-            Get.offAll(() => const Dashboard());
+          if (index == 3) {
+            Get.to(() => const ProfileScreen());
           } else if (index == 1) {
             Get.to(() => const MeetingHomeScreen());
           } else if (index == 2) {
             Get.to(() => const PremiumPurchase());
+          } else {
+            Get.offAll(() => const Dashboard());
           }
         },
         destinations: const [

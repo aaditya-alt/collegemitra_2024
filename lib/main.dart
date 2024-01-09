@@ -1,4 +1,5 @@
 import 'package:collegemitra/firebase_options.dart';
+import 'package:collegemitra/src/features/authentication/controllers/theme_controller.dart';
 
 import 'package:collegemitra/src/repository/authentication_repository/authentication_repository.dart';
 import 'package:collegemitra/src/utils/theme/theme.dart';
@@ -27,15 +28,25 @@ void main() async {
   runApp(const App());
 }
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
 
   @override
+  State<App> createState() => _AppState();
+
+  // ignore: library_private_types_in_public_api
+  static _AppState of(BuildContext context) =>
+      context.findAncestorStateOfType<_AppState>()!;
+}
+
+class _AppState extends State<App> {
+  ThemeMode _themeMode = ThemeMode.system;
+  @override
   Widget build(BuildContext context) {
-    var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
+    bool isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     return GetMaterialApp(
       highContrastTheme: TAppTheme.lightTheme,
-      themeMode: ThemeMode.system,
+      themeMode: _themeMode,
       theme: TAppTheme.lightTheme,
       darkTheme: TAppTheme.darkTheme,
       debugShowCheckedModeBanner: false,
@@ -66,5 +77,11 @@ class App extends StatelessWidget {
             ),
           )),
     );
+  }
+
+  void changeTheme(ThemeMode themeMode) {
+    setState(() {
+      _themeMode = themeMode;
+    });
   }
 }

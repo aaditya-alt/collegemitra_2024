@@ -22,6 +22,9 @@ class AuthenticationRepository extends GetxController {
   final _userRepo = Get.put(UserRepository());
   var userRole = "";
   String userName = "";
+  String fullName = "";
+  String imageLink = "";
+  String phone = "";
 
   // Local cache to store user data
   Box? userDataBox; // Change the type to Box?
@@ -34,24 +37,37 @@ class AuthenticationRepository extends GetxController {
       userDataBox = await Hive.openBox(email);
 
       // Check if user data is already present in Hive
-      if (userDataBox!.isEmpty) {
+      if (userDataBox!.isEmpty ||
+          userDataBox!.get('userName') == "" ||
+          userDataBox!.get('userRole') == "" ||
+          userDataBox!.get('fullName') == "" ||
+          userDataBox!.get('imageLink') == "" ||
+          userDataBox!.get('phone') == "") {
         // User data is not present in Hive, fetch from Firebase
         print("User data not found in Hive, fetching from Firebase");
         var userDetails = await _userRepo.getUserDetails(email);
 
         // Mocking user details, replace this with actual implementation
         userRole = userDetails.role.toString();
-        userName = userDetails.fullName.toString();
-        userName = userName.split(" ")[0];
+        fullName = userDetails.fullName.toString();
+        userName = fullName.split(" ")[0];
+        phone = userDetails.phoneNo.toString();
+        imageLink = userDetails.imageLink.toString();
 
         // Store user data in the user-specific Hive box
         userDataBox?.put('userRole', userRole);
         userDataBox?.put('userName', userName);
+        userDataBox?.put('fullName', fullName);
+        userDataBox?.put('phone', phone);
+        userDataBox?.put('imageLink', imageLink);
       } else {
         // User data is already present in Hive, retrieve from Hive
         print("User data found in Hive");
         userRole = userDataBox!.get('userRole', defaultValue: "");
         userName = userDataBox!.get('userName', defaultValue: "");
+        fullName = userDataBox!.get('fullName', defaultValue: "");
+        phone = userDataBox!.get('phone', defaultValue: "");
+        imageLink = userDataBox!.get('imageLink', defaultValue: "");
       }
     } else {
       Get.snackbar("Error", "Email is null, please provide email");

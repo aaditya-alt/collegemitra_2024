@@ -89,12 +89,15 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
                       //     .phoneAuthentication(controller.phoneNo.text.trim());
 
                       final user = UserModel(
-                          id: controller.email.text.trim(),
-                          email: controller.email.text.trim(),
-                          password: controller.password.text.trim(),
-                          fullName: controller.fullName.text.trim(),
-                          phoneNo: controller.phoneNo.text.trim(),
-                          role: 'User');
+                        id: controller.email.text.trim(),
+                        email: controller.email.text.trim(),
+                        password: controller.password.text.trim(),
+                        fullName: controller.fullName.text.trim(),
+                        phoneNo: controller.phoneNo.text.trim(),
+                        role: 'User',
+                        imageLink:
+                            "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png",
+                      );
 
                       if (isValidEmail(controller.email.text.trim())) {
                         setState(() {
